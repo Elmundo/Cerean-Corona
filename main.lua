@@ -2,7 +2,10 @@
 
 local display = require "display"
 local widget = require "widget"
+local Server = require "Data.Server"
 
+Server:login("Crmuser", "CaCu2013!")
+--[[
 local contentGroup = display.newGroup( )
 contentGroup.x = 200
 contentGroup.y = 200
@@ -34,6 +37,7 @@ local changeSceneButton = widget.newButton {
 --contentGroup:insert(redBox )
 --contentGroup:insert(blueBox )
 contentGroup:insert( changeSceneButton )
+--]]
 
 -- Methods
 
