@@ -2,10 +2,11 @@
 
 local display = require "display"
 local widget = require "widget"
-local Server = require "Data.Server"
+local mime   = require "mime"
+local Server = require "Server"
 
 Server:login("Crmuser", "CaCu2013!")
---[[
+--[[s
 local contentGroup = display.newGroup( )
 contentGroup.x = 200
 contentGroup.y = 200
