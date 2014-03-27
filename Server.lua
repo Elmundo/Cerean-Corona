@@ -2,13 +2,13 @@
 local network = require("network")
 local json    = require("json")
 local mime    = require("mime")
+local Utils   = require("Utils") 
 
 -- Parameters for network config
-
 local params = {
 	headers = {
 		["Content-Type"]    = "application/x-www-form-urlencoded",
-		["Accept-Language"] = "us-EN",
+		["Accept-Language"] = "tr-TR",
 		["Accept-Charset"]  = "utf-8",
 		["Accept"]          = "application/json", 
 	},
@@ -18,22 +18,9 @@ local params = {
 }
 -- Server Module
 local Server = {
-	baseURL = "http://cerean.ogoodigital.com/Services/MobileService.ashx/?",
+	baseURL = "http://cerean.ogoodigital.com/Services/MobileService.ashx/",
 	params  = params,
 }
-
-function printTableRecursive( t )
-	for k,v in pairs(t) do
-		if (type(v) == "table") then
-			print(k .. " = {")
-			printTableRecursive(v)
-			print( "}" )
-		else
-			print(k,v)	
-		end
-		
-	end
-end
 
 function Server:login( username, password)
 	local baseRequest =   {
@@ -49,21 +36,17 @@ function Server:login( username, password)
 
 	}
 	
-
-	self:completeRequest(baseRequest)
-
-	self:request()
+	self:request(self:completeRequest(baseRequest), "POST")
 
 end
 
 function Server:completeRequest( params )
 	local jsonFormat = json.encode( params )
 	local completedData = "d=" .. jsonFormat
-	self.params.body = completedData
+	return completedData
 end
 
-local function myCallback( event )
-	
+local function onRequestSuccess( event )
 	print( "[[ -- RESPONSE DATAS -- ]]" )
 	print( "Name: ".. event.name )
 	print( "Phase: ".. event.phase )
@@ -71,19 +54,16 @@ local function myCallback( event )
 	print( "Status: ".. event.status )
 	print( "URL: ".. event.url )
 
-	
-
+	print( event.response )
 	local responseData = json.decode( event.response )
 	responseData = responseData.results[1].res
-	printTableRecursive(responseData )
-
 
 	print( "ResponseType: ".. event.responseType )
 	if (event.isError) then
 		print( "Response: ".. event.response )
+
 	end
 
-	print( event.response )
 	if (event.phase == "began") then
 	
 	elseif (event.phase == "progress") then
@@ -95,11 +75,12 @@ local function myCallback( event )
 	end
 end
 
-function Server:request(  )		
+function Server:request( params, requestType )
 
-	printTableRecursive(self.params)
+	self.params.body = params
+	requestType = requestType or "POST"
 
-	network.request( "http://cerean.ogoodigital.com/Services/MobileService.ashx/", "POST", myCallback, self.params)
+	network.request( self.baseURL, requestType, onRequestSuccess, self.params)
 end
 
 return Server
