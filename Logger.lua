@@ -39,7 +39,7 @@ function Logger:debug( object, method, message )
 		print( "[DEBUG] -- Object=( " .. object .. " )   " .. "   Method=( " .. method .. " )   " .. "Message= " .. message )
 	end
 end
----[[
+
 function Logger:warning( object, method, message )
 	if (logLevelTable[WARN] >= logLevelTable[logLevel]) then
 		print( "[WARN] -- Object=(" .. object .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
@@ -57,6 +57,5 @@ function Logger:fatal( object, method, message )
 		print( "[FATAL] -- Object=(" .. object .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
 	end
 end
---]]
 
 return Logger

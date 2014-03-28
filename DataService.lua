@@ -4,6 +4,7 @@ local json = require "json"
 
 -- Data Service Module
 local CereanServer = require "CereanServer"
+local Utils        = require "Utils"
 
 Phase = {
 
@@ -127,10 +128,7 @@ end
 function DataService:findCompanyForCity( cityCode )
 	local companies = self.companies
 	for i,company in ipairs(companies) do
-	
-		-- TODO: A string manipulation is need here to insert city names into list by seperating in the string list
-		-- cities = company.cityList.componentsSeparatedByString(",")
-		local cities = {}
+		local cities = Utils:componentSeperatedByString(company.cityList, ",")
 		for i,city in ipairs(cities) do
 			if (city == cityCode) then
 				return company

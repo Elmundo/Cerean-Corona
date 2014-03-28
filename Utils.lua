@@ -21,4 +21,27 @@ function Utils:printTable( table )
 	end
 end
 
+function Utils:componentSeperatedByString( string, pattern )
+	local subPart    = ""
+	local commaIndex = -1
+	local i          = 0
+	local list       = {}
+
+	while commaIndex do
+		i = i + 1
+		commaIndex = string.find( string, "," )
+		if (commaIndex ~= nil) then
+			subPart = string.sub( string, 1, commaIndex - 1)
+			string  = string.sub( string, commaIndex + 1, -1) 
+		else
+			subPart = string
+			string  = ""
+		end
+
+		list[i] = subPart
+	end
+
+	return list
+end
+
 return Utils
