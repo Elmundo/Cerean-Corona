@@ -24,6 +24,7 @@ local Server = {
 -- Property List
 	baseURL = "http://cerean.ogoodigital.com/Services/MobileService.ashx/",
 	params  = params,
+	requestID = 0,
 }
 
 -- Base Class
@@ -31,11 +32,14 @@ local Server = {
 function Server.new()
 	local newServer = {
 
-		baseURL = Server.baseURL, 
-		params  = Server.params,
+		baseURL   = Server.baseURL, 
+		params    = Server.params,
+		requestID = Server.requestID,
 
 		setProperties    = Server.setProperties,
 		request          = Server.request,
+		logRequest       = Server.logRequest,
+		logResponse      = Server.logResponse,
 	}
 	return newServer
 end
@@ -46,11 +50,39 @@ function Server:setProperties( _params )
 	self.params  = _params.params or self.params
 end
 
+function Server:logRequest( params, requestID )
+
+	print( "------------------------------------------------------------------------------------------------------------------------------------------------------------" )
+	print( "----------------- REQUEST ID: " .. self.requestID)
+	print( "--                                                																										  --" )
+	print( "--												  																										  --" )
+	print("request.body= " .. params)
+	print( "--                                                																										  --" )
+	print( "--												  																										  --" )
+	print( "------------------------------------------------------------------------------------------------------------------------------------------------------------" )
+	print( "------------------------------------------------------------------------------------------------------------------------------------------------------------" )
+end
+
+function Server:logResponse( params, responseID )
+	print( "----------------------------------------------------" )
+	print( "----------------- RESPONSE ID: " .. self.requestID)
+	print( "--                                                																										  --" )
+	print( "--												  																										  --" )
+	print("response.body= ")
+	Utils:printTable(params)
+	print( "--                                                																										  --" )
+	print( "--												  																										  --" )
+	print( "------------------------------------------------------------------------------------------------------------------------------------------------------------" )
+	print( "------------------------------------------------------------------------------------------------------------------------------------------------------------" )
+end
+
 function Server:request( params, callback, requestType )
 
+	self.requestID = self.requestID + 1
 	self.params.body = params
 	requestType = requestType or "POST"
 
+	self:logRequest(params, self.requestID)
 	network.request( self.baseURL, requestType, 
 					
 					function ( event )
@@ -58,6 +90,7 @@ function Server:request( params, callback, requestType )
 
 							local responseData = json.decode( event.response )
 							responseData = responseData.results[1].res
+							self:logResponse(responseData, self.requestID)
 
 							callback(responseData) -- Call the related callback function
 						end

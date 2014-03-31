@@ -22,9 +22,14 @@ function Utils:printTable( table )
 end
 
 function Utils:componentSeperatedByString( string, pattern )
+	local list = {}
+	local i = 1
 	for w in string.gmatch( string, pattern ) do
-		print(w)
+		list[i] = w
+		i = i + 1
 	end	
+
+	return list
 end
 
 --[[
@@ -51,6 +56,5 @@ function Utils:componentSeperatedByString( string, pattern )
 	return list
 end
 ]]
-
 
 return Utils
