@@ -12,6 +12,9 @@ local Utils       = require "Utils"
 Logger:setLevel("DEBUG")
 Logger:debug("main", "general", "This is main scope.")
 
+local list = "istanbul,ankara,izmir,gotham"
+
+Utils:componentSeperatedByStringNew(list, "%w+")
 -- Login test
 --[[
 DataService:login("Crmuser", "CaCu2013!", function ( responseData ) 

@@ -22,6 +22,13 @@ function Utils:printTable( table )
 end
 
 function Utils:componentSeperatedByString( string, pattern )
+	for w in string.gmatch( string, pattern ) do
+		print(w)
+	end	
+end
+
+--[[
+function Utils:componentSeperatedByString( string, pattern )
 	local subPart    = ""
 	local commaIndex = -1
 	local i          = 0
@@ -43,5 +50,7 @@ function Utils:componentSeperatedByString( string, pattern )
 
 	return list
 end
+]]
+
 
 return Utils
