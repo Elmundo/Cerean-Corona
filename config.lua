@@ -2,8 +2,8 @@ sapplicartion =
 {
 	content = 
 	{
-		width  = 640,
-		height = 960,
+		width  = 1280,
+		height = 800,
 		scale  = "letterbox",
 		xAlign = "left",
 		yAlign = "top",
@@ -13,7 +13,7 @@ sapplicartion =
 			["-small"] = 0.375,
 			["@2x"] = 1.5,
 		},
-
+	
 		fps = 30,
 	},
 
