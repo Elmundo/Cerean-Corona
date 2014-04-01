@@ -1,4 +1,4 @@
--- First first
+
 local display     = require "display"
 local widget      = require "widget"
 local mime        = require "mime"
@@ -25,7 +25,24 @@ DataService:login("Crmuser", "CaCu2013!", function ( responseData )
 	print( "memory consuming is " .. memoryConsuming .. " Kbyte")
 end)
 --]]
-
 local packageScene = PackageScene.new()
-
 packageScene.init()
+
+
+
+-- ERROR HANDLING SECTION --
+function myUnhandledErrorListener( event )
+
+    local iHandledTheError = true
+
+    if ( iHandledTheError ) then
+        print( "Handling the unhandled error", event.errorMessage )
+    else
+        print( "Not handling the unhandled error", event.errorMessage )
+    end
+
+    return iHandledTheError
+end
+
+Runtime:addEventListener( "unhandledError", myUnhandledErrorListener )
+

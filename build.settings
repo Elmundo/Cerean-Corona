@@ -2,9 +2,9 @@ settings =
 {
 	orientation = 
 	{
-		default = "landscapeRight, landscapeLeft",  --initial launch orientation
-        content = "",  --locked orientation of the Corona stage, independent of Native UI elements (iOS only)
-        supported = { "landscapeRight", "landscapeLeft"},  --table of allowed options for auto-orientation
+            default = "landscapeRight",  --initial launch orientation
+            content = "",  --locked orientation of the Corona stage, independent of Native UI elements (iOS only)
+            supported = { "landscapeRight", "landscapeLeft"},  --table of allowed options for auto-orientation
 	},
 
 	-- iOS Settings

@@ -1,9 +1,9 @@
-sapplicartion =
+application =
 {
 	content = 
 	{
-		width  = 1280,
-		height = 800,
+		width  = 800,
+		height = 1280,
 		scale  = "letterbox",
 		xAlign = "left",
 		yAlign = "top",
@@ -27,4 +27,6 @@ sapplicartion =
     },
 
     launchPad = false,
+    
+    showRuntimeErrors = true,
 }
