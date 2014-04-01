@@ -6,13 +6,19 @@ local json        = require "json"
 local string      = require "string"
 local storyboard = require "storyboard"
 
-local DataService = require "DataService"
-local Logger      = require "Logger" 
-local Utils       = require "Utils"
+local DataService  = require "DataService"
+local Logger       = require "Logger" 
+local Utils        = require "Utils"
+local PackageScene = require "PackageScene"
+
+-- Set default anchor point of project top-left
+display.setDefault( "anchorX", 0 )
+display.setDefault( "anchorY", 0 )
+display.setDefault( "background", 255, 255, 255, 1 )
 
 Logger:setLevel("DEBUG")
-Logger:debug("main", "general", "This is main scope.")
 Logger:debug("main", "general", "PixelWidth: " .. display.pixelWidth .. " PixelHeight: " .. display.pixelHeight )
+Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 
 
