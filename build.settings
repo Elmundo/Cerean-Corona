@@ -1,9 +1,19 @@
 settings = 
 {
+    orientation =
+    {
+        default = "landscapeRight",
+        supported = { "landscapeRight", "landscapeLeft" },
+    },
+}
+
+--[[
+settings = 
+{
 	orientation = 
 	{
-		default = "landscapeRight, landscapeLeft",  --initial launch orientation
-        content = "",  --locked orientation of the Corona stage, independent of Native UI elements (iOS only)
+		default = "landscapeRight",  --initial launch orientation
+        --content = "",  --locked orientation of the Corona stage, independent of Native UI elements (iOS only)
         supported = { "landscapeRight", "landscapeLeft"},  --table of allowed options for auto-orientation
 	},
 
@@ -60,9 +70,12 @@ settings =
             { name = "android.hardware.location.gps", required = false },
         },
     },
+
 }
 
 -- iOS Settings which is used because of containing special character
 settings.iphone.plist["UIInterfaceOrientation~ipad"] = "UIInterfaceOrientationPortrait"
 settings.iphone.plist["UISupportedInterfaceOrientations~ipad"] = 
 { "UIInterfaceOrientationPortrait","UIInterfaceOrientationPortraitUpsideDown" }
+
+--]]

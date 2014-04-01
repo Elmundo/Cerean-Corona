@@ -1,9 +1,9 @@
-sapplicartion =
+application =
 {
 	content = 
 	{
-		width  = 640,
-		height = 960,
+		width  = 800,
+		height = 1280,
 		scale  = "letterbox",
 		xAlign = "left",
 		yAlign = "top",
@@ -16,7 +16,7 @@ sapplicartion =
 
 		fps = 30,
 	},
-
+--[[
 	license =
     {
         google =
@@ -27,4 +27,5 @@ sapplicartion =
     },
 
     launchPad = false,
+    --]]
 }
