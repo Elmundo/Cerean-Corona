@@ -9,7 +9,7 @@ function new( xPos, yPos )
 
 	local textFieldWrapper = display.newGroup( )
 	local background = display.newImage( "Assets/InputInfo.png", 0, 0 )
-	local textField = display.newText( "Test", 0, 0, 220, 20, native.systemFont, 15 )
+	local textField = display.newText( "Test", 5, 10, 220, 20, native.systemFont, 15 )
 	--[[
 		{
 		text = "Test",
@@ -42,7 +42,8 @@ function new( xPos, yPos )
 
 
 	function textFieldWrapper:setListener( listener )
-		textField:addEventListener( "userInput", listener )
+            background:addEventListener("touch", listener)
+		--textField:addEventListener( "userInput", listener )
 	end
 
 	function textFieldWrapper:getText()

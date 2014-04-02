@@ -1,10 +1,14 @@
 local widget = require( "widget" )
 local CLabel = require( "Views.Labels.CLabel" )
 local CButton = require( "Views.Buttons.CButton" )
-
+local ControlBar = require( "Views.ControlBar")
+local storyboard = require( "storyboard" )
+local BaseScene   = require "Scenes.BaseScene"
+local scene = BaseScene.new()
+--[[
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
-
+--]]
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 
@@ -24,7 +28,7 @@ function onExitButtonTouched( event )
 end
 
 function onPhaseButtonTouched( event )
-	storyboard.gotoScene( "SubscriptionScene", "slideLeft", 800 )
+	storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
 	return true
 end
 
@@ -35,19 +39,21 @@ function scene:createScene( event )
 	--storyboard.purgeScene( "Scenes.LoginScene" )
 
 	displayGroup = self.view
-
+        controlBar = ControlBar.new()
 	--testImage  = display.newImage( "avengerMinions.jpg", centerX, centerY, true )
-	menuHeader = display.newImage( "Assets/MenuHeader.png", 0, 100, true )
+	menuHeader = display.newImageRect( "Assets/MenuHeader.png", 1280, 100 )
+        menuHeader.x = 0
+        menuHeader.y = 50
 	applicationPhaseButton = widget.newButton{
    		width = 219,
-    	height = 219,
-    	defaultFile = "Assets/MenuButton01.png",
-    	overFile = "Assets/MenuButton01Pressed.png",
-    	label = "",
-    	onEvent = onPhaseButtonTouched
+                height = 219,
+                defaultFile = "Assets/MenuButton01.png",
+                overFile = "Assets/MenuButton01Pressed.png",
+                label = "",
+                onEvent = onPhaseButtonTouched
 	}
-	applicationPhaseButton.x = centerX-229
-	applicationPhaseButton.y = centerY
+	applicationPhaseButton.x = centerX-229-219/2
+	applicationPhaseButton.y = centerY-219/2
 
 	callPhaseButton = widget.newButton{
    		width = 219,
@@ -57,8 +63,8 @@ function scene:createScene( event )
     	label = "",
     	onEvent = onPhaseButtonTouched
 	}
-	callPhaseButton.x = centerX
-	callPhaseButton.y = centerY
+	callPhaseButton.x = centerX-219/2
+	callPhaseButton.y = centerY-219/2
 
 	registryPhaseButton = widget.newButton{
    		width = 219,
@@ -68,9 +74,10 @@ function scene:createScene( event )
     	label = "",
     	onEvent = onPhaseButtonTouched
 	}
-	registryPhaseButton.x = centerX+229
-	registryPhaseButton.y = centerY
-
+	registryPhaseButton.x = centerX+229-219/2
+	registryPhaseButton.y = centerY-219/2
+        
+        displayGroup:insert( controlBar )
 	displayGroup:insert( menuHeader )
 	displayGroup:insert( applicationPhaseButton )
 	displayGroup:insert( callPhaseButton )

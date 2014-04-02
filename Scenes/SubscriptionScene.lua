@@ -1,9 +1,15 @@
 local storyboard = require( "storyboard" )
-local scene = storyboard.newScene()
+
+local BaseScene   = require "Scenes.BaseScene"
+local scene = BaseScene.new()
+
 local display = require( "display" )
 local widget = require( "widget" )
 local native = require( "native" )
-local CButton = require( "Views.Buttons.CButton")
+
+
+local CButton = require( "Views.Buttons.CButton" )
+local ControlBar = require( "Views.ControlBar" )
 local SubscriberTypeView = require( "Views.SubscriberTypeView" )
 local PersonalInformationView = require( "Views.PersonalInformationView" )
 local CounterInformationView = require( "Views.CounterInformationView" )
@@ -119,9 +125,12 @@ end
 function shiftDown()
 
         if( isStepAnimationRunning == false ) then
+            print( "No Animation Running")
                 isStepAnimationRunning = true
                 if( step == 0 ) then
                         --Pop previous scene
+                        local previousScene = storyboard.getPrevious()
+                        storyboard.gotoScene(previousScene, "slideRight", 800 )
                 elseif ( step == 1 ) then
                         transition.to( personalInformationGroup, {time=400, y= 185,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 else 
@@ -138,12 +147,12 @@ function scene:createScene( event )
         step = 0
         isStepAnimationRunning = false
 
-        logo = display.newImage( "Assets/Logo.png", 50, 50, true )
-
+        logo = display.newImage( "Assets/Logo.png", 50, 55, true )
+        controlBar = ControlBar.new()
         buttomWhiteMask = display.newRect( 40, 690, 1200, 110 )
         --buttomWhiteMask:setFillColor( 1,0,0 )
-        backButton = CButton.new( "GERİ", "backButton", onBackButtonTouch, 50, 700, 0 )
-        nextButton = CButton.new( "DEVAM", "nextButton", onNextButtonTouch, 1090, 700, 0 )
+        backButton = CButton.new( "GERİ", "backButton", onBackButtonTouch, 40, 700, 0 )
+        nextButton = CButton.new( "DEVAM", "nextButton", onNextButtonTouch, 1100, 700, 0 )
 
         callCenterLogo = display.newImage( "Assets/CallCenter.png", 50, 750 )
         fibaLogo = display.newImage( "Assets/FibaGroup.png", 1030, 760 )
@@ -160,7 +169,8 @@ function scene:createScene( event )
 --------------------------------------------
         subscriberTypeGroup = SubscriberTypeView.new()
         subscriberTypeGroup:addButtonEventListeners( handleIndividualButtonEvent, handleCorporateButtonEvent)
-		
+		group:insert( logo )
+                group:insert( controlBar )
 		group:insert( subscriberTypeGroup )
 		group:insert( personalInformationGroup )
                 group:insert( counterInformationGroup )
@@ -184,6 +194,9 @@ end
 -- Called BEFORE scene has moved onscreen:
 function scene:willEnterScene( event )
         local group = self.view
+        
+        step = 0
+        isStepAnimationRunning = false
 
         -----------------------------------------------------------------------------
 
@@ -197,7 +210,7 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
         local group = self.view
-
+        
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -250,7 +263,7 @@ end
 function scene:overlayBegan( event )
         local group = self.view
         local overlay_name = event.sceneName  -- name of the overlay scene
-
+        
         -----------------------------------------------------------------------------
 
         --      This event requires build 2012.797 or later.

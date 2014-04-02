@@ -6,10 +6,10 @@ local json        = require "json"
 local string      = require "string"
 local storyboard = require "storyboard"
 
-local DataService  = require "DataService"
-local Logger       = require "Logger" 
-local Utils        = require "Utils"
-local PackageScene = require "PackageScene"
+local DataService  = require "Network.DataService"
+local Logger       = require "libs.Log.Logger" 
+local Utils        = require "libs.Util.Utils"
+--local PackageScene = require "PackageScene"
 
 -- Set default anchor point of project top-left
 display.setDefault( "anchorX", 0 )
@@ -41,5 +41,5 @@ end)
 
 display.setDefault("background", 1, 1, 1, 1)
 
-storyboard.gotoScene( "SubscriptionScene", "slideLeft", 400 )
+storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400 )
 

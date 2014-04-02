@@ -16,6 +16,7 @@ application =
 	
 		fps = 30,
 	},
+}
 --[[
 	license =
     {
@@ -30,3 +31,4 @@ application =
     
     showRuntimeErrors = true,
 }
+--]]
