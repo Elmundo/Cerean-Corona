@@ -25,7 +25,13 @@ function ProgressBar.new(position, imageName, maskImageName)
         progressBar:insert(imageBG)
         progressBar:insert(imageContainer)
         progressBar:insert(imageMask)
-
+        
+         -- PROGRESS ICON IMAGES
+        local icon1 = display.newImage(progressBar, "Assets/IconProgress01.png",  system.ResourceDirectory,   10, 24, YES)
+        local icon2 = display.newImage(progressBar, "Assets/IconProgress02.png",  system.ResourceDirectory,  206, 24, YES)
+        local icon3 = display.newImage(progressBar, "Assets/IconProgress03A.png", system.ResourceDirectory, 401, 24, YES)
+        local icon4 = display.newImage(progressBar, "Assets/IconProgress04.png",  system.ResourceDirectory,  598, 24, YES)
+        
         progressBar.x = position.x
         progressBar.y = position.y
 

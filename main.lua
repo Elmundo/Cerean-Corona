@@ -1,4 +1,3 @@
-
 local display     = require "display"
 local storyboard  = require "storyboard"
 
