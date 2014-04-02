@@ -4,7 +4,6 @@ local storyboard  = require "storyboard"
 
 local DataService  = require "Network.DataService"
 local Logger       = require "libs.Log.Logger" 
-local PackageScene = require "Scenes.PackageScene"
 
 -- Set default anchor point of project top-left
 display.setDefault( "anchorX", 0 )
