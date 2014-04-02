@@ -4,7 +4,6 @@ application =
 	{
 		width  = 800,
 		height = 1280,
-
 		scale  = "letterbox",
 		xAlign = "left",
 		yAlign = "top",
@@ -28,5 +27,6 @@ application =
     },
 
     launchPad = false,
-    --]]
+    
+    showRuntimeErrors = true,
 }

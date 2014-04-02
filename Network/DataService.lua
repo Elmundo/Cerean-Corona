@@ -3,8 +3,8 @@ local os   = require "os"
 local json = require "json"
 
 -- Data Service Module
-local CereanServer = require "CereanServer"
-local Utils        = require "Utils"
+local CereanServer = require "Network.CereanServer"
+local Utils        = require "libs.Util.Utils"
 
 Phase = {
 

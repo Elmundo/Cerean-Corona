@@ -2,8 +2,8 @@
 local network = require("network")
 local json    = require("json")
 local mime    = require("mime")
-local Utils   = require("Utils") 
-local Logger  = require "Logger"
+local Utils   = require("libs.Util.Utils") 
+local Logger  = require "libs.Log.Logger"
 
 -- Parameters for network config
 local params = {
