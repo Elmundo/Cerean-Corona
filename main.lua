@@ -1,14 +1,10 @@
 
 local display     = require "display"
-local widget      = require "widget"
-local mime        = require "mime"
-local json        = require "json"
-local string      = require "string"
+local storyboard  = require "storyboard"
 
-local DataService  = require "DataService"
-local Logger       = require "Logger" 
-local Utils        = require "Utils"
-local PackageScene = require "PackageScene"
+local DataService  = require "Network.DataService"
+local Logger       = require "libs.Log.Logger" 
+local PackageScene = require "Scenes.PackageScene"
 
 -- Set default anchor point of project top-left
 display.setDefault( "anchorX", 0 )
@@ -25,10 +21,8 @@ DataService:login("Crmuser", "CaCu2013!", function ( responseData )
 	print( "memory consuming is " .. memoryConsuming .. " Kbyte")
 end)
 --]]
-local packageScene = PackageScene.new()
-packageScene.init()
 
-
+storyboard.gotoScene("Scenes.PackageScene", { effect = "slideLeft", time=800})
 
 -- ERROR HANDLING SECTION --
 function myUnhandledErrorListener( event )
