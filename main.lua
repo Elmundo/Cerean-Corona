@@ -1,4 +1,3 @@
-require "CiderDebugger";-- First first
 local display     = require "display"
 local widget      = require "widget"
 local mime        = require "mime"
@@ -8,8 +7,6 @@ local storyboard = require "storyboard"
 
 local DataService  = require "Network.DataService"
 local Logger       = require "libs.Log.Logger" 
-local Utils        = require "libs.Util.Utils"
---local PackageScene = require "PackageScene"
 
 -- Set default anchor point of project top-left
 display.setDefault( "anchorX", 0 )

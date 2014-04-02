@@ -32,6 +32,15 @@ function Utils:componentSeperatedByString( string, pattern )
 	return list
 end
 
+function cColor(r, g, b, a)
+    local color = {r/255, g/255, b/255, (a or 1)}
+    return color
+end
+
+function cColorM(r, g, b, a)
+    return r/255, g/255, b/255, (a or 1)
+end
+
 --[[
 function Utils:componentSeperatedByString( string, pattern )
 	local subPart    = ""
