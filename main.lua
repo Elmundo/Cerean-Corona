@@ -41,5 +41,5 @@ end)
 
 display.setDefault("background", 1, 1, 1, 1)
 
-storyboard.gotoScene( "LoginScene", "slideLeft", 400 )
+storyboard.gotoScene( "SubscriptionScene", "slideLeft", 400 )
 

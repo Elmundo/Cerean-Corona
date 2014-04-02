@@ -37,17 +37,17 @@ end
 -------------------------------------------------------------------------------
 function scene:createScene( event )
 	displayGroup = self.view
-	loginBackground = display.newImage( "Assets/LoginBackground.png", centerX, centerY, true )
-	loginBox = display.newImage( "Assets/LoginBox.png", centerX, centerY, true )
+	loginBackground = display.newImage( "Assets/LoginBackground.png", 0, 0, true )
+	loginBox = display.newImage( "Assets/LoginBox.png", 640-189, 400-249, true )
 
-	userNameTextField = CTextField.new( centerX, centerY-5 )
-	passwordTextField = CTextField.new( centerX, centerY+65 ) 
+	userNameTextField = CTextField.new( centerX-120, centerY-15 )
+	passwordTextField = CTextField.new( centerX-120, centerY+55 ) 
 
-	headerLabel = CLabel.new( "Bayi Girişi", centerX-75, centerY-70, 20)
-	userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-70, centerY-35, 15)
-	passwordLabel = CLabel.new( "Şifre", centerX-100, centerY+35, 15)
+	headerLabel = CLabel.new( "Bayi Girişi", centerX-120, centerY-70, 20)
+	userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-120, centerY-35, 15)
+	passwordLabel = CLabel.new( "Şifre", centerX-120, centerY+35, 15)
 
-	loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, centerX, centerY+110, 0 )
+	loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, centerX-90, centerY+110, 0 )
 
 	displayGroup:insert( loginBackground )
 	displayGroup:insert( loginBox )

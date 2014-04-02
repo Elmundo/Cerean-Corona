@@ -138,15 +138,15 @@ function scene:createScene( event )
         step = 0
         isStepAnimationRunning = false
 
-        logo = display.newImage( "Assets/Logo.png", 120, 90, true )
+        logo = display.newImage( "Assets/Logo.png", 50, 50, true )
 
-        buttomWhiteMask = display.newRect( 640, 745, 1200, 110 )
-        buttomWhiteMask:setFillColor( 1,0,0 )
+        buttomWhiteMask = display.newRect( 40, 690, 1200, 110 )
+        --buttomWhiteMask:setFillColor( 1,0,0 )
         backButton = CButton.new( "GERİ", "backButton", onBackButtonTouch, 50, 700, 0 )
         nextButton = CButton.new( "DEVAM", "nextButton", onNextButtonTouch, 1090, 700, 0 )
 
-        callCenterLogo = display.newImage( "Assets/CallCenter.png", 120, 770 )
-        fibaLogo = display.newImage( "Assets/FibaGroup.png", 1130, 770 )
+        callCenterLogo = display.newImage( "Assets/CallCenter.png", 50, 750 )
+        fibaLogo = display.newImage( "Assets/FibaGroup.png", 1030, 760 )
         --controlBar
         --progressBar
 --------------------------------------------

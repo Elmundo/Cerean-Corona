@@ -37,7 +37,7 @@ function scene:createScene( event )
 	displayGroup = self.view
 
 	--testImage  = display.newImage( "avengerMinions.jpg", centerX, centerY, true )
-	menuHeader = display.newImage( "Assets/MenuHeader.png", centerX, 100, true )
+	menuHeader = display.newImage( "Assets/MenuHeader.png", 0, 100, true )
 	applicationPhaseButton = widget.newButton{
    		width = 219,
     	height = 219,
@@ -47,7 +47,7 @@ function scene:createScene( event )
     	onEvent = onPhaseButtonTouched
 	}
 	applicationPhaseButton.x = centerX-229
-	applicationPhaseButton.y = centerY+50
+	applicationPhaseButton.y = centerY
 
 	callPhaseButton = widget.newButton{
    		width = 219,
@@ -58,7 +58,7 @@ function scene:createScene( event )
     	onEvent = onPhaseButtonTouched
 	}
 	callPhaseButton.x = centerX
-	callPhaseButton.y = centerY+50
+	callPhaseButton.y = centerY
 
 	registryPhaseButton = widget.newButton{
    		width = 219,
@@ -69,7 +69,7 @@ function scene:createScene( event )
     	onEvent = onPhaseButtonTouched
 	}
 	registryPhaseButton.x = centerX+229
-	registryPhaseButton.y = centerY+50
+	registryPhaseButton.y = centerY
 
 	displayGroup:insert( menuHeader )
 	displayGroup:insert( applicationPhaseButton )
