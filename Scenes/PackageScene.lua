@@ -1,11 +1,13 @@
-local display     = require "display"
-local BaseScene   = require "Scenes.BaseScene"
-local widget      = require "widget"
-local ProgressBar = require "libs.ProgressBar.ProgressBar"
+local display         = require "display"
+local BaseScene       = require "Scenes.BaseScene"
+local widget          = require "widget"
+local storyboard      = require "storyboard"
+local ProgressBar     = require "libs.ProgressBar.ProgressBar"
 local PackageScroller = require "Views.PackageScroller"
 local PackageView     = require "Views.PackageDetail"
 local Utils           = require "libs.Util.Utils"
 
+-- PackageScene Module
 local PackageScene    = BaseScene.new()
 
 function PackageScene:createScene( event )
@@ -24,6 +26,7 @@ function PackageScene:createScene( event )
     -- EPIC PROGRESS BAR 
     local progressBar = ProgressBar.new({x=280,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
     progressBar:setProgress(242)
+    
     -- HEADER TEXT
     local bgHeaderText = display.newRoundedRect( 30, 220, 960, 40, 5 )
     bgHeaderText:setFillColor( 1,0,0 )
@@ -84,8 +87,10 @@ function PackageScene:createScene( event )
         labelAlign = "center",
         labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
         emboss = true,
-        onEvent = function (event)
-                        print "Pressed next button"
+        onEvent = function (event)                    
+                        if event.phase == "ended" then
+                            storyboard.gotoScene("Scenes.ConfirmationScene", "slideLeft", 400 )
+                        end 
                   end,
     })
     
@@ -100,7 +105,7 @@ function PackageScene:createScene( event )
     group:insert(backButtonBg)
     group:insert(backButton)
     group:insert(nextButtonBg)
-    group:insert(backButton)
+    group:insert(nextButton)
     
 end
 PackageScene:addEventListener("createScene")

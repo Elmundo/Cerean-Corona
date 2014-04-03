@@ -6,6 +6,7 @@ local json = require "json"
 local CereanServer = require "Network.CereanServer"
 local Utils        = require "libs.Util.Utils"
 
+-- GLOBAL Phase Enum
 Phase = {
 
 	ApplicationPhase = 0,

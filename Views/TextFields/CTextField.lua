@@ -39,8 +39,6 @@ function new( xPos, yPos )
 	textFieldWrapper.x = xPos
 	textFieldWrapper.y = yPos
 
-
-
 	function textFieldWrapper:setListener( listener )
             background:addEventListener("touch", listener)
 		--textField:addEventListener( "userInput", listener )
