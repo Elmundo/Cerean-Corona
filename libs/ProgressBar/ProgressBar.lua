@@ -45,7 +45,7 @@ function ProgressBar.new(position, imageName, maskImageName)
         end
         
         function progressBar:setProgressWithPercentage( value )
-            local widthValue = (value * self.imageContainer.width) / 100 
+            local widthValue = (value * image.width) / 100 
             transition.to(self.imageContainer, {width=widthValue, time=500, transition=easing.linear})
         end
         

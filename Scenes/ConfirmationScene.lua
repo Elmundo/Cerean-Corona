@@ -29,7 +29,7 @@ function ConfirmationScene:createScene( event )
 
     -- EPIC PROGRESS BAR 
     local progressBar = ProgressBar.new({x=280,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
-    progressBar:setProgress(438)
+    progressBar:setProgressWithPercentage(100)
     
     -- HEADER TEXT
     local bgHeaderText = display.newRoundedRect( 30, 170, 960, 40, 5 )
@@ -101,7 +101,11 @@ function ConfirmationScene:createScene( event )
         labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
         emboss = true,
         onEvent = function (event)
-                        print "Pressed back button"
+                        if event.phase == "ended" then
+                            local prevScene = storyboard.getPrevious()
+                            --storyboard.gotoScene(prevScene, "slideRight", 400)
+                            storyboard.gotoScene("Scenes.PackageScene", "slideRight", 400)
+                        end                       
                   end,
     })
     
@@ -118,8 +122,7 @@ function ConfirmationScene:createScene( event )
         emboss = true,
         onEvent = function (event)
                         if event.phase == "ended" then
-                            local prevScene = storyboard.getPrevious()
-                            storyboard.gotoScene(prevScene, "slideRight", 400)
+                            storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)
                         end 
                   end,
     })

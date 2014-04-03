@@ -35,4 +35,4 @@ end)
 
 display.setDefault("background", 1, 1, 1, 1)
 
-storyboard.gotoScene( "Scenes.ConfirmationScene", "slideLeft", 400)
+storyboard.gotoScene( "Scenes.PackageScene", "slideLeft", 400)
