@@ -1,6 +1,7 @@
-local widget = require "widget"
+local widget  = require "widget"
 local display = require "display"
 
+-- PackageView Factory Module
 local PackageView = {}
     
 -- options
@@ -13,8 +14,8 @@ local PackageView = {}
 --]]
 function PackageView.new(options)
     
-    packageView = display.newContainer(options.width, options.height)
-    packageView.anchorChildren = false
+    -- New PackageView
+    local packageView = display.newGroup()
     packageView.delegate = options.delegate
     
     -- Backgorund Image
@@ -22,8 +23,12 @@ function PackageView.new(options)
     packageView:insert(bgImage)
     
     -- Header Text
-    local indexLabel = display.newText(packageView, "ENDEKSLİ 1", 30, 10, 290, 80, native.systemFontBold, 20)
-
+    local indexLabel = display.newText(packageView, "ENDEKSLİ 1", 90, 14, 290, 80, native.systemFontBold, 20)
+    
+    -- Check Icon
+    local iconImage  = display.newImage(packageView, "Assets/IconSelectTariffPressed.png", system.ResourceDirectory, -12, -9, true)
+    iconImage.isVisible = false
+    
     packageView:translate(options.x, options.y)
     
     -- Button - Only functionalty, no visual elements
@@ -48,6 +53,11 @@ function PackageView.new(options)
     }
     
     packageView:insert(detailButton)
+    
+    -- METHODS
+    function packageView:getIcon()
+        return iconImage
+    end
     
     return packageView
 end

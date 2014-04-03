@@ -6,6 +6,10 @@ function PackageDetail.new()
     
     local packageDetail = display.newGroup()
     
+    local indexLabel  = display.newText(packageDetail, "Default", 0 , 0, 100, 50, native.systemFont, 16)
+    local dateLabel   = display.newText(packageDetail, "Default", 0 , 0, 100, 50 ,native.systemFont, 16)
+    local detailLabel = display.newText(packageDetail, "Default", 0 , 0, 100, 50, native.systemFont, 16)
+    
     local unselectedBG = display.newImage("Assets/VisualSelectTariff.png", 0, 0)
     local selectedBG   = display.newImage("Assets/VisualSelectedTariff.png", 0, 0)
     

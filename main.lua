@@ -18,9 +18,6 @@ Logger:debug("main", "general", "PixelWidth: " .. display.pixelWidth .. " PixelH
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 
-
-
-
 -- Set default anchor point of project top-left
 --[[
 display.setDefault( "anchorX", 0 )
@@ -38,5 +35,5 @@ end)
 
 display.setDefault("background", 1, 1, 1, 1)
 
-storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400 )
+storyboard.gotoScene( "Scenes.PackageScene", "slideLeft", 400 )
 

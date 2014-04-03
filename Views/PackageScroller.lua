@@ -1,7 +1,8 @@
 local widget      = require "widget"
 local display     = require "display"
 local PackageView = require "Views.PackageView"
--- Module PacakgeScroller
+
+-- PackageScroller Factory Module
 local PackageScroller = {}
 
 -- CONSTANTS
@@ -21,11 +22,14 @@ local cPACKAGE_RIGHT_X_POS = 330
 --]]
 function PackageScroller.new(packageDataList, options)
     
+    -- New PackageScroller
     local packageScroller = widget.newScrollView(options)
     
+    -- Properties
     packageScroller.yPos = 10
     packageScroller.packageDataList = packageDataList
     packageScroller.delegate = options.delegate
+    packageScroller.prevPackageView = nil
     
     function packageScroller:setMyScroller(list)
         
@@ -64,7 +68,14 @@ function PackageScroller.new(packageDataList, options)
     
     -- Package Delegate
     function packageScroller:didPackageSelect(package)
+        if self.prevPackageView ~= nil then
+            local icon = self.prevPackageView:getIcon()
+            icon.isVisible = false
+        end
         self.delegate:didPackageSelect(package)
+        local icon = package:getIcon()
+        icon.isVisible = true
+        self.prevPackageView = package
     end
     
     return packageScroller
