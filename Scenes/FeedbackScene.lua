@@ -92,7 +92,11 @@ end
 FeedbackScene:addEventListener("createScene")
 
 function FeedbackScene:enterScene(event)
-    
+    timer.performWithDelay(1000, 
+                            function (event)
+                                storyboard.gotoScene("Scenes.PackageScene", "slideRight", 400)
+                            end, 
+                            1)
 end
 FeedbackScene:addEventListener("enterScene")
 

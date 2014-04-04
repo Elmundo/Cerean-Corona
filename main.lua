@@ -3,7 +3,7 @@ local widget      = require "widget"
 local mime        = require "mime"
 local json        = require "json"
 local string      = require "string"
-local storyboard = require "storyboard"
+local storyboard  = require "storyboard"
 
 local DataService  = require "Network.DataService"
 local Logger       = require "libs.Log.Logger" 
@@ -11,7 +11,12 @@ local Logger       = require "libs.Log.Logger"
 -- Set default anchor point of project top-left
 display.setDefault( "anchorX", 0 )
 display.setDefault( "anchorY", 0 )
-display.setDefault( "background", 255, 255, 255, 1 )
+display.setDefault("background", 1, 1, 1, 1)
+
+-- Extend native libs
+string.trim = function (str)
+                    return (str:gsub("+%s*(.-)%s*$", "%1") )
+                end
 
 Logger:setLevel("DEBUG")
 Logger:debug("main", "general", "PixelWidth: " .. display.pixelWidth .. " PixelHeight: " .. display.pixelHeight )
@@ -31,8 +36,5 @@ DataService:login("Crmuser", "CaCu2013!", function ( responseData )
 	print( "memory consuming is " .. memoryConsuming .. " Kbyte")
 end)
 --]]
-
-
-display.setDefault("background", 1, 1, 1, 1)
 
 storyboard.gotoScene( "Scenes.PackageScene", "slideLeft", 400)
