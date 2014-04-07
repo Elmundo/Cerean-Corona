@@ -225,6 +225,7 @@ function PackageScene:didPackageSelect( packageView )
     print "We are here now!"
     
     local product = packageView.product
+    self.packageDetail:setPackageDetail(product)
     -- TODO: Set the PackageDetail when it is ready
     self.packageDetail:hideMask()
 end
