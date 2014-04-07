@@ -4,6 +4,7 @@ local storyboard  = require "storyboard"
 local BaseScene   = require "Scenes.BaseScene"
 local ProgressBar = require "libs.ProgressBar.ProgressBar"
 local CTextField  = require "Views.TextFields.CTextField"
+local DataService = require "Network.DataService"
 
 -- GLOBAL MailType Enum
 MailType = {
@@ -14,32 +15,182 @@ MailType = {
 -- ConfirmationScene Module
 local ConfirmationScene = BaseScene.new()
 
+-- Properties
+local step = -1
+
+-- Widget Properties
+local headerBar
+local logo
+local progressBar
+local bgHeaderText
+local headerText
+local informationText
+local confirmationCodeText
+local verificationTextField
+local sendAgainButton
+local envelopeImage
+local backButtonBg
+local backButton
+local nextButtonBg
+local nextButton
+
+-- METHODS
+function ConfirmationScene.onNextButton(event)
+    if event.phase == "ended" then
+        ConfirmationScene:saveContent(step, function (event)
+            ConfirmationScene:sendCustomerNumberMail()
+            storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)
+        end)
+        
+    end
+end
+
+function ConfirmationScene:onBackButton(event)
+    if event.phase == "ended" then
+        local prevScene = storyboard.getPrevious()
+        --storyboard.gotoScene(prevScene, "slideRight", 400)
+        storyboard.gotoScene("Scenes.PackageScene", "slideRight", 400)
+    end   
+end
+
+function ConfirmationScene:sendMail()
+    
+    local contentData
+    
+    if DataService.phase == Phase.RegistryPhase then
+        contentData = {
+            Name = DataService.customer.customerName,
+            Sms = DataService.customer.customerPhone,
+            Email = DataService.customer.customerEmail,
+            VerificationCode = DataService.customer.verificationCode,
+        }
+    else
+        contentData = {
+            Name = DataService.customerName,
+            Sms = DataService.customerPhone,
+            Email = DataService.customerEmail,
+            VerificationCode = DataService.verificationCode,
+        }
+    end
+    
+    DataService:sendMail(MailType.MailTypeVerification, contentData, function (resonseData)
+        -- Error check
+    end)
+end
+
+function ConfirmationScene:sendCustomerNumberMail()
+    
+    local contentData
+    
+    if DataService.phase == Phase.CallPhase then
+        contentData = {
+            Name = DataService.customerName,
+            Sms = DataService.customerPhone,
+            Email = DataService.customerEmail,
+            meterserialnumber = "",
+            CustomerNumber = DataService.customerNumber,
+        }
+    elseif DataService.phase == Phase.RegistryPhase then
+        contentData = {
+            Name = DataService.customer.customerName,
+            Sms = DataService.customer.customerPhone,
+            Email = DataService.customerEmail,
+            meterserialnumber = DataService.meterSerialNumber,
+            CustomerNumber = DataService.customerNumber,
+        }
+    elseif DataService.phase == Phase.ApplicationPhase then
+        contentData = {
+            Name = DataService.customerName,
+            Sms = DataService.customerPhone,
+            Email = DataService.customerEmail,
+            meterserialnumber = DataService.meterSerialNumber,
+            CustomerNumber = DataService.customerNumber,
+        }
+    end
+    
+    DataService:sendMail(MailType.MailTypeCustomerNumber, contentData, function (responseData)
+        -- Error Check
+    end)
+end
+
+function ConfirmationScene:getContent()
+    local content = {}
+    
+    if DataService.phase == Phase.CallPhase then
+        content = {
+            WebFormPage = DataService.webFormPage,
+            VerificationCode = confirmationCodeText.text,
+            CustomerId = DataService.customerId,
+            MeterId = "",
+            QuoteId = "",
+            AppointmentId = DataService.appointmentId,
+            AddressIdVisition = DataService.addressIdVisiting,
+        }
+    elseif DataService.phase == Phase.RegistryPhase then
+        content = {
+            WebFormPage = DataService.webFormPage,
+            VerificationCode = confirmationCodeText.text,
+            CustomerId = DataService.customerId,
+            MeterId = DataService.meterId,
+            QuoteId = DataService.quoteId,
+            AppointmentId = DataService.appointmentId,
+            AddressIdVisition = DataService.addressIdVisiting,
+        }
+    elseif DataService.phase == Phase.ApplicationPhase then
+        content = {
+            WebFormPage = DataService.webFormPage,
+            VerificationCode = confirmationCodeText.text,
+            CustomerId = DataService.customerId,
+            MeterId = DataService.meterSerialNumber,
+            QuoteId = DataService.quoteId,
+            AppointmentId = DataService.appointmentId,
+            AddressIdVisition = DataService.addressIdVisiting,
+        }
+    end
+    
+    return content
+end
+
+function ConfirmationScene:saveContent(step, callback)
+    local contentData = self:getContent()
+    
+    DataService:saveContent(contentData, function (responseData)
+        DataService.customerId = responseData.customerId
+        DataService.customerNumber = responseData.customerNumber
+        
+        callback(responseData)
+    end)
+    
+end
+
 function ConfirmationScene:createScene( event )
+
+    step = kStepConfirmation
 
     -- View of scene
     local group = self.view
     
     -- HEADER BAR
-    local headerBar = display.newRect( 0, 0, 1024, 50 )
+    headerBar = display.newRect( 0, 0, 1024, 50 )
     headerBar:setFillColor( 74/255, 74/255, 74/255 )
 
     -- CEREAN LOGO
-    local logo = display.newImage( "Assets/Logo.png" )
+    logo = display.newImage( "Assets/Logo.png" )
     logo.x, logo.y = 30, 70
 
     -- EPIC PROGRESS BAR 
-    local progressBar = ProgressBar.new({x=280,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
+    progressBar = ProgressBar.new({x=280,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
     progressBar:setProgressWithPercentage(100)
     
     -- HEADER TEXT
-    local bgHeaderText = display.newRoundedRect( 30, 170, 960, 40, 5 )
+    bgHeaderText = display.newRoundedRect( 30, 170, 960, 40, 5 )
     bgHeaderText:setFillColor( cColorM(157, 20, 97, 1) )
-    local headerText     = display.newText( "E-Posta Onaylama", 0, 0, native.systemFontBold, 18 )
+    headerText     = display.newText( "E-Posta Onaylama", 0, 0, native.systemFontBold, 18 )
     headerText:setFillColor( 1, 1, 1 )
     headerText.x, headerText.y = 40,180
     
     -- INFORMATION TEXT
-    local informationText = display.newText("Mail ve SMS olarak gönderilen onay kodunu girerek başvurunuzu tamamlayınız", 
+    informationText = display.newText("Mail ve SMS olarak gönderilen onay kodunu girerek başvurunuzu tamamlayınız", 
                                             display.contentWidth*0.5, 
                                             display.contentHeight*0.5 - 30, 
                                             1000, 
@@ -51,7 +202,7 @@ function ConfirmationScene:createScene( event )
     informationText:setFillColor(cColorM(165, 161, 155))
     
     -- CONFIRMATIN CODE TEXT
-    local confirmationCodeText = display.newText("ONAY KODU", 
+    confirmationCodeText = display.newText("ONAY KODU", 
                                             display.contentWidth*0.5 - 182, 
                                             display.contentHeight*0.5 + 84, 
                                             200, 
@@ -63,11 +214,11 @@ function ConfirmationScene:createScene( event )
     confirmationCodeText:setFillColor(cColorM(0, 0, 0))
     
     -- VERIFICATION TEXT FIELD
-    local verificationTextField = CTextField.new(display.contentWidth*0.5 - 320, 
+    verificationTextField = CTextField.new(display.contentWidth*0.5 - 320, 
                                                 display.contentHeight*0.5 + 90)
     
     -- SEND AGAIN BUTTON
-    local sendAgainButton = widget.newButton({left  = 318,
+    sendAgainButton = widget.newButton({left  = 318,
                                             top     = 530,
                                             width   = 105,
                                             height  = 29,
@@ -83,15 +234,15 @@ function ConfirmationScene:createScene( event )
                                                       end,})
     
     -- VISUAL ENVELOPE
-    local envelopeImage = display.newImage("Assets/VisualEnvelope.png", 
+    envelopeImage = display.newImage("Assets/VisualEnvelope.png", 
                                             system.ResourceDirectory, 
                                             150, 
                                             display.contentHeight*0.5)
     
     -- SCENE BUTTONS
-    local backButtonBg = display.newRoundedRect( 30, 630, 105, 29, 0.5 )
+    backButtonBg = display.newRoundedRect( 30, 630, 105, 29, 0.5 )
     backButtonBg:setFillColor( 165/255, 161/255, 155/255 )
-    local backButton = widget.newButton({
+    backButton = widget.newButton({
         left    = 30,
         top     = 630,
         width   = 105, 
@@ -100,18 +251,12 @@ function ConfirmationScene:createScene( event )
         labelAlign = "center",
         labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
         emboss = true,
-        onEvent = function (event)
-                        if event.phase == "ended" then
-                            local prevScene = storyboard.getPrevious()
-                            --storyboard.gotoScene(prevScene, "slideRight", 400)
-                            storyboard.gotoScene("Scenes.PackageScene", "slideRight", 400)
-                        end                       
-                  end,
+        onEvent = self.onBackButton,
     })
     
-    local nextButtonBg = display.newRoundedRect( 885, 630, 105, 30, 0.5 )
+    nextButtonBg = display.newRoundedRect( 885, 630, 105, 30, 0.5 )
     nextButtonBg:setFillColor( 165/255, 161/255, 155/255 )
-    local nextButton = widget.newButton({
+    nextButton = widget.newButton({
         left    = 885,
         top     = 630,
         width   = 105,
@@ -120,11 +265,7 @@ function ConfirmationScene:createScene( event )
         labelAlign = "center",
         labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
         emboss = true,
-        onEvent = function (event)
-                        if event.phase == "ended" then
-                            storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)
-                        end 
-                  end,
+        onEvent = self.onNextButton,
     })
     
     group:insert(headerBar)
@@ -144,21 +285,26 @@ function ConfirmationScene:createScene( event )
     group:insert(nextButton)
     
 end
-ConfirmationScene:addEventListener("createScene")
+
 
 function ConfirmationScene:enterScene(event)
     
 end
-ConfirmationScene:addEventListener("enterScene")
+
 
 function ConfirmationScene:didExitScene(event)
     
 end
-ConfirmationScene:addEventListener("didExitScene")
+
 
 function ConfirmationScene:destroyScene(event)
     
 end
+
+
+ConfirmationScene:addEventListener("createScene")
+ConfirmationScene:addEventListener("enterScene")
+ConfirmationScene:addEventListener("didExitScene")
 ConfirmationScene:addEventListener("destroyScene")
 
 return ConfirmationScene
