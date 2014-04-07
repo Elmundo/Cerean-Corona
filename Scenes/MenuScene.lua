@@ -28,8 +28,12 @@ function onExitButtonTouched( event )
 end
 
 function onPhaseButtonTouched( event )
-	storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
-	return true
+        --TODO: Delete Later - Baris
+        storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
+        
+        --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
+        
+        return true
 end
 
 -------------------------------------------------------------------------------

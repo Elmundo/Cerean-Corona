@@ -14,25 +14,37 @@ local PackageView = {}
 --]]
 function PackageView.new(options)
     
+    -- Properties
+    local width      = options.width
+    local height     = options.height
+    local product    = options.product
+    local delegate   = options.delegate
+    
+    -- Widget Properties
+    local bgImage
+    local indexLabel
+    local iconImage
+    local detailButton
+    
     -- New PackageView
     local packageView = display.newGroup()
-    packageView.delegate = options.delegate
+    packageView.product = product
     
     -- Backgorund Image
-    local bgImage = display.newImageRect("Assets/Tariff.png", 290, 120)
+    bgImage = display.newImageRect("Assets/Tariff.png", width, height)
     packageView:insert(bgImage)
-    
+
     -- Header Text
-    local indexLabel = display.newText(packageView, "ENDEKSLİ 1", 90, 14, 290, 80, native.systemFontBold, 20)
+    indexLabel = display.newText(packageView, product.name, 90, 14, 290, 80, native.systemFontBold, 20)
     
     -- Check Icon
-    local iconImage  = display.newImage(packageView, "Assets/IconSelectTariffPressed.png", system.ResourceDirectory, -12, -9, true)
+    iconImage  = display.newImage(packageView, "Assets/IconSelectTariffPressed.png", system.ResourceDirectory, -12, -9, true)
     iconImage.isVisible = false
     
     packageView:translate(options.x, options.y)
     
     -- Button - Only functionalty, no visual elements
-    local detailButton = widget.newButton{
+    detailButton = widget.newButton{
         left    = 102,
         top     = 80,
         width   = 97,
@@ -46,7 +58,7 @@ function PackageView.new(options)
                         elseif event.phase == "moved" then
                             --print "moved"
                         elseif event.phase == "ended" then
-                            packageView.delegate:didPackageSelect(packageView)
+                            delegate:didPackageSelect(packageView)
                         end
                     end, 
     }

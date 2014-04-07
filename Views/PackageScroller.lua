@@ -20,7 +20,8 @@ local cPACKAGE_RIGHT_X_POS = 330
     Listener listener
     RGB+A    backgroundColor = {0.8, 0.8, 0.8}
 --]]
-function PackageScroller.new(packageDataList, options)
+
+function PackageScroller.new(options)
     
     -- New PackageScroller
     local packageScroller = widget.newScrollView(options)
@@ -30,6 +31,7 @@ function PackageScroller.new(packageDataList, options)
     packageScroller.packageDataList = packageDataList
     packageScroller.delegate = options.delegate
     packageScroller.prevPackageView = nil
+    packageScroller.products = options.products
     
     function packageScroller:setMyScroller(list)
         
@@ -43,7 +45,7 @@ function PackageScroller.new(packageDataList, options)
                     y = self.yPos,
                     width = 290,
                     height = 120,
-                    product = nil,
+                    product = productData,
                     delegate = self,
                     
                 })
@@ -53,7 +55,7 @@ function PackageScroller.new(packageDataList, options)
                     y = self.yPos,
                     width = 290,
                     height = 120,
-                    product = nil,
+                    product = productData,
                     delegate = self,
                     
                 })
@@ -77,6 +79,8 @@ function PackageScroller.new(packageDataList, options)
         icon.isVisible = true
         self.prevPackageView = package
     end
+    
+    packageScroller:setMyScroller(packageScroller.products)
     
     return packageScroller
     

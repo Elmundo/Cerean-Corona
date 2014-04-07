@@ -161,7 +161,7 @@ end
 ------------------------
 -- Networking Methods --
 ------------------------
-function DataService.saveContent( params, callback )
+function DataService:saveContent( params, callback )
 	
 	request.params = {params}
 	request.method = "savecontent"
