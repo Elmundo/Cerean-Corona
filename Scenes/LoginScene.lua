@@ -5,8 +5,9 @@ local CLabel = require( "Views.Labels.CLabel" )
 local CButton = require( "Views.Buttons.CButton" )
 local DataServer = require "Network.DataService"
 local Utils      = require "libs.Util.Utils"
-
+local LoadingMask  = require "Views.LoadingMask"
 local BaseScene   = require "Scenes.BaseScene"
+
 local scene = BaseScene.new()
 
 local storyboard = require( "storyboard" )
@@ -145,7 +146,6 @@ function scene:createScene( event )
 	displayGroup = self.view
 	loginBackground = display.newImageRect( "Assets/LoginBackground.png", 1280, 800 )
         
-        
 	loginBox = display.newImageRect( "Assets/LoginBox.png", 378, 498 )--640-189, 400-249, true )
         loginBox.x = 1280/2- 378/2
         loginBox.y = 800/2 -498/2
@@ -170,12 +170,19 @@ function scene:createScene( event )
 	displayGroup:insert( passwordLabel )
 	displayGroup:insert( loginButton )
 	displayGroup.x = centerX
-	displayGroup.y = centerY 
-
+	displayGroup.y = centerY
 end
 
+local superEnterScene = scene.enterScene
 function  scene:enterScene( event )
-	
+        superEnterScene(self, event)
+        
+        self:showMask()
+        
+        timer.performWithDelay(3000, function (event)
+                
+            self:hideMask()
+        end)
 end
 
 function scene:exitScene( event )
@@ -192,9 +199,10 @@ end
 -------------------------------------------------------------------------------
 --Scene Evenet Listeners
 -------------------------------------------------------------------------------
-scene:addEventListener( "createScene", scene )
-scene:addEventListener( "enterScene", scene )
-scene:addEventListener( "exitScene", scene )
-scene:addEventListener( "destroyScene", scene )
+scene:addEventListener( "createScene" )
+scene:addEventListener( "enterScene" )
+scene:addEventListener( "exitScene" )
+scene:addEventListener( "destroyScene" )
+scene:addEventListener( "createScene" )
 -------------------------------------------------------------------------------
 return scene

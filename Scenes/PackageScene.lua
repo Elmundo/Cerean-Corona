@@ -210,7 +210,6 @@ function PackageScene:createScene( event)
     group:insert(nextButtonBg)
     group:insert(nextButton)
 end
-
 PackageScene:addEventListener("createScene")
 
 function PackageScene:enterScene(event)

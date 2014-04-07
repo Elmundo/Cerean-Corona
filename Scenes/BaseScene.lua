@@ -1,25 +1,39 @@
 local storyboard = require "storyboard"
+local LoadingMask = require "Views.LoadingMask"
 
 local BaseScene = {}
 
 function BaseScene.new()
-
+    
 	local baseScene = storyboard.newScene()
-
+        
+        -- Properties
+        local group = nil
+        
+        local loadingMask
+        
 	function baseScene:alert()
 		-- Make alert message here
 	end
 
 	function baseScene:showMask()
-		-- Create a mask which includes the spinner
+		loadingMask:start()
 	end
 
 	function baseScene:hideMask()
-		-- Remove a mask which includes the spinner
+		loadingMask:stop()
 	end
 
-	return baseScene
-
+        function baseScene:enterScene( event )
+            gruop = self.view
+            loadingMask = LoadingMask.new {
+            view = gruop, 
+        }
+        end
+        
+        return baseScene
 end
+
+
 
 return BaseScene
