@@ -61,7 +61,7 @@ local DataService = {
 	-- Parameters Cached Data List
 	cities           = {},
 	companies        = {},
-	suppliers 		 = {},
+	suppliers        = {},
 	membershipgroups = {},
 	meterList        = {},
 	products         = {},

@@ -3,8 +3,8 @@ local native = require( "native" )
 local CTextField = require( "Views.TextFields.CTextField" )
 local CLabel = require( "Views.Labels.CLabel" )
 local CButton = require( "Views.Buttons.CButton" )
-
-
+local DataServer = require "Network.DataService"
+local Utils      = require "libs.Util.Utils"
 
 local BaseScene   = require "Scenes.BaseScene"
 local scene = BaseScene.new()
@@ -12,6 +12,8 @@ local scene = BaseScene.new()
 local storyboard = require( "storyboard" )
 --local scene = storyboard.newScene()
 --local baseScene = BaseScene.new()
+local kCachedDataCount = 6
+
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 
@@ -30,11 +32,92 @@ local passwordLabel
 local errorLabel
 local loginButton
 
+local cachedDataIndex = 0
+
+local function nextViewController()
+    
+end
+
+local function checkCachedDatas()
+        
+    if cachedDataIndex >= kCachedDataCount then
+        storyboard.gotoScene( "Scenes.MenuScene", "slideLeft", 800 )
+        return true
+    end
+
+    return false
+end
+
+local function cacheContents()
+    
+    DataServer:getParameters(kParameterCities, nil, function (responseData)
+        
+        -- Cache Cities list data
+        DataServer.cities = responseData
+        
+        cachedDataIndex = cachedDataIndex + 1
+        checkCachedDatas()   
+    end)
+    
+    DataServer:getParameters(kParameterCompanies, nil, function (responseData)
+        
+        -- Cache Companies list data
+        DataServer.companies = responseData
+        
+        cachedDataIndex = cachedDataIndex + 1
+        checkCachedDatas()   
+    end)
+    
+    DataServer:getParameters(kParameterSuppliers, nil, function (responseData)
+        
+        -- Cache Suppliers list data
+        DataServer.suppliers = responseData
+        
+        cachedDataIndex = cachedDataIndex + 1
+        checkCachedDatas()   
+    end)
+    
+    DataServer:getParameters(kParameterMembershipGroups, nil, function (responseData)
+        
+        -- Cache Membership Groups data
+        DataServer.membershipgroups = responseData
+        
+        cachedDataIndex = cachedDataIndex + 1
+        checkCachedDatas()   
+    end)
+    
+    DataServer:getParameters(kParameterMeterTypes, nil, function (responseData)
+        
+        -- Cache MeterTypes list data
+        DataServer.meterList = responseData
+        
+        cachedDataIndex = cachedDataIndex + 1
+        checkCachedDatas()   
+    end)
+    
+    DataServer:getParameters(kParameterInterval, nil, function (responseData)
+        
+        DataServer.timeIntervals = responseData
+        
+        cachedDataIndex = cachedDataIndex + 1
+        checkCachedDatas()   
+    end)
+     
+end
+
 function onButtonTouch( event )
 	if( event.phase == "ended") then
 		print( userNameTextField:getText() )
 		print( passwordTextField:getText() )
-		storyboard.gotoScene( "Scenes.MenuScene", "slideLeft", 800 )
+                
+                -- TODO: Hard-Coded Data Insert            
+                DataServer:login("Crmuser", "CaCu2013!", 
+                                                    function (responseData)
+                                                        cacheContents()
+                                                    end
+                    )
+                
+                
 
 		return true
 	end
@@ -48,6 +131,7 @@ function onTextFieldTouch ( event )
    activateInputField(centerX-120, centerY-15 )
    -- activateInputField(xPos, yPos, textObject)
 end
+
 function activateInputField ( xPos, yPos )
     inputField = native.newTextField(xPos+5, yPos+10, 220, 20, onTextInput)
     displayGroup:insert( inputField )

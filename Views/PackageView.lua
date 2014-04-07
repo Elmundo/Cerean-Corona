@@ -39,8 +39,7 @@ function PackageView.new(options)
         height  = 23,
         label   = "",
         labelAlign = "left",
-        labelColor = { default={ 1, 0, 0 }, over={ 1, 0, 0, 0.5 } },
-        emboss = true,
+        labelColor = { default={ 1, 0, 0, }, over={ 1, 0, 0, 0.5 } },
         onEvent   = function (event)
                         if event.phase == "began" then
                             --print "began"
@@ -51,6 +50,7 @@ function PackageView.new(options)
                         end
                     end, 
     }
+    detailButton.isVisible = true
     
     packageView:insert(detailButton)
     
