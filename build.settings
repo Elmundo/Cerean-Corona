@@ -17,8 +17,8 @@ settings =
             supported = { "landscapeRight", "landscapeLeft"},  --table of allowed options for auto-orientation
 	},
 
-	-- iOS Settings
-	iphone =
+    -- iOS Settings
+    iphone =
     {
         plist =
         {
