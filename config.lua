@@ -1,24 +1,23 @@
-applicartion =
+application =
 {
 	content = 
 	{
-		width  = 1280,
-		height = 800,
+		width  = 800,
+		height = 1280,
 		scale  = "letterbox",
 		xAlign = "left",
 		yAlign = "top",
-	
+
 		imageSuffix = 
 		{
 			["-small"] = 0.375,
 			["@2x"] = 1.5,
 		},
-
-		fps = 30,
-		
-	},
 	
-	--[[
+		fps = 30,
+	},
+}
+--[[
 	license =
     {
         google =
@@ -29,5 +28,7 @@ applicartion =
     },
 
     launchPad = false,
-    --]]
+    
+    showRuntimeErrors = true,
 }
+--]]
