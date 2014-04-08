@@ -1,3 +1,4 @@
+local native       = require "native"
 local display      = require "display"
 local widget       = require "widget"
 local mime         = require "mime"
@@ -5,8 +6,8 @@ local json         = require "json"
 local string       = require "string"
 local storyboard   = require "storyboard"
 local DataService  = require "Network.DataService"
-local Logger       = require "libs.Log.Logger" 
-
+local Logger       = require "libs.Log.Logger"
+local native       = require "native"
 
 require "ParameterConfig"
 
@@ -26,3 +27,7 @@ Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " Co
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 
 storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400)
+
+native.showAlert("Alert Test", "This is a alert message", {"OK", "CANCEL"}, function(event)
+    
+end)
