@@ -28,10 +28,10 @@ function new()
 	 
 	 contentGroup = display.newGroup( )
 
-	        subscriberTypeHeaderText = display.newText(  "Abonelik Tipi", 100, 160, native.systemFontBold, 15 )
+	        subscriberTypeHeaderText = display.newText(  "Abonelik Tipi", 60, 150, native.systemFontBold, 15 )
 			subscriberTypeHeaderText:setFillColor( 1, 1, 1 )
 
-			subscriberTypeHeaderBackground = display.newRoundedRect( 640, 160, 1200, 40, 5 )
+			subscriberTypeHeaderBackground = display.newRoundedRect( 40, 140, 1200, 40, 5 )
 			subscriberTypeHeaderBackground:setFillColor( 255/255, 107/255, 0 )
 
 			personalButton = widget.newButton{ width = 219, 
@@ -40,8 +40,8 @@ function new()
 												overFile = "Assets/ButtonIndividualPressed.png", 
 												label = "", 
 												onEvent = handleIndividualButtonEvent }
-			personalButton.x = centerX - 120
-			personalButton.y = centerY 
+			personalButton.x = centerX - 120 -110
+			personalButton.y = centerY -100
 
 			corporateButton = widget.newButton{ width = 219, 
 												height =219, 
@@ -49,8 +49,8 @@ function new()
 												overFile = "Assets/ButtonCorporatePressed.png", 
 												label = "", 
 												onEvent = handleCorporateButtonEvent }
-			corporateButton.x = centerX + 120
-			corporateButton.y = centerY 
+			corporateButton.x = centerX + 120-110
+			corporateButton.y = centerY -100
 
 	        subscriberTypeGroup:insert( subscriberTypeHeaderBackground )
 			subscriberTypeGroup:insert( subscriberTypeHeaderText )

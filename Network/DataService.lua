@@ -3,9 +3,10 @@ local os   = require "os"
 local json = require "json"
 
 -- Data Service Module
-local CereanServer = require "CereanServer"
-local Utils        = require "Utils"
+local CereanServer = require "Network.CereanServer"
+local Utils        = require "libs.Util.Utils"
 
+-- GLOBAL Phase Enum
 Phase = {
 
 	ApplicationPhase = 0,
@@ -60,7 +61,7 @@ local DataService = {
 	-- Parameters Cached Data List
 	cities           = {},
 	companies        = {},
-	suppliers 		 = {},
+	suppliers        = {},
 	membershipgroups = {},
 	meterList        = {},
 	products         = {},
@@ -160,7 +161,7 @@ end
 ------------------------
 -- Networking Methods --
 ------------------------
-function DataService.saveContent( params, callback )
+function DataService:saveContent( params, callback )
 	
 	request.params = {params}
 	request.method = "savecontent"

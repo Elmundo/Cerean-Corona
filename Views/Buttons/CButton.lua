@@ -22,7 +22,7 @@ function new( buttonLabel, buttonID, buttonListener, xPos, yPos, fontSize )
 			
 	} )
 	
-	local background = display.newRoundedRect( 70, 20, 140, 40, 5 )
+	local background = display.newRoundedRect( 0, 0, 140, 40, 5 )
 	background:setFillColor( 113/255, 27/255, 69/255 )
 	
 	buttonWrapper:insert( background )

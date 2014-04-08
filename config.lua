@@ -13,9 +13,10 @@ application =
 			["-small"] = 0.375,
 			["@2x"] = 1.5,
 		},
-
+	
 		fps = 30,
 	},
+}
 --[[
 	license =
     {
@@ -27,5 +28,7 @@ application =
     },
 
     launchPad = false,
-    --]]
+    
+    showRuntimeErrors = true,
 }
+--]]
