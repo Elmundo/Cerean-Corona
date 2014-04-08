@@ -1,0 +1,90 @@
+settings = 
+{
+<<<<<<< HEAD
+	orientation =
+	{
+		default = "landscapeRight",
+		supported = { "landscapeRight", "landscapeLeft" },
+	},
+}
+=======
+    orientation =
+    {
+        default = "landscapeRight",
+        supported = { "landscapeRight", "landscapeLeft" },
+    },
+}
+
+--[[
+settings = 
+{
+	orientation = 
+	{
+            default = "landscapeRight",  --initial launch orientation
+            content = "",  --locked orientation of the Corona stage, independent of Native UI elements (iOS only)
+            supported = { "landscapeRight", "landscapeLeft"},  --table of allowed options for auto-orientation
+	},
+
+	-- iOS Settings
+	iphone =
+    {
+        plist =
+        {
+            UIApplicationExitsOnSuspend = false,
+            UIPrerenderedIcon = true,
+            UIStatusBarHidden = true,
+            UIAppFonts = { "AvenirLTStd-Black.otf","SourceCodePro-Black.ttf" },
+            CFBundleIconFiles = {"Icon.png",
+					            "Icon@2x.png",
+					            "Icon-Small-40.png",
+					            "Icon-Small-40@2x.png",
+					            "Icon-60.png",
+					            "Icon-60@2x.png",
+					            "Icon-72.png",
+					            "Icon-72@2x.png",
+					            "Icon-76.png",
+					            "Icon-76@2x.png",
+					            "Icon-Small-50.png",
+					            "Icon-Small-50@2x.png",
+					            "Icon-Small.png",
+					            "Icon-Small@2x.png" 
+			},
+            MinimumOSVersion = "5.1.0",
+        },
+
+        skipPNGCrush = false,
+    },
+
+    -- Android Settings
+    android =
+    {
+    	--this tells the Corona Simulator to create an expansion file.
+        usesExpansionFile = true,
+        versionCode = "100",
+        largeHeap = true,
+
+        usesPermissions =
+        {
+            "android.permission.INTERNET",
+            "android.permission.WRITE_EXTERNAL_STORAGE",
+            "android.permission.ACCESS_FINE_LOCATION",
+            "android.permission.ACCESS_COURSE_LOCATION",
+        },
+
+        usesFeatures =
+        {
+            { name = "android.hardware.camera", required = true },
+            { name = "android.hardware.location", required = false },
+            { name = "android.hardware.location.gps", required = false },
+        },
+    },
+
+}
+
+-- iOS Settings which is used because of containing special character
+settings.iphone.plist["UIInterfaceOrientation~ipad"] = "UIInterfaceOrientationPortrait"
+settings.iphone.plist["UISupportedInterfaceOrientations~ipad"] = 
+{ "UIInterfaceOrientationPortrait","UIInterfaceOrientationPortraitUpsideDown" }
+
+--]]
+>>>>>>> c7008eb4f9ca71447266985b4a7a37e5354bdeae

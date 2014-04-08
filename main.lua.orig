@@ -1,0 +1,61 @@
+<<<<<<< HEAD
+--display.setStatusBar( display.HiddenStatusBar )
+
+local storyboard = require "storyboard"
+local widget = require "widget"
+
+-------------------------------------------------------------------------------
+--Error Handle
+-------------------------------------------------------------------------------
+local function myUnhandledErrorListener( event )
+
+    local iHandledTheError = true
+
+    if iHandledTheError then
+        print( "Handling the unhandled error", event.errorMessage )
+    else
+        print( "Not handling the unhandled error", event.errorMessage )
+    end
+    
+    return iHandledTheError
+end
+
+Runtime:addEventListener("unhandledError", myUnhandledErrorListener)
+-------------------------------------------------------------------------------
+
+display.setDefault("background", 255, 255, 255, 1)
+
+storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400 )
+
+
+
+=======
+local display      = require "display"
+local widget       = require "widget"
+local mime         = require "mime"
+local json         = require "json"
+local string       = require "string"
+local storyboard   = require "storyboard"
+local DataService  = require "Network.DataService"
+local Logger       = require "libs.Log.Logger" 
+
+
+require "ParameterConfig"
+
+-- Set default anchor point of project top-left
+display.setDefault( "anchorX", 0 )
+display.setDefault( "anchorY", 0 )
+display.setDefault("background", 1, 1, 1, 1)
+
+-- Extend native libs
+string.trim = function (str)
+                    return (str:gsub("+%s*(.-)%s*$", "%1") )
+                end
+
+Logger:setLevel("DEBUG")
+Logger:debug("main", "general", "PixelWidth: " .. display.pixelWidth .. " PixelHeight: " .. display.pixelHeight )
+Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
+Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
+
+storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400)
+>>>>>>> c7008eb4f9ca71447266985b4a7a37e5354bdeae

@@ -1,0 +1,61 @@
+<<<<<<< HEAD
+applicartion =
+{
+	content = 
+	{
+		width  = 1280,
+		height = 800,
+		scale  = "letterbox",
+		xAlign = "left",
+		yAlign = "top",
+	
+=======
+application =
+{
+	content = 
+	{
+		width  = 800,
+		height = 1280,
+		scale  = "letterbox",
+		xAlign = "left",
+		yAlign = "top",
+
+>>>>>>> c7008eb4f9ca71447266985b4a7a37e5354bdeae
+		imageSuffix = 
+		{
+			["-small"] = 0.375,
+			["@2x"] = 1.5,
+		},
+<<<<<<< HEAD
+
+		fps = 30,
+		
+	},
+	
+	--[[
+=======
+	
+		fps = 30,
+	},
+}
+--[[
+>>>>>>> c7008eb4f9ca71447266985b4a7a37e5354bdeae
+	license =
+    {
+        google =
+        {
+            key = "Your key here",
+            policy = "this is optional",
+        },
+    },
+
+    launchPad = false,
+<<<<<<< HEAD
+    --]]
+}
+=======
+    
+    showRuntimeErrors = true,
+}
+--]]
+>>>>>>> c7008eb4f9ca71447266985b4a7a37e5354bdeae
