@@ -29,7 +29,7 @@ end
 
 function onPhaseButtonTouched( event )
         --TODO: Delete Later - Baris
-        storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
+        storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
         
         --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
         

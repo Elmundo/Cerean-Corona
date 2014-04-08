@@ -7,6 +7,7 @@ local display = require( "display" )
 local widget = require( "widget" )
 local native = require( "native" )
 
+local DataService = require( "Network.DataService" )
 
 local CButton = require( "Views.Buttons.CButton" )
 local ControlBar = require( "Views.ControlBar" )
@@ -32,6 +33,8 @@ local CounterInformationView = require( "Views.CounterInformationView" )
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 
+local isCorporate
+
 local phase
 local step
 local isStepAnimationRunning
@@ -53,6 +56,67 @@ local backButton
 
 local callCenterLogo
 local fibaLogo
+
+
+
+function saveContent ( appStep, callback ) 
+    if( step == 1 ) then
+        local contentData = personalInformationGroup:getContent()
+        --Add a check for corporate later
+        contentData["step"] = appStep
+        contentData["IsCorporate"] = 0 --Add value to hold
+        
+        contentData["VerificationCode"] = DataService.verificationCode
+        
+        if( DataService.customerId ) then
+            contentData["CustomerId"] = DataService.customerId
+            contentData["CustomerNumber"] = DataService.customerNumber
+        end
+        
+        DataService.saveContent( contentData, 
+                                 function (status) 
+                                     --Code Here
+                                     --Check Error?
+                                      DataService.customerId = status.customerId
+                                      DataService.customerNumber = status.customerNumber
+                                      callback( responseData )
+                                 end
+            )
+    else if( step == 2 ) then
+        --DataDataService.meterSerialNumber = 
+        --DataService.meterId = 
+        local contentData = counterInformationGroup:getContent()
+        DataService.meterId = contentData["MeterId"]
+        contentData["step"] = appStep
+        
+        if( DataService.phase == Phase.RegistryPhase ) then
+            contentData["CustomerId"] = DataService.customer.customerId
+        else
+            contentData["CustomerId"] = DataService.customerId
+        end
+        
+        --Below code for back from forward views
+        if( DataService.meterId == null ) then
+           if( DataService.phase == Phase.RegistryPhase ) then  
+                contentData["VerificationCode"] = DataService.verificationCode
+                contentData["CustomerId"] = DataService.customer.customerId
+           else
+                contentData["MeterId"] = DataService.meterId
+           end
+        end
+        
+        DataService:saveContent( contentData, 
+                                 function( responseData )
+                                     --Add status response check
+                                     DataService.customerId = responseData.customerId
+                                     DataService.customerNumber = responseData.customerNumber
+                                     DataService.meterId = responseData.meterId
+                                 end )
+        
+        
+        end
+    end
+end
 
 function onComplete ()
         print( "Done animation" )
@@ -94,29 +158,38 @@ end
 function handleIndividualButtonEvent( event )
 	-- body
 	if ( event.phase == "ended") then
-		print( "Ind" )
-                transition.to( personalInformationGroup, {time=400, y= -235,onComplete=doneStepAnimationNext , transition = easing.outExpo } )
+            isCorporate = false
+            print( "Ind" )
+            transition.to( personalInformationGroup, {time=400, y= -235,onComplete=doneStepAnimationNext , transition = easing.outExpo } )
 	end
 end
 
 function handleCorporateButtonEvent( event )
 	-- body
 	if( event.phase == "ended") then
-		print( "Corp" )
+            isCorporate = true
+            print( "Corp" )
 	end
 end
 
 function shiftUp()
         if( isStepAnimationRunning == false ) then
+                isStepAnimationRunning = true
                 if( step == 0 ) then
                         --Do Nothing
                         --transition.to( personalInformationGroup, {time=400, y= -235, transition = easing.outExpo } )
                 elseif( step == 1 ) then
                         isStepAnimationRunning = true
+                        --saveContent(appStep)
+                        --[[
+                        saveContent(kStepPersonel, function (responseData)
+                                                                transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
+                                                            end )
+                                                            --]]
                         transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
                 else 
-                        --NextScene
-
+                        --NextScenePackageScene
+                        storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
                         print( "Next Scene" )
                 end
         end
@@ -125,7 +198,6 @@ end
 function shiftDown()
 
         if( isStepAnimationRunning == false ) then
-            print( "No Animation Running")
                 isStepAnimationRunning = true
                 if( step == 0 ) then
                         --Pop previous scene
