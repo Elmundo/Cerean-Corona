@@ -26,7 +26,9 @@ function onButtonTouch( event )
 	if( event.phase == "ended") then
 		print( userNameTextField:getText() )
 		print( passwordTextField:getText() )
-		--storyboard.gotoScene( "Scenes.MainScene", "slideLeft", 400 )
+		storyboard.gotoScene( "Scenes.MenuScene", "slideLeft", 800 )
+
+		return true
 	end
 end
 
@@ -34,18 +36,18 @@ end
 --Scene Evenet Handlers
 -------------------------------------------------------------------------------
 function scene:createScene( event )
-	displayGroup = display.newGroup( )
-	loginBackground = display.newImage( "Assets/LoginBackground.png", 0, 0 )
-	loginBox = display.newImage( "Assets/LoginBox.png", 0, 0 )
+	displayGroup = self.view
+	loginBackground = display.newImage( "Assets/LoginBackground.png", centerX, centerY, true )
+	loginBox = display.newImage( "Assets/LoginBox.png", centerX, centerY, true )
 
-	userNameTextField = CTextField.new( 0, 0 )
-	passwordTextField = CTextField.new( 0, 80 ) 
+	userNameTextField = CTextField.new( centerX, centerY-5 )
+	passwordTextField = CTextField.new( centerX, centerY+65 ) 
 
-	headerLabel = CLabel.new( "Bayi Girişi", -75, -70, 20)
-	userNameLabel = CLabel.new( "Kullanıcı Kodu", -70, -30, 15)
-	passwordLabel = CLabel.new( "Şifre", -100, 50, 15)
+	headerLabel = CLabel.new( "Bayi Girişi", centerX-75, centerY-70, 20)
+	userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-70, centerY-35, 15)
+	passwordLabel = CLabel.new( "Şifre", centerX-100, centerY+35, 15)
 
-	loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, 100, 100, 0 )
+	loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, centerX, centerY+110, 0 )
 
 	displayGroup:insert( loginBackground )
 	displayGroup:insert( loginBox )
@@ -56,7 +58,8 @@ function scene:createScene( event )
 	displayGroup:insert( passwordLabel )
 	displayGroup:insert( loginButton )
 	displayGroup.x = centerX
-	displayGroup.y = centerY
+	displayGroup.y = centerY 
+
 end
 
 function  scene:enterScene( event )

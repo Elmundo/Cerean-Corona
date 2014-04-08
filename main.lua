@@ -1,4 +1,4 @@
-	display.setStatusBar( display.HiddenStatusBar )
+--display.setStatusBar( display.HiddenStatusBar )
 
 local storyboard = require "storyboard"
 local widget = require "widget"
@@ -22,6 +22,9 @@ end
 Runtime:addEventListener("unhandledError", myUnhandledErrorListener)
 -------------------------------------------------------------------------------
 
-
+display.setDefault("background", 255, 255, 255, 1)
 
 storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400 )
+
+
+
