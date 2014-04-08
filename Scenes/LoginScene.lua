@@ -129,7 +129,7 @@ function onTextInput ( event )
 end
 
 function onTextFieldTouch ( event )
-   activateInputField(centerX-120, centerY-15 )
+   --activateInputField(centerX-120, centerY-15 )
    -- activateInputField(xPos, yPos, textObject)
 end
 

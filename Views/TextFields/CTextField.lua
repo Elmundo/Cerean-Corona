@@ -9,8 +9,11 @@ function new( xPos, yPos )
 
 	local textFieldWrapper = display.newGroup( )
 	local background = display.newImage( "Assets/InputInfo.png", 0, 0 )
-	local textField = display.newText( "Test", 5, 10, 220, 20, native.systemFont, 15 )
-	--[[
+	--local textField = display.newText( "Test", 5, 10, 220, 20, native.systemFont, 15 )
+	--textField:setFillColor( 0, 0, 0 )
+        local textField = native.newTextField(0, 0, 240, 40 )
+        textField:setTextColor(0, 0, 0)
+        --[[
 		{
 		text = "Test",
 		x = xPos,
@@ -20,8 +23,8 @@ function new( xPos, yPos )
 		font = native.systemFont,
 		fontSize = 15
 		}  
-	--]]
-	textField:setFillColor( 0, 0, 0 )
+	]]
+	
 	local textContent
 	--native.newTextField( 0, 0, 220, 20 )
 
@@ -40,8 +43,8 @@ function new( xPos, yPos )
 	textFieldWrapper.y = yPos
 
 	function textFieldWrapper:setListener( listener )
-            background:addEventListener("touch", listener)
-		--textField:addEventListener( "userInput", listener )
+            --background:addEventListener("touch", listener)
+            textField:addEventListener( "userInput", listener )
 	end
 
 	function textFieldWrapper:getText()
