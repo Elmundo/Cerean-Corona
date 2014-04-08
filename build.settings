@@ -1,5 +1,5 @@
 
-settings = 
+settings =
 {
     orientation =
     {
@@ -7,31 +7,16 @@ settings =
         supported = { "landscapeRight", "landscapeLeft" },
     },
 
-    -- Android Settings
-    --[[
     android =
     {
-    	--this tells the Corona Simulator to create an expansion file.
-        usesExpansionFile = true,
-        versionCode = "100",
-        largeHeap = true,
+
+        versionCode = "10",
 
         usesPermissions =
         {
             "android.permission.INTERNET",
-            "android.permission.WRITE_EXTERNAL_STORAGE",
-            "android.permission.ACCESS_FINE_LOCATION",
-            "android.permission.ACCESS_COURSE_LOCATION",
-        },
-
-        usesFeatures =
-        {
-            { name = "android.hardware.camera", required = true },
-            { name = "android.hardware.location", required = false },
-            { name = "android.hardware.location.gps", required = false },
         },
     },
-    --]]
 }
 
 

@@ -2,9 +2,9 @@ local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
 
-module( ... )
+local CounterInformationView = {}
 
-function new()
+function CounterInformationView.new()
 
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
@@ -39,6 +39,27 @@ local counterMultiplierLabel
 local counterMultiplierField
 local billAmountLabel
 local billAmountField
+
+function getContent () 
+            local contentData = {}
+            
+            contentData = {
+                DistributorId = "123",--distrubitionCompanyField:getText()--Not TextField
+                SkaDescId = "123",--supplierCompanyField:getText()
+                CompanyCode = "123",--companyCodeField:getText()
+                MembershipNumber = "123",--subscriberGroupField:getText()
+                TariffCode = "123",--recieptField:getText()
+                MembershipGroup = "133",--subscriberGroupField:getText()
+                CustomerName = "123",--customerNameField:getText()
+                MeterSerialNumber = "245",--counterSerialNumberField:getText()
+                MeterSerialNumberAgain = "768",--inductiveCounterSerialNumberField:getText()
+                MeterParameter = "1233",--counterMultiplierField:getText()
+                BillAmount = "89761"--billAmountField:getText()
+           } 
+           
+             
+            return contentData
+        end
 
 counterInformationGroup = display.newGroup( )
 contentGroup = display.newGroup( )
@@ -150,3 +171,5 @@ contentGroup = display.newGroup( )
 
     return counterInformationGroup
 end
+
+return CounterInformationView

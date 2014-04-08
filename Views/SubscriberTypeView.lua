@@ -2,9 +2,9 @@ local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
 
-module( ... )
+local SubscriberTypeView = {}
 
-function new()
+function SubscriberTypeView.new()
 
 
 	local subscriberTypeGroup
@@ -62,3 +62,5 @@ function new()
 
 	return subscriberTypeGroup
 end
+
+return SubscriberTypeView

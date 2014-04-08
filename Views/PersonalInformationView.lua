@@ -1,11 +1,12 @@
 local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
+local DataService = require( "Network.DataService" )
 
-module( ... )
+local PersonalInformationView = {}
 
-function new()
-
+function PersonalInformationView.new()
+        
 	local personalInformationGroup
 	local personalInformationGroupBackground
 	local personalInformationHeaderText
@@ -30,7 +31,25 @@ function new()
 
 	local centerX = display.contentCenterX
 	local centerY = display.contentCenterY
-
+        
+        function getContent () 
+            local contentData = {}
+            
+            DataService.customerPhone = mobileField:getText()
+            DataService.customerEmail = emailField:getText()
+            DataService.customerName = nameField:getText()
+            contentData = {
+                Name = nameField:getText(),
+                TckNo = iDNumberField:getText(),
+                MobilePhone = mobileField:getText(),
+                Email = emailField:getText(),
+                CityId = cityField:getText(),
+                CountyId = countyField:getText()
+            }
+             
+            return contentData
+        end
+        
 	personalInformationGroup = display.newGroup( )
 	contentGroup = display.newGroup( )
 
@@ -106,3 +125,5 @@ function new()
 
     return personalInformationGroup
 end
+
+return PersonalInformationView
