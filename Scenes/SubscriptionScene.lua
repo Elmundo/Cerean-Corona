@@ -186,6 +186,7 @@ function shiftUp()
                         --transition.to( personalInformationGroup, {time=400, y= -235, transition = easing.outExpo } )
                 elseif( step == 1 ) then
                         isStepAnimationRunning = true
+                        local contentData = personalInformationGroup:getContent()
                         personalInformationGroup:hideGroup(true)
                         --saveContent(appStep)
                         --[[
