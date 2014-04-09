@@ -14,6 +14,7 @@ local ControlBar = require( "Views.ControlBar" )
 local SubscriberTypeView = require( "Views.SubscriberTypeView" )
 local PersonalInformationView = require( "Views.PersonalInformationView" )
 local CounterInformationView = require( "Views.CounterInformationView" )
+local Logger = require "libs.Log.Logger"
 ----------------------------------------------------------------------------------
 -- 
 --      NOTE:
@@ -33,7 +34,7 @@ local CounterInformationView = require( "Views.CounterInformationView" )
 local centerX = display.contentCenterX
 local centerY = display.contentCenterY
 
-local isCorporate
+local isCorporate = 0
 
 local phase
 local step
@@ -57,15 +58,29 @@ local backButton
 local callCenterLogo
 local fibaLogo
 
+-- METHODS
 
+-- Network Error handler, check type 2
+function scene:isErrorCheckOk(responseData)
+    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
+        return true
+    end
+    
+    return false
+end
 
-function saveContent ( appStep, callback ) 
-    if( step == 1 ) then
-        local contentData = personalInformationGroup:getContent()
+function scene:saveContent ( appStep, callback ) 
+    if( step == kStepPersonel ) then
+        local contentData
+        if personalInformationGroup.isVisible == YES then
+            contentData = personalInformationGroup:getContent()
+        else
+            contentData = nil -- TODO: enterpriseGroup:getContent()
+        end
+        
         --Add a check for corporate later
         contentData["step"] = appStep
-        contentData["IsCorporate"] = 0 --Add value to hold
-        
+        contentData["IsCorporate"] = isCorporate--Add value to hold
         contentData["VerificationCode"] = DataService.verificationCode
         
         if( DataService.customerId ) then
@@ -74,16 +89,31 @@ function saveContent ( appStep, callback )
         end
         
         DataService.saveContent( contentData, 
-                                 function (status) 
-                                     --Code Here
-                                     --Check Error?
-                                      DataService.customerId = status.customerId
-                                      DataService.customerNumber = status.customerNumber
-                                      callback( responseData )
+                                 function (responseData) -- Success callback
+                                     
+                                     if scene:isErrorCheckOk(responseData) then
+                                         Logger:debug(scene, "scene:saveContent", "Step 1 is success!")
+                                         DataService.customerId = responseData.CustomerId
+                                         DataService.customerNumber = responseData.UstomerNumber
+                                         callback(true, nil )
+                                     else
+                                         Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
+                                         callback(false, responseData.ErrorMessage)
+                                     end
+                                 
+                                     
+                                 end, 
+                                 
+                                 function (errorData) -- Failure callback
+                                    Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
+                                    callback(false, errorData.ErrorDetail)
                                  end
             )
-    else if( step == 2 ) then
-        --DataDataService.meterSerialNumber = 
+    else if( step == kStepRegistry ) then
+        
+        -- Cache the meterSerialNumber
+        --TODO: Bahadir - DataDataService.meterSerialNumber = _registryView.activeRegisterySerialNoText.text
+        -- Yukardakine benzer bi atama olacak, farklı isimler verdiğin için ben atamayı yapamadım. Bu atamayı yapmayı unutma.
         --DataService.meterId = 
         local contentData = counterInformationGroup:getContent()
         DataService.meterId = contentData["MeterId"]
@@ -106,24 +136,37 @@ function saveContent ( appStep, callback )
         end
         
         DataService:saveContent( contentData, 
-                                 function( responseData )
-                                     --Add status response check
-                                     DataService.customerId = responseData.customerId
-                                     DataService.customerNumber = responseData.customerNumber
-                                     DataService.meterId = responseData.meterId
-                                 end )
+                                 function( responseData ) -- Success callback
+                                     
+                                     if scene:isErrorCheckOk(responseData) then
+                                         Logger:debug(scene, "scene:saveContent", "Step 2 is success.")
+                                         DataService.customerId     = responseData.CustomerId
+                                         DataService.customerNumber = responseData.CustomerNumber
+                                         DataService.meterId        = responseData.MeterId
+                                         callback(true, nil)
+                                     else
+                                         Logger:debug(scene, "Step 2 is failure.", message)
+                                         callback(false, responseData.ErrorMessage)
+                                     end
+                                     
+                                 end,
+                                 function (errorData) -- Failure callback
+                                     Logger:debug(scene, "Step 2 is failure.", message)
+                                     callback(false, errorData.ErrorDetail)
+                                 end
+                                 )
         
         
         end
     end
 end
 
-function onComplete ()
+function scene:onComplete ()
         print( "Done animation" )
 end
 
 --onComplete
-function doneStepAnimationNext ()
+function scene:doneStepAnimationNext ()
         if( step == 0 )then
             personalInformationGroup:hideGroup(false)
         end
@@ -133,7 +176,7 @@ function doneStepAnimationNext ()
         print( step )
 end
 
-function doneStepAnimationBack()
+function scene:doneStepAnimationBack()
         if( step == 2 )then
             personalInformationGroup:hideGroup(false)
         end
@@ -142,14 +185,14 @@ function doneStepAnimationBack()
         print( step )
 end
 
-function onBackButtonTouch( event )
+function scene:onBackButtonTouch( event )
         if( event.phase == "ended" ) then
                 print( "Back" )
                 shiftDown()
         end
 end
 
-function onNextButtonTouch( event )
+function scene:onNextButtonTouch( event )
         if( event.phase == "ended" ) then
                 print( "Next" )
                 shiftUp()
@@ -160,7 +203,7 @@ end
 
 --local corporateInformationGroup
 
-function handleIndividualButtonEvent( event )
+function scene:handleIndividualButtonEvent( event )
 	-- body
 	if ( event.phase == "ended") then
             isCorporate = false
@@ -169,7 +212,7 @@ function handleIndividualButtonEvent( event )
 	end
 end
 
-function handleCorporateButtonEvent( event )
+function scene:handleCorporateButtonEvent( event )
 	-- body
 	if( event.phase == "ended") then
             isCorporate = true
@@ -177,7 +220,7 @@ function handleCorporateButtonEvent( event )
 	end
 end
 
-function shiftUp()
+function scene:shiftUp()
         if( isStepAnimationRunning == false ) then
                 isStepAnimationRunning = true
                 if( step == 0 ) then
@@ -193,7 +236,7 @@ function shiftUp()
                                                                 transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
                                                             end )
                                                             --]]
-                        transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
+                        
                 else 
                         --NextScenePackageScene
                         storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
@@ -202,7 +245,7 @@ function shiftUp()
         end
 end
 
-function shiftDown()
+function scene:shiftDown()
 
         if( isStepAnimationRunning == false ) then
                 isStepAnimationRunning = true
@@ -399,5 +442,33 @@ scene:addEventListener( "overlayBegan", scene )
 scene:addEventListener( "overlayEnded", scene )
 
 ---------------------------------------------------------------------------------
+
+-- TODO: Bahadir - isCorporate datasının değeri SubscriptionView de yapılan seçime göre belirleniyor.
+-- Delegate sistemi ile yapılan çözümü incele burda da benzer bi yapı kullan.
+-- Aşağıda SubscriptionViewController içerisinde isCorporate'yi değiştiren kodu ekledim.'
+--[[
+#pragma mark SubscriptionDelegate
+- (void)subscription:(SubscriptionView *)view didSelectSubscriptionType:(enum SubscriptionType)type
+{
+    switch (type) {
+        case SubscriptionTypePerson:
+            _personalView.hidden = NO;
+            _enterpriseView.hidden = YES;
+            self.IsCorporate = NO;
+            break;
+        case SubscriptionTypeEnterprise:
+            _personalView.hidden = YES;
+            _enterpriseView.hidden = NO;
+            self.IsCorporate = YES;
+            break;
+            
+        default:
+            break;
+    }
+    
+    [self shiftUp];
+}
+
+--]]
 
 return scene

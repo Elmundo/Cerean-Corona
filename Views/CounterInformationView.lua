@@ -57,7 +57,6 @@ function getContent ()
                 BillAmount = "89761"--billAmountField:getText()
            } 
            
-             
             return contentData
         end
 

@@ -74,7 +74,7 @@ local function cacheContents()
         Logger:debug(scene, "DataServer:getParameters", "City list could no be cached cached!")
         scene:alert("Login Operation", "City list could not be cached")
     end)
-    
+   
     DataServer:getParameters(kParameterCompanies, nil, function (responseData)
         
         -- Cache Companies list data
@@ -148,7 +148,7 @@ local function cacheContents()
         scene:alert("Login Operation", "Interval list could not be cached")
 
     end)
-     
+
 end
 
 function onButtonTouch( event )

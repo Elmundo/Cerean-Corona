@@ -36,25 +36,25 @@ end
 
 function Logger:debug( object, method, message )
 	if (logLevelTable[DEBUG] >= logLevelTable[logLevel]) then
-		print( "[DEBUG] -- Object=( " .. object .. " )   " .. "   Method=( " .. method .. " )   " .. "Message= " .. message )
+		print( "[DEBUG] -- Object=( " .. "" .. " )   " .. "   Method=( " .. method .. " )   " .. "Message= " .. message )
 	end
 end
 
 function Logger:warning( object, method, message )
 	if (logLevelTable[WARN] >= logLevelTable[logLevel]) then
-		print( "[WARN] -- Object=(" .. object .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
+		print( "[WARN] -- Object=(" .. "" .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
 	end
 end
 
 function Logger:error( object, method, message )
 	if (logLevelTable[ERROR] >= logLevelTable[logLevel]) then
-		print( "[ERROR] -- Object=(" .. object .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
+		print( "[ERROR] -- Object=(" .. "" .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
 	end
 end
 
 function Logger:fatal( object, method, message )
 	if (logLevelTable[FATAL] >= logLevelTable[logLevel]) then
-		print( "[FATAL] -- Object=(" .. object .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
+		print( "[FATAL] -- Object=(" .. "" .. ")" .. "Method=(" .. method .. ")" .. "Message= " .. message )
 	end
 end
 
