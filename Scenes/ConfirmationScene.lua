@@ -5,6 +5,7 @@ local BaseScene   = require "Scenes.BaseScene"
 local ProgressBar = require "libs.ProgressBar.ProgressBar"
 local CTextField  = require "Views.TextFields.CTextField"
 local DataService = require "Network.DataService"
+local Logger      = require "libs.Log.Logger"
 
 -- GLOBAL MailType Enum
 MailType = {
@@ -35,11 +36,27 @@ local nextButtonBg
 local nextButton
 
 -- METHODS
+
+-- Network Error handler, check type 2
+function ConfirmationScene:isErrorCheckOk(responseData)
+    if responseData.errorCode == "00" and responseData.errorDetail == nil then
+        return true
+    end
+    
+    return false
+end
+
 function ConfirmationScene.onNextButton(event)
     if event.phase == "ended" then
-        ConfirmationScene:saveContent(step, function (event)
-            ConfirmationScene:sendCustomerNumberMail()
-            storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)
+        ConfirmationScene:saveContent(step, function (success, errorDetail)
+            if success then
+                ConfirmationScene:sendCustomerNumberMail()
+                storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)
+            else
+                Logger:debug(self, "ConfirmationScene.onNextButton", "Step 6 is failure!")
+                ConfirmationScene:alert("UYARI!", errorDetail, {"OK"})
+            end
+            
         end)
         
     end
@@ -73,8 +90,13 @@ function ConfirmationScene:sendMail()
         }
     end
     
-    DataService:sendMail(MailType.MailTypeVerification, contentData, function (resonseData)
-        -- Error check
+    DataService:sendMail(MailType.MailTypeVerification, contentData, function (responseData)
+        if ConfirmationScene:isErrorCheckOk(responseData) == false then
+            ConfirmationScene:alert("UYARI!", responseData.responseDetail, "OK")
+        end
+    end, function (errorData)
+        Logger:error(self, "ConfirmationScene:sendMail", errorData)
+        ConfirmationScene:alert("UYARI!", "Mail gönderme istediğinde hata oluştu!", "OK")
     end)
 end
 
@@ -109,8 +131,17 @@ function ConfirmationScene:sendCustomerNumberMail()
     end
     
     DataService:sendMail(MailType.MailTypeCustomerNumber, contentData, function (responseData)
-        -- Error Check
+        if ConfirmationScene:isErrorCheckOk(responseData) == false then
+            ConfirmationScene:alert("UYARI!", responseData.responseDetail, "OK")
+        end
+    end, function (errorData)
+        Logger:error(self, "ConfirmationScene:sendCustomerNumberMail", errorData)
+        ConfirmationScene:alert("UYARI!", "Müşteri mail gönderme istediğinde hata oluştu!", "OK")
     end)
+end
+
+function ConfirmationScene:resendMail()
+    self:sendMail()
 end
 
 function ConfirmationScene:getContent()
@@ -155,10 +186,18 @@ function ConfirmationScene:saveContent(step, callback)
     local contentData = self:getContent()
     
     DataService:saveContent(contentData, function (responseData)
-        DataService.customerId = responseData.customerId
-        DataService.customerNumber = responseData.customerNumber
-        
-        callback(responseData)
+        if ConfirmationScene:isErrorCheckOk(responseData) then
+            Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is success!")
+            DataService.customerId = responseData.customerId
+            DataService.customerNumber = responseData.customerNumber
+            callback(YES, nil)
+        else
+            Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is failure!")
+            callback(NO, responseData.errorDetail)
+        end
+    end, function (errorData)
+        Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is failure!")
+        callback(NO, errorData.description)
     end)
     
 end
@@ -229,7 +268,7 @@ function ConfirmationScene:createScene( event )
 
                                             onEvent = function (event)                    
                                                             if event.phase == "ended" then
-                                                                
+                                                                self:resendMail()
                                                             end 
                                                       end,})
     
@@ -286,9 +325,10 @@ function ConfirmationScene:createScene( event )
     
 end
 
-
+local superEnterScene = ConfirmationScene.enterScene
 function ConfirmationScene:enterScene(event)
-    
+    --Call parent enterScene method
+    superEnterScene(self, event)
 end
 
 
