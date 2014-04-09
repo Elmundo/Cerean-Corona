@@ -39,7 +39,7 @@ local nextButton
 
 -- Network Error handler, check type 2
 function ConfirmationScene:isErrorCheckOk(responseData)
-    if responseData.errorCode == "00" and responseData.errorDetail == nil then
+    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
         return true
     end
     
@@ -188,16 +188,16 @@ function ConfirmationScene:saveContent(step, callback)
     DataService:saveContent(contentData, function (responseData)
         if ConfirmationScene:isErrorCheckOk(responseData) then
             Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is success!")
-            DataService.customerId = responseData.customerId
-            DataService.customerNumber = responseData.customerNumber
+            DataService.customerId = responseData.CustomerId
+            DataService.customerNumber = responseData.CustomerNumber
             callback(YES, nil)
         else
             Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is failure!")
-            callback(NO, responseData.errorDetail)
+            callback(NO, responseData.ErrorDetail)
         end
     end, function (errorData)
         Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is failure!")
-        callback(NO, errorData.description)
+        callback(NO, errorData.Description)
     end)
     
 end

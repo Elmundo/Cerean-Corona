@@ -36,7 +36,7 @@ local nextButton
 
 -- Network Error handler, check type 2
 function PackageScene:isErrorCheckOk(responseData)
-    if responseData.errorCode == "00" and responseData.errorDetail == nil then
+    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
         return true
     end
     
@@ -103,18 +103,18 @@ function PackageScene:saveContent(step, callback)
     
         if PackageScene:isErrorCheckOk(responseData) then
             Logger:debug(PackageScene, "PackageScene:saveContent", "Step Package is success!")
-            DataService.customerId = responseData.customerId
-            DataService.productId  = responseData.productId
-            DataService.quoteId    = responseData.quoteId
+            DataService.customerId = responseData.CustomerId
+            DataService.productId  = responseData.ProductId
+            DataService.quoteId    = responseData.QuoteId
             callback(true, nil)
         else
             Logger:debug(PackageScene, "PackageScene:saveContent", "Step Package is failure!")
-            callback(false, responseData.errorMessage)
+            callback(false, responseData.ErrorMessage)
         end
         
     end, function (errorData)
         Logger:debug(PackageScene, "PackageScene:saveContent", "Step Package is failure!")
-        callback(false, errorData)
+        callback(false, errorData.Description)
     end)
 end
 
