@@ -204,15 +204,15 @@ end
 --Scene Evenet Handlers
 -------------------------------------------------------------------------------
 function scene:createScene( event )
-    displayGroup = self.view
-    loginBackground = display.newImageRect( "Assets/LoginBackground.png", 1280, 800 )
-
-    loginBox = display.newImageRect( "Assets/LoginBox.png", 378, 498 )--640-189, 400-249, true )
-    loginBox.x = 1280/2- 378/2
-    loginBox.y = 800/2 -498/2
-    userNameTextField = CTextField.new( centerX-120, centerY-15 )
-    userNameTextField:setListener( onTextFieldTouch )
-    passwordTextField = CTextField.new( centerX-120, centerY+55 ) 
+	displayGroup = self.view
+	loginBackground = display.newImageRect( "Assets/LoginBackground.png", 1280, 800 )
+        
+	loginBox = display.newImageRect( "Assets/LoginBox.png", 378, 498 )--640-189, 400-249, true )
+        loginBox.x = 1280/2- 378/2
+        loginBox.y = 800/2 -498/2
+	userNameTextField = CTextField.new( centerX-120, centerY-15, 240, 40 )
+        --userNameTextField:setListener( onTextFieldTouch )
+	passwordTextField = CTextField.new( centerX-120, centerY+55, 240, 40 ) 
 
     --inputField = native.newTextField(1280, 0, 220, 20, onTextInput )
 

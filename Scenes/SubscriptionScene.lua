@@ -124,14 +124,19 @@ end
 
 --onComplete
 function doneStepAnimationNext ()
-
+        if( step == 0 )then
+            personalInformationGroup:hideGroup(false)
+        end
+            
         step = step  + 1 
         isStepAnimationRunning = false
         print( step )
 end
 
 function doneStepAnimationBack()
-
+        if( step == 2 )then
+            personalInformationGroup:hideGroup(false)
+        end
         step = step - 1
         isStepAnimationRunning = false
         print( step )
@@ -176,10 +181,12 @@ function shiftUp()
         if( isStepAnimationRunning == false ) then
                 isStepAnimationRunning = true
                 if( step == 0 ) then
+                        --personalInformationGroup:hideGroup(true)
                         --Do Nothing
                         --transition.to( personalInformationGroup, {time=400, y= -235, transition = easing.outExpo } )
                 elseif( step == 1 ) then
                         isStepAnimationRunning = true
+                        personalInformationGroup:hideGroup(true)
                         --saveContent(appStep)
                         --[[
                         saveContent(kStepPersonel, function (responseData)
@@ -204,6 +211,7 @@ function shiftDown()
                         local previousScene = storyboard.getPrevious()
                         storyboard.gotoScene(previousScene, "slideRight", 800 )
                 elseif ( step == 1 ) then
+                        personalInformationGroup:hideGroup(true)
                         transition.to( personalInformationGroup, {time=400, y= 185,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 else 
                         transition.to( counterInformationGroup, {time=400, y= 230,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
@@ -236,7 +244,7 @@ function scene:createScene( event )
 
 --------------------------------------------
         personalInformationGroup = PersonalInformationView.new()
-
+        personalInformationGroup:hideGroup(true)
 
 --------------------------------------------
         subscriberTypeGroup = SubscriberTypeView.new()
