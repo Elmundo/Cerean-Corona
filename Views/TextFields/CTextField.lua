@@ -1,19 +1,22 @@
-
+local CTextField = {}
 
 local display = require( "display" )
 local native = require( "native" )
 
-module( ... )
 
-function new( xPos, yPos )
 
+
+function CTextField.new( xPos, yPos, width, height )
+        
+        local defaultXPos
+        
 	local textFieldWrapper = display.newGroup( )
-	local background = display.newImage( "Assets/InputInfo.png", 0, 0 )
-	--local textField = display.newText( "Test", 5, 10, 220, 20, native.systemFont, 15 )
-	--textField:setFillColor( 0, 0, 0 )
-        local textField = native.newTextField(0, 0, 240, 40 )
-        textField:setTextColor(0, 0, 0)
-        --[[
+	--local background = display.newImage( "Assets/InputInfo.png", 0, 0 )
+        local background = display.newRoundedRect( 0, 0, width, height, 5 )
+        background:setFillColor( 0.5, 0.5, 0.5 )
+	local textField = native.newTextField(3, 3, width-6, height-6 )
+        --display.newText( "Test", 5, 10, 220, 20, native.systemFont, 15 )
+	--[[
 		{
 		text = "Test",
 		x = xPos,
@@ -23,8 +26,8 @@ function new( xPos, yPos )
 		font = native.systemFont,
 		fontSize = 15
 		}  
-	]]
-	
+	--]]
+	textField:setTextColor( 0, 0, 0 )
 	local textContent
 	--native.newTextField( 0, 0, 220, 20 )
 
@@ -38,20 +41,37 @@ function new( xPos, yPos )
 
 	textFieldWrapper:insert( background )
 	textFieldWrapper:insert( textField )
-
+        
+        defaultXPos = xPos
+        
 	textFieldWrapper.x = xPos
 	textFieldWrapper.y = yPos
-
+        function textFieldWrapper:setSize ( width, height )
+            --This is for inheritance check with Barış
+            textFieldWrapper = display.newGroup()
+            background = display.newRoundedRect( 0, 0, width, height, 5 )
+            background:setFillColor( 0.5, 0.5, 0.5 )
+            textField = native.newTextField(2, 2, width-4, height-4 )
+            textFieldWrapper:insert( background )
+            textFieldWrapper:insert( textField )
+        end
+        
 	function textFieldWrapper:setListener( listener )
-            --background:addEventListener("touch", listener)
-            textField:addEventListener( "userInput", listener )
+            textField:addEventListener("touch", listener)
+		--textField:addEventListener( "userInput", listener )
 	end
 
 	function textFieldWrapper:getText()
 		return textField.text
 	end
-
+        function textFieldWrapper:hide( isHidden )
+            if( isHidden ) then
+                textFieldWrapper.x = display.pixelWidth + 5000
+            else
+                textFieldWrapper.x = defaultXPos
+            end
+        end
 	return textFieldWrapper
 end
 
-
+return CTextField
