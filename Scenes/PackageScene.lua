@@ -7,6 +7,7 @@ local PackageScroller = require "Views.PackageScroller"
 local PackageView     = require "Views.PackageDetail"
 local Utils           = require "libs.Util.Utils"
 local DataService     = require "Network.DataService"
+local Logger          = require "libs.Log.Logger"
 
 -- PackageScene Module
 local PackageScene    = BaseScene.new()
@@ -32,6 +33,16 @@ local nextButtonBg
 local nextButton
 
 -- METHODS
+
+-- Network Error handler, check type 2
+function PackageScene:isErrorCheckOk(responseData)
+    if responseData.errorCode == "00" and responseData.errorDetail == nil then
+        return true
+    end
+    
+    return false
+end
+
 function PackageScene:createDummyProductList()
     
     local list = {}
@@ -89,13 +100,22 @@ function PackageScene:saveContent(step, callback)
     end
     
     DataService:saveContent(contentData, function (responseData)
-        DataService.customerId = responseData.customerId
-        DataService.productId  = responseData.productId
-        DataService.quoteId    = responseData.quoteId
-        
-        callback(responseData)
-    end)
     
+        if PackageScene:isErrorCheckOk(responseData) then
+            Logger:debug(PackageScene, "PackageScene:saveContent", "Step Package is success!")
+            DataService.customerId = responseData.customerId
+            DataService.productId  = responseData.productId
+            DataService.quoteId    = responseData.quoteId
+            callback(true, nil)
+        else
+            Logger:debug(PackageScene, "PackageScene:saveContent", "Step Package is failure!")
+            callback(false, responseData.errorMessage)
+        end
+        
+    end, function (errorData)
+        Logger:debug(PackageScene, "PackageScene:saveContent", "Step Package is failure!")
+        callback(false, errorData)
+    end)
 end
 
 -- Button Methods 
@@ -105,8 +125,14 @@ function PackageScene.onNextButton(event)
             --TODO: Buarada hata mesajı verdir. 
         end
         
-        PackageScene:saveContent(step, function (responseData)
-            storyboard.gotoScene("Scenes.ConfirmationScene", "slideLeft", 400 )
+        PackageScene:saveContent(step, function (success, errorDetail)
+            if success then
+                storyboard.gotoScene("Scenes.AppointmentScene", "slideLeft", 400 )
+            else
+                Logger:error(PackageScene, "PackageScene:saveContent", errorDetail)
+                PackageScene:alert("UYARI!", errorDetail, {"OK"})
+            end
+            
         end)
         
     end
@@ -212,9 +238,13 @@ function PackageScene:createScene( event)
 end
 PackageScene:addEventListener("createScene")
 
+-- 
+local superEnterScene = Package.enterScene
 function PackageScene:enterScene(event)
-    
+    -- Call superclass method
+    superEnterScene(self, event)
 end
+
 PackageScene:addEventListener("enterScene")
 
 function PackageScene:didExitScene(event)

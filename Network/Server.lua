@@ -90,8 +90,8 @@ function Server:request( params, callback, failure, requestType )
 
                                                 if event.isError then
                                                     
-                                                    local errorData = event.response
-                                                    Logger:error(self, "Server:request", "Connection Error! " .. event.response)
+                                                    local errorData = json.decode( event.response )
+                                                    Logger:error(self, "Server:request", "Connection Error! " .. errorData)
                                                     
                                                     failure(errorData) -- Call the related error callback function
                                                     
