@@ -38,7 +38,7 @@ local cachedDataIndex = 0
 
 -- Network Error handler, check type 2
 local function isErrorCheckOk(responseData)
-    if responseData.errorCode == "00" and responseData.errorDetail == nil then
+    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
         return true
     end
     
@@ -162,9 +162,9 @@ function onButtonTouch( event )
                                             function (responseData)
 
                                                 if isErrorCheckOk(responseData) then
-                                                    DataServer.userBusinessUnitName = responseData.userBusinessUnitName
-                                                    DataServer.userId = responseData.userId
-                                                    DataServer.userName = responseData.userName
+                                                    DataServer.userBusinessUnitName = responseData.UserBusinessUnitName
+                                                    DataServer.userId               = responseData.UserId
+                                                    DataServer.userName             = responseData.UserName
 
                                                     cacheContents()
                                                 else
