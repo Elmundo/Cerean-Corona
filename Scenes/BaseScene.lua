@@ -12,8 +12,8 @@ function BaseScene.new()
         
         local loadingMask
         
-	function baseScene:alert()
-		-- Make alert message here
+	function baseScene:alert(title, message, labelList, listener)
+            --native.showAlert("Alert Test", "This is a alert message", {"OK", "CANCEL"}, function(event)
 	end
 
 	function baseScene:showMask()
