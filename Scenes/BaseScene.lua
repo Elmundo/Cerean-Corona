@@ -1,6 +1,6 @@
-local storyboard = require "storyboard"
+local storyboard  = require "storyboard"
 local LoadingMask = require "Views.LoadingMask"
-
+local native      = require "native"
 local BaseScene = {}
 
 function BaseScene.new()
@@ -13,7 +13,9 @@ function BaseScene.new()
         local loadingMask
         
 	function baseScene:alert(title, message, labelList, listener)
-            --native.showAlert("Alert Test", "This is a alert message", {"OK", "CANCEL"}, function(event)
+            native.showAlert(title, message, labelList, function(event)
+                -- Something to do
+            end)
 	end
 
 	function baseScene:showMask()
@@ -33,7 +35,5 @@ function BaseScene.new()
         
         return baseScene
 end
-
-
 
 return BaseScene

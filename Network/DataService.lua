@@ -161,60 +161,60 @@ end
 ------------------------
 -- Networking Methods --
 ------------------------
-function DataService:saveContent( params, callback )
+function DataService:saveContent( params, callback, failure )
 	
 	request.params = {params}
 	request.method = "savecontent"
 
-	CereanServer:request(self:completeRequest(baseRequest), callback)
+	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
-function DataService:login( username, password, callback  )
+function DataService:login( username, password, callback, failure  )
 
 	request.params = {username, password}
 	request.method = "login"
 	
-	CereanServer:request(self:completeRequest(baseRequest), callback)
+	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
-function DataService:isCustomer( customerId, callback  )
+function DataService:isCustomer( customerId, callback, failure  )
 	
 	request.params = {customerId, self.userId}
 	request.method = "iscustomer"
 	
-	CereanServer:request(self:completeRequest(baseRequest), callback)
+	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
-function DataService:getParameters( key, parentAsInt, callback  )
+function DataService:getParameters( key, parentAsInt, callback, failure )
 	
 	request.params = {key, json.null, json.null}
 	request.method = "getparameters"
 	
-	CereanServer:request(self:completeRequest(baseRequest), callback)
+	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
-function DataService:getParametersWithGuid(	key, guid, parentAsInt, callback  )
+function DataService:getParametersWithGuid(	key, guid, parentAsInt, callback, failure  )
 	
 	request.params = {key, guid, json.null}
 	request.method = "getparameters"
 	
-	CereanServer:request(self:completeRequest(baseRequest), callback)
+	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
-function DataService:sendMail( mailType, params, callback  )
+function DataService:sendMail( mailType, params, callback, failure  )
 	
 	request.params = {mailType, params}
 	request.method = "sendmail"
 	
-	CereanServer:request(self:completeRequest(baseRequest), callback)
+	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
-function DataService:getProduct( callback  )
+function DataService:getProduct( callback, failure  )
 	
 	request.params = {self.customerId}
 	request.method = "getproducts"
 	
-	CereanServer:request(self:completeRequest(baseRequest), callback)
+	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
 return DataService

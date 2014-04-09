@@ -1,12 +1,13 @@
-local widget = require( "widget" )
-local native = require( "native" )
-local CTextField = require( "Views.TextFields.CTextField" )
-local CLabel = require( "Views.Labels.CLabel" )
-local CButton = require( "Views.Buttons.CButton" )
-local DataServer = require "Network.DataService"
-local Utils      = require "libs.Util.Utils"
+local widget       = require( "widget" )
+local native       = require( "native" )
+local CTextField   = require( "Views.TextFields.CTextField" )
+local CLabel       = require( "Views.Labels.CLabel" )
+local CButton      = require( "Views.Buttons.CButton" )
+local DataServer   = require "Network.DataService"
+local Utils        = require "libs.Util.Utils"
 local LoadingMask  = require "Views.LoadingMask"
-local BaseScene   = require "Scenes.BaseScene"
+local BaseScene    = require "Scenes.BaseScene"
+local Logger       = require "libs.Log.Logger"
 
 local scene = BaseScene.new()
 
@@ -35,6 +36,15 @@ local loginButton
 
 local cachedDataIndex = 0
 
+-- Network Error handler, check type 2
+local function isErrorCheckOk(responseData)
+    if responseData.errorCode == "00" and responseData.errorDetail == nil then
+        return true
+    end
+    
+    return false
+end
+
 local function nextViewController()
     
 end
@@ -55,73 +65,124 @@ local function cacheContents()
         
         -- Cache Cities list data
         DataServer.cities = responseData
+        Logger:debug(scene, "DataServer:getParameters", "City list are cached!")
         
         cachedDataIndex = cachedDataIndex + 1
         checkCachedDatas()   
+    end, function( errorData )
+        
+        Logger:debug(scene, "DataServer:getParameters", "City list could no be cached cached!")
+        scene:alert("Login Operation", "City list could not be cached")
     end)
     
     DataServer:getParameters(kParameterCompanies, nil, function (responseData)
         
         -- Cache Companies list data
         DataServer.companies = responseData
+        Logger:debug(scene, "DataServer:getParameters", "Company list are cached!")
         
         cachedDataIndex = cachedDataIndex + 1
         checkCachedDatas()   
+    end, function( errorData )
+        
+        Logger:debug(scene, "DataServer:getParameters", "Company list could no be cached cached!")
+        scene:alert("Login Operation", "Company list could not be cached")
+
     end)
-    
     DataServer:getParameters(kParameterSuppliers, nil, function (responseData)
         
         -- Cache Suppliers list data
         DataServer.suppliers = responseData
+        Logger:debug(scene, "DataServer:getParameters", "Supplier list are cached!")
         
         cachedDataIndex = cachedDataIndex + 1
         checkCachedDatas()   
+    end, function( errorData )
+        
+        Logger:debug(scene, "DataServer:getParameters", "Supplier list could no be cached cached!")
+        scene:alert("Login Operation", "Supplier list could not be cached")
+
     end)
     
     DataServer:getParameters(kParameterMembershipGroups, nil, function (responseData)
         
         -- Cache Membership Groups data
         DataServer.membershipgroups = responseData
+        Logger:debug(scene, "DataServer:getParameters", "MembershipGroup list are cached!")
         
         cachedDataIndex = cachedDataIndex + 1
         checkCachedDatas()   
+    end, function( errorData )
+        
+        Logger:debug(scene, "DataServer:getParameters", "MembershipGroup list could no be cached cached!")
+        scene:alert("Login Operation", "MembershipGroup list could not be cached")
+
     end)
     
     DataServer:getParameters(kParameterMeterTypes, nil, function (responseData)
         
         -- Cache MeterTypes list data
         DataServer.meterList = responseData
+        Logger:debug(scene, "DataServer:getParameters", "MeterType list are cached!")
         
         cachedDataIndex = cachedDataIndex + 1
         checkCachedDatas()   
+    end, function( errorData )
+        
+        Logger:debug(scene, "DataServer:getParameters", "MeterType list could no be cached cached!")
+        scene:alert("Login Operation", "MeterType list could not be cached")
+
     end)
     
     DataServer:getParameters(kParameterInterval, nil, function (responseData)
         
+        -- Cache Interval list data
         DataServer.timeIntervals = responseData
+        Logger:debug(scene, "DataServer:getParameters", "Interval list are cached!")
         
         cachedDataIndex = cachedDataIndex + 1
         checkCachedDatas()   
+    end, function( errorData )
+        
+        Logger:debug(scene, "DataServer:getParameters", "Interval list could no be cached cached!")
+        scene:alert("Login Operation", "Interval list could not be cached")
+
     end)
      
 end
 
 function onButtonTouch( event )
-	if( event.phase == "ended") then
-		print( userNameTextField:getText() )
-		print( passwordTextField:getText() )
-                
-                -- TODO: Hard-Coded Data Insert            
-                DataServer:login("Crmuser", "CaCu2013!", 
-                                                    function (responseData)
-                                                        cacheContents()
-                                                    end
-                    )
-                
-                
+    if( event.phase == "ended") then
+        print( userNameTextField:getText() )
+        print( passwordTextField:getText() )
 
-		return true
-	end
+        scene:showMask()
+        -- TODO: Hard-Coded Data Insert
+        DataServer:login("Crmuser", "CaCu2013!", 
+                                            function (responseData)
+
+                                                if isErrorCheckOk(responseData) then
+                                                    DataServer.userBusinessUnitName = responseData.userBusinessUnitName
+                                                    DataServer.userId = responseData.userId
+                                                    DataServer.userName = responseData.userName
+
+                                                    cacheContents()
+                                                else
+                                                    scene:hideMask()
+                                                    -- TODO: Bahadir - burda errorMessage image'ını göstereceksin sanırım
+                                                end
+
+                                            end,
+
+                                            function ( errorData )
+                                                scene:alert("Login Operations","Login request is failed!",{"OK"})
+                                                scene:hideMask()
+                                            end)
+
+
+
+        return true
+    end
 end
 
 function onTextInput ( event )
@@ -153,36 +214,29 @@ function scene:createScene( event )
         --userNameTextField:setListener( onTextFieldTouch )
 	passwordTextField = CTextField.new( centerX-120, centerY+55, 240, 40 ) 
 
-        --inputField = native.newTextField(1280, 0, 220, 20, onTextInput )
+    --inputField = native.newTextField(1280, 0, 220, 20, onTextInput )
 
-	headerLabel = CLabel.new( "Bayi Girişi", centerX-120, centerY-70, 20)
-	userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-120, centerY-35, 15)
-	passwordLabel = CLabel.new( "Şifre", centerX-120, centerY+35, 15)
+    headerLabel = CLabel.new( "Bayi Girişi", centerX-120, centerY-70, 20)
+    userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-120, centerY-35, 15)
+    passwordLabel = CLabel.new( "Şifre", centerX-120, centerY+35, 15)
 
-	loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, centerX-90, centerY+110, 0 )
+    loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, centerX-90, centerY+110, 0 )
 
-	displayGroup:insert( loginBackground )
-	displayGroup:insert( loginBox )
-	displayGroup:insert( headerLabel )
-	displayGroup:insert( userNameTextField )
-	displayGroup:insert( passwordTextField )
-	displayGroup:insert( userNameLabel )
-	displayGroup:insert( passwordLabel )
-	displayGroup:insert( loginButton )
-	displayGroup.x = centerX
-	displayGroup.y = centerY
+    displayGroup:insert( loginBackground )
+    displayGroup:insert( loginBox )
+    displayGroup:insert( headerLabel )
+    displayGroup:insert( userNameTextField )
+    displayGroup:insert( passwordTextField )
+    displayGroup:insert( userNameLabel )
+    displayGroup:insert( passwordLabel )
+    displayGroup:insert( loginButton )
+    displayGroup.x = centerX
+    displayGroup.y = centerY
 end
 
 local superEnterScene = scene.enterScene
 function  scene:enterScene( event )
-        superEnterScene(self, event)
-        
-        self:showMask()
-        
-        timer.performWithDelay(3000, function (event)
-                
-            self:hideMask()
-        end)
+    superEnterScene(self, event)
 end
 
 function scene:exitScene( event )
