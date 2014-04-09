@@ -28,6 +28,4 @@ Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " Co
 
 storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400)
 
-native.showAlert("Alert Test", "This is a alert message", {"OK", "CANCEL"}, function(event)
-    
-end)
+

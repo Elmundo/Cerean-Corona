@@ -82,7 +82,7 @@ function saveContent ( appStep, callback )
                                       callback( responseData )
                                  end
             )
-    else if( step == 2 ) then
+    elseif( step == 2 ) then
         --DataDataService.meterSerialNumber = 
         --DataService.meterId = 
         local contentData = counterInformationGroup:getContent()
@@ -115,7 +115,7 @@ function saveContent ( appStep, callback )
         
         
         end
-    end
+    
 end
 
 function onComplete ()
@@ -126,6 +126,8 @@ end
 function doneStepAnimationNext ()
         if( step == 0 )then
             personalInformationGroup:hideGroup(false)
+        elseif( step == 1 )then
+            counterInformationGroup:hideGroup(false)
         end
             
         step = step  + 1 
@@ -215,6 +217,7 @@ function shiftDown()
                         personalInformationGroup:hideGroup(true)
                         transition.to( personalInformationGroup, {time=400, y= 185,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 else 
+                        counterInformationGroup:hideGroup(true)
                         transition.to( counterInformationGroup, {time=400, y= 230,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 end
         end

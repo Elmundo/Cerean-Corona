@@ -2,6 +2,8 @@ local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
 
+local CTextField = require( "Views.TextFields.CTextField" )
+
 local CounterInformationView = {}
 
 function CounterInformationView.new()
@@ -40,7 +42,25 @@ local counterMultiplierField
 local billAmountLabel
 local billAmountField
 
-function getContent () 
+
+counterInformationGroup = display.newGroup( )
+contentGroup = display.newGroup( )
+
+function counterInformationGroup:hideGroup( isHidden )
+    distrubitionCompanyField:hide(isHidden)
+    supplierCompanyField:hide(isHidden)
+    companyCodeField:hide(isHidden)
+    subscriberNumberField:hide(isHidden)
+    recieptField:hide(isHidden)
+    subscriberGroupField:hide(isHidden)
+    customerNameField:hide(isHidden)
+    counterSerialNumberField:hide(isHidden)
+    inductiveCounterSerialNumberField:hide(isHidden)
+    counterMultiplierField:hide(isHidden)
+    billAmountField:hide(isHidden)
+end
+
+function counterInformationGroup:getContent () 
             local contentData = {}
             
             contentData = {
@@ -61,8 +81,7 @@ function getContent ()
             return contentData
         end
 
-counterInformationGroup = display.newGroup( )
-contentGroup = display.newGroup( )
+
 
         counterInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
         --counterInformationGroupBackground:setFillColor( 0,0,1 )
@@ -78,62 +97,84 @@ contentGroup = display.newGroup( )
 
         distrubitionCompanyLabel = display.newText( "Dağıtım Şirketi Adı", 60, 485, native.systemFontBold, 15 )
         distrubitionCompanyLabel:setFillColor( 0,0,0 )
+        distrubitionCompanyField = CTextField.new( 50, 505, 240, 30)
+        --[[]
         distrubitionCompanyField  = display.newRoundedRect( 50, 505, 240, 30, 5 )
         distrubitionCompanyField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         supplierCompanyLabel = display.newText( "Tedarik Şirketi Adı", 470, 490, native.systemFontBold, 15 )
         supplierCompanyLabel:setFillColor( 0,0,0 )
+        supplierCompanyField = CTextField.new( centerX-60-120, 510, 240, 30)
+        --[[]
         supplierCompanyField = display.newRoundedRect( centerX-60-120, 510, 240, 30, 5 )
         supplierCompanyField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         counterInformation = display.newText( "2. Sayaç Bilgileri", 60, 540, native.systemFontBold, 17 )
         counterInformation:setFillColor( 0, 0, 0 )
 
         companyCodeLabel = display.newText( "İşletme Kodu", 60, 555, native.systemFontBold, 15 )
         companyCodeLabel:setFillColor( 0,0,0 )
+        companyCodeField = CTextField.new( 50, 575, 240, 30)
+        --[[]
         companyCodeField  = display.newRoundedRect( 50, 575, 240, 30, 5 )
         companyCodeField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         subscriberNumberLabel = display.newText( "Abone/Tesisat No", 470, 555, native.systemFontBold, 15 )
         subscriberNumberLabel:setFillColor( 0,0,0 )
+        subscriberNumberField = CTextField.new( centerX-180, 575, 240, 30)
+        --[[]
         subscriberNumberField  = display.newRoundedRect( centerX-180, 575, 240, 30, 5 )
         subscriberNumberField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         recieptLabel = display.newText( "Tarife Kodu", 60, 605, native.systemFontBold, 15 )
         recieptLabel:setFillColor( 0,0,0 )
+        recieptField = CTextField.new( 50, 625, 240, 30)
+        --[[]
         recieptField  = display.newRoundedRect( 50, 625, 240, 30, 5 )
         recieptField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         subscriberGroupLabel = display.newText( "Abone Grubu", 470, 605, native.systemFontBold, 15 )
         subscriberGroupLabel:setFillColor( 0,0,0 )
+        subscriberGroupField = CTextField.new( centerX-180, 625, 240, 30)
+        --[[]
         subscriberGroupField  = display.newRoundedRect( centerX-180, 625, 240, 30, 5 )
         subscriberGroupField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         customerNameLabel = display.newText( "Müşteri Adı/Ünvanı", 60, 655, native.systemFontBold, 15 )
         customerNameLabel:setFillColor( 0,0,0 ) 
+        customerNameField = CTextField.new( 50, 675, 240, 30)
+        --[[]
         customerNameField = display.newRoundedRect( 50, 675, centerX-50, 30, 5 )
         customerNameField:setFillColor( 0.5,0.5,0.5 )
-
+        -]]
         counterSerialNumberLabel = display.newText( "Aktif Sayaç Seri No", 60, 710, native.systemFontBold, 15 )
         counterSerialNumberLabel:setFillColor( 0,0,0 )
+        counterSerialNumberField = CTextField.new( 50, 730, 240, 30)
+        --[[]
         counterSerialNumberField  = display.newRoundedRect( 50, 730, 240, 30, 5 )
         counterSerialNumberField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         inductiveCounterSerialNumberLabel = display.newText( "Endüktif Sayaç Seri No", 470, 710, native.systemFontBold, 15 )
         inductiveCounterSerialNumberLabel:setFillColor( 0,0,0 )
+        inductiveCounterSerialNumberField = CTextField.new( centerX-180, 730, 240, 30)
+        --[[]
         inductiveCounterSerialNumberField  = display.newRoundedRect( centerX-180, 730, 240, 30, 5 )
         inductiveCounterSerialNumberField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         counterMultiplierLabel = display.newText( "Sayaç Çarpanı", 60, 760, native.systemFontBold, 15 )
         counterMultiplierLabel:setFillColor( 0,0,0 )
+        counterMultiplierField = CTextField.new( 50, 780, 240, 30)
+        --[[]
         counterMultiplierField  = display.newRoundedRect( 50, 780, 240, 30, 5 )
         counterMultiplierField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
         billAmountLabel = display.newText( "Fatura Tutarı", 470, 760, native.systemFontBold, 15 )
         billAmountLabel:setFillColor( 0,0,0 )
+        billAmountField = CTextField.new( centerX-180, 780, 240, 30)
+        --[[]
         billAmountField  = display.newRoundedRect( centerX-180, 780, 240, 30, 5 )
         billAmountField:setFillColor( 0.5, 0.5, 0.5 )
-
+        --]]
 
         counterInformationGroup:insert( counterInformationGroupBackground )
         counterInformationGroup:insert( counterInformationHeaderBackground )
