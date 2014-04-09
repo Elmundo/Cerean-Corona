@@ -27,9 +27,27 @@ function onExitButtonTouched( event )
 
 end
 
-function onPhaseButtonTouched( event )
+function onApplicationPhaseButtonTouched( event )
         --TODO: Delete Later - Baris
         storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
+        
+        --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
+        
+        return true
+end
+
+function onCallPhaseButtonTouched( event )
+        --TODO: Delete Later - Baris
+        storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
+        
+        --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
+        
+        return true
+end
+
+function onRegistryPhaseButtonTouched( event )
+        --TODO: Delete Later - Baris
+        storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
         
         --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
         
@@ -54,7 +72,7 @@ function scene:createScene( event )
                 defaultFile = "Assets/MenuButton01.png",
                 overFile = "Assets/MenuButton01Pressed.png",
                 label = "",
-                onEvent = onPhaseButtonTouched
+                onEvent = onApplicationPhaseButtonTouched
 	}
 	applicationPhaseButton.x = centerX-229-219/2
 	applicationPhaseButton.y = centerY-219/2
@@ -65,7 +83,7 @@ function scene:createScene( event )
     	defaultFile = "Assets/MenuButton02.png",
     	overFile = "Assets/MenuButton02Pressed.png",
     	label = "",
-    	onEvent = onPhaseButtonTouched
+    	onEvent = onCallPhaseButtonTouched
 	}
 	callPhaseButton.x = centerX-219/2
 	callPhaseButton.y = centerY-219/2
@@ -76,7 +94,7 @@ function scene:createScene( event )
     	defaultFile = "Assets/MenuButton03.png",
     	overFile = "Assets/MenuButton03Pressed.png",
     	label = "",
-    	onEvent = onPhaseButtonTouched
+    	onEvent = onRegistryPhaseButtonTouched
 	}
 	registryPhaseButton.x = centerX+229-219/2
 	registryPhaseButton.y = centerY-219/2
