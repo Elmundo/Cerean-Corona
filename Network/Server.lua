@@ -76,7 +76,7 @@ function Server:logResponse( params, responseID )
 	print( "------------------------------------------------------------------------------------------------------------------------------------------------------------" )
 end
 
-function Server:request( params, callback, requestType )
+function Server:request( params, callback, failure, requestType )
 
 	self.requestID = self.requestID + 1
 	self.params.body = params
@@ -86,18 +86,27 @@ function Server:request( params, callback, requestType )
 	network.request( self.baseURL, requestType, 
 					
 					function ( event )
-						if (event.phase == "ended") then
+                                            if (event.phase == "ended") then
 
-							local responseData = json.decode( event.response )
-							responseData = responseData.results[1].res
-							self:logResponse(responseData, self.requestID)
+                                                if event.isError then
+                                                    
+                                                    local errorData = event.response
+                                                    Logger:error(self, "Server:request", "Connection Error! " .. event.response)
+                                                    
+                                                    failure(errorData) -- Call the related error callback function
+                                                    
+                                                else
+                                                    local responseData = json.decode( event.response )
+                                                    responseData = responseData.results[1].res
+                                                    self:logResponse(responseData, self.requestID)
 
-							callback(responseData) -- Call the related callback function
-						end
+                                                    callback(responseData) -- Call the related callback function
+                                                end
+                                                
+                                            end
 					end, 
 	
-					self.params
-					)
+					self.params)
 end
 
 return Server
