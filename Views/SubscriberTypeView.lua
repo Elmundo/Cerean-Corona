@@ -4,7 +4,7 @@ local widget = require( "widget" )
 
 local SubscriberTypeView = {}
 
-function SubscriberTypeView.new()
+function SubscriberTypeView.new(delegate)
 
 
 	local subscriberTypeGroup
@@ -20,12 +20,19 @@ function SubscriberTypeView.new()
 	
 
 	 subscriberTypeGroup = display.newGroup( )
-
+         subscriberTypeGroup.delegate = delegate
+         
+         local function handleIndividualButtonEvent ( event )
+             if( event.phase == "ended" )then
+                 delegate:individualButtonPressed() 
+             end
+         end
+         --[[
 	 function subscriberTypeGroup:addButtonEventListeners ( personal, corporate )
 		personalButton:addEventListener( "touch", personal )
 		corporateButton:addEventListener( "touch", corporate )
-	end
-	 
+	 end
+	 --]]
 	 contentGroup = display.newGroup( )
 
 	        subscriberTypeHeaderText = display.newText(  "Abonelik Tipi", 60, 150, native.systemFontBold, 15 )

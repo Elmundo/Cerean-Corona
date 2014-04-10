@@ -1,11 +1,20 @@
+local CButton = {}
+
 local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
 
-module( ... )
-
-function new( buttonLabel, buttonID, buttonListener, xPos, yPos, fontSize )
+function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
 	local buttonWrapper = display.newGroup( )
+        local iD = buttonID
+        local function onButtonTouch( event )
+            if( event.phase == "ended" )then
+                if( buttonWrapper.delegate ~= nil )then
+                    buttonWrapper.delegate:onButtonTouchEnded( event, iD )
+                end
+            end
+        end
+        
 	local button = widget.newButton( 
 	{
 		left = 0,
@@ -15,13 +24,14 @@ function new( buttonLabel, buttonID, buttonListener, xPos, yPos, fontSize )
 		height = 40,
 		cornerRadius = 5,
 		label = buttonLabel,
-		onEvent = buttonListener,
+		onEvent = onButtonTouch,
 		textOnly = false,
 		labelYOffset = -4,
 		labelColor = { default={ 1, 1, 1 }, over={ 1, 1, 1, 0.5 } }
 			
 	} )
-	
+        buttonWrapper.delegate = delegate
+        
 	local background = display.newRoundedRect( 0, 0, 140, 40, 5 )
 	background:setFillColor( 113/255, 27/255, 69/255 )
 	
@@ -33,3 +43,5 @@ function new( buttonLabel, buttonID, buttonListener, xPos, yPos, fontSize )
 
 	return buttonWrapper
 end
+
+return CButton

@@ -109,11 +109,16 @@ function scene:saveContent ( appStep, callback )
                                     callback(false, errorData.ErrorDetail)
                                  end
             )
-    elseif( step == kStepRegistry ) then
+<<<<<<< HEAD
+    elseif( step == 2 ) then
+        --DataDataService.meterSerialNumber = 
+=======
+    else if( step == kStepRegistry ) then
         
         -- Cache the meterSerialNumber
         --TODO: Bahadir - DataDataService.meterSerialNumber = _registryView.activeRegisterySerialNoText.text
         -- Yukardakine benzer bi atama olacak, farklı isimler verdiğin için ben atamayı yapamadım. Bu atamayı yapmayı unutma.
+>>>>>>> 05b0625bf30c43d8d4ea8bbb55bb8a0f319c694b
         --DataService.meterId = 
         local contentData = counterInformationGroup:getContent()
         DataService.meterId = contentData["MeterId"]
@@ -190,52 +195,27 @@ end
 function scene:onBackButtonTouch( event )
         if( event.phase == "ended" ) then
                 print( "Back" )
-                scene:shiftDown()
+                shiftDown()
         end
 end
 
 function scene:onNextButtonTouch( event )
         if( event.phase == "ended" ) then
                 print( "Next" )
-                scene:shiftUp()
+                shiftUp()
         end
 end
 
---TextField DELEGATE
-function scene:onInputBegan( event )
-  
-end
---Button DELEGATE  
-function scene:onButtonTouchEnded( event, buttonID )
-    if( buttonID == "backButton" )then
-        print("BACK BUTTON PRESSED")
-        scene:shiftDown()
-    elseif( buttonID == "nextButton" )then
-        print("NEXT BUTTON PRESSED")
-        if( step == 0 )then
-            
-        elseif( step == 1 )then
-            --Add check for enterprise
-            scene:saveContent(kStepPersonel, callback)
-        end
-        scene:shiftUp()
-    end
-    
-end
+
 
 --local corporateInformationGroup
-
-function scene:individualButtonPressed () 
-    isCorporate = false
-    transition.to( personalInformationGroup, {time=400, y= -235,onComplete= scene.doneStepAnimationNext , transition = easing.outExpo } )
-end
 
 function scene:handleIndividualButtonEvent( event )
 	-- body
 	if ( event.phase == "ended") then
             isCorporate = false
             print( "Ind" )
-            transition.to( personalInformationGroup, {time=400, y= -235,onComplete=scene.doneStepAnimationNext , transition = easing.outExpo } )
+            transition.to( personalInformationGroup, {time=400, y= -235,onComplete=doneStepAnimationNext , transition = easing.outExpo } )
 	end
 end
 
@@ -283,10 +263,10 @@ function scene:shiftDown()
                         storyboard.gotoScene(previousScene, "slideRight", 800 )
                 elseif ( step == 1 ) then
                         personalInformationGroup:hideGroup(true)
-                        transition.to( personalInformationGroup, {time=400, y= 185,onComplete=scene.doneStepAnimationBack,  transition = easing.outExpo } )
+                        transition.to( personalInformationGroup, {time=400, y= 185,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 else 
                         counterInformationGroup:hideGroup(true)
-                        transition.to( counterInformationGroup, {time=400, y= 230,onComplete=scene.doneStepAnimationBack,  transition = easing.outExpo } )
+                        transition.to( counterInformationGroup, {time=400, y= 230,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 end
         end
 end
@@ -303,8 +283,8 @@ function scene:createScene( event )
         controlBar = ControlBar.new()
         buttomWhiteMask = display.newRect( 40, 690, 1200, 110 )
         --buttomWhiteMask:setFillColor( 1,0,0 )
-        backButton = CButton.new( "GERİ", "backButton", self, 40, 700, 0 )
-        nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 700, 0 )
+        backButton = CButton.new( "GERİ", "backButton", onBackButtonTouch, 40, 700, 0 )
+        nextButton = CButton.new( "DEVAM", "nextButton", onNextButtonTouch, 1100, 700, 0 )
 
         callCenterLogo = display.newImage( "Assets/CallCenter.png", 50, 750 )
         fibaLogo = display.newImage( "Assets/FibaGroup.png", 1030, 760 )
@@ -319,8 +299,8 @@ function scene:createScene( event )
         personalInformationGroup:hideGroup(true)
 
 --------------------------------------------
-        subscriberTypeGroup = SubscriberTypeView.new(self)
-        --subscriberTypeGroup:addButtonEventListeners( scene.handleIndividualButtonEvent, scene.handleCorporateButtonEvent)
+        subscriberTypeGroup = SubscriberTypeView.new()
+        subscriberTypeGroup:addButtonEventListeners( handleIndividualButtonEvent, handleCorporateButtonEvent)
 		group:insert( logo )
                 group:insert( controlBar )
 		group:insert( subscriberTypeGroup )

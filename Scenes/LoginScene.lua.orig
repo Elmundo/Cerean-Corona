@@ -38,7 +38,7 @@ local cachedDataIndex = 0
 
 -- Network Error handler, check type 2
 local function isErrorCheckOk(responseData)
-    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
+    if responseData.errorCode == "00" and responseData.errorDetail == nil then
         return true
     end
     
@@ -74,7 +74,7 @@ local function cacheContents()
         Logger:debug(scene, "DataServer:getParameters", "City list could no be cached cached!")
         scene:alert("Login Operation", "City list could not be cached")
     end)
-   
+    
     DataServer:getParameters(kParameterCompanies, nil, function (responseData)
         
         -- Cache Companies list data
@@ -148,15 +148,10 @@ local function cacheContents()
         scene:alert("Login Operation", "Interval list could not be cached")
 
     end)
+     
+end
 
-end
---TextField DELEGATE
-function scene:onInputBegan( event )
-  
-end
---Button DELEGATE  
-function scene:onButtonTouchEnded( event, buttonID )
-    print( "Working on Scene" )
+function onButtonTouch( event )
     if( event.phase == "ended") then
         print( userNameTextField:getText() )
         print( passwordTextField:getText() )
@@ -167,9 +162,9 @@ function scene:onButtonTouchEnded( event, buttonID )
                                             function (responseData)
 
                                                 if isErrorCheckOk(responseData) then
-                                                    DataServer.userBusinessUnitName = responseData.UserBusinessUnitName
-                                                    DataServer.userId               = responseData.UserId
-                                                    DataServer.userName             = responseData.UserName
+                                                    DataServer.userBusinessUnitName = responseData.userBusinessUnitName
+                                                    DataServer.userId = responseData.userId
+                                                    DataServer.userName = responseData.userName
 
                                                     cacheContents()
                                                 else
@@ -190,51 +185,26 @@ function scene:onButtonTouchEnded( event, buttonID )
     end
 end
 
---[[]
-function scene:onTouchEnded()
-    print( "DELEGATE TOUCH" )
+function onTextInput ( event )
+    print( "Testing Fake input" ) 
 end
---]]
---[[Decrepated
-local function onButtonTouch( event )
-    if( event.phase == "ended") then
-        print( userNameTextField:getText() )
-        print( passwordTextField:getText() )
 
-        scene:showMask()
-        -- TODO: Hard-Coded Data Insert
-        DataServer:login("Crmuser", "CaCu2013!", 
-                                            function (responseData)
-
-                                                if isErrorCheckOk(responseData) then
-                                                    DataServer.userBusinessUnitName = responseData.UserBusinessUnitName
-                                                    DataServer.userId               = responseData.UserId
-                                                    DataServer.userName             = responseData.UserName
-
-                                                    cacheContents()
-                                                else
-                                                    scene:hideMask()
-                                                    -- TODO: Bahadir - burda errorMessage image'ını göstereceksin sanırım
-                                                end
-
-                                            end,
-
-                                            function ( errorData )
-                                                scene:alert("Login Operations","Login request is failed!",{"OK"})
-                                                scene:hideMask()
-                                            end)
-
-
-
-        return true
-    end
+function onTextFieldTouch ( event )
+   --activateInputField(centerX-120, centerY-15 )
+   -- activateInputField(xPos, yPos, textObject)
 end
---]]
+
+function activateInputField ( xPos, yPos )
+    inputField = native.newTextField(xPos+5, yPos+10, 220, 20, onTextInput)
+    displayGroup:insert( inputField )
+    native.setKeyboardFocus(ininputField)
+end
 
 -------------------------------------------------------------------------------
 --Scene Evenet Handlers
 -------------------------------------------------------------------------------
 function scene:createScene( event )
+<<<<<<< HEAD
 	displayGroup = self.view
 	loginBackground = display.newImageRect( "Assets/LoginBackground.png", 1280, 800 )
         
@@ -242,8 +212,37 @@ function scene:createScene( event )
         loginBox.x = 1280/2- 378/2
         loginBox.y = 800/2 -498/2
 	userNameTextField = CTextField.new( centerX-120, centerY-15, 240, 40 )
-        userNameTextField:setDelegate(self)
+        --userNameTextField:setListener( onTextFieldTouch )
 	passwordTextField = CTextField.new( centerX-120, centerY+55, 240, 40 ) 
+
+        --inputField = native.newTextField(1280, 0, 220, 20, onTextInput )
+
+	headerLabel = CLabel.new( "Bayi Girişi", centerX-120, centerY-70, 20)
+	userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-120, centerY-35, 15)
+	passwordLabel = CLabel.new( "Şifre", centerX-120, centerY+35, 15)
+
+	loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, centerX-90, centerY+110, 0 )
+
+	displayGroup:insert( loginBackground )
+	displayGroup:insert( loginBox )
+	displayGroup:insert( headerLabel )
+	displayGroup:insert( userNameTextField )
+	displayGroup:insert( passwordTextField )
+	displayGroup:insert( userNameLabel )
+	displayGroup:insert( passwordLabel )
+	displayGroup:insert( loginButton )
+	displayGroup.x = centerX
+	displayGroup.y = centerY
+=======
+    displayGroup = self.view
+    loginBackground = display.newImageRect( "Assets/LoginBackground.png", 1280, 800 )
+
+    loginBox = display.newImageRect( "Assets/LoginBox.png", 378, 498 )--640-189, 400-249, true )
+    loginBox.x = 1280/2- 378/2
+    loginBox.y = 800/2 -498/2
+    userNameTextField = CTextField.new( centerX-120, centerY-15 )
+    userNameTextField:setListener( onTextFieldTouch )
+    passwordTextField = CTextField.new( centerX-120, centerY+55 ) 
 
     --inputField = native.newTextField(1280, 0, 220, 20, onTextInput )
 
@@ -251,7 +250,7 @@ function scene:createScene( event )
     userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-120, centerY-35, 15)
     passwordLabel = CLabel.new( "Şifre", centerX-120, centerY+35, 15)
 
-    loginButton = CButton.new( "GİRİŞ YAP", "loginButton", self, centerX-90, centerY+110, 0 )
+    loginButton = CButton.new( "GİRİŞ YAP", "loginButton", onButtonTouch, centerX-90, centerY+110, 0 )
 
     displayGroup:insert( loginBackground )
     displayGroup:insert( loginBox )
@@ -263,6 +262,7 @@ function scene:createScene( event )
     displayGroup:insert( loginButton )
     displayGroup.x = centerX
     displayGroup.y = centerY
+>>>>>>> 639dc827dcbf9cd963742fb5a789b54df0f1d54f
 end
 
 local superEnterScene = scene.enterScene
