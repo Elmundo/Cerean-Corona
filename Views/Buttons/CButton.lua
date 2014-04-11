@@ -4,20 +4,21 @@ local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
 
+local button
+
 function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
 	local buttonWrapper = display.newGroup( )
-        local iD = buttonID
         local function onButtonTouch( event )
             if( event.phase == "ended" )then
                 if( buttonWrapper.delegate ~= nil )then
-                    buttonWrapper.delegate:onButtonTouchEnded( event, iD )
+                    buttonWrapper.delegate:onButtonTouchEnded( event )
                 end
             end
             
             return false
         end
         
-	local button = widget.newButton( 
+	button = widget.newButton( 
 	{
 		left = 0,
 		top = 0,

@@ -239,7 +239,7 @@ end
 PackageScene:addEventListener("createScene")
 
 -- 
-local superEnterScene = Package.enterScene
+local superEnterScene = PackageScene.enterScene
 function PackageScene:enterScene(event)
     -- Call superclass method
     superEnterScene(self, event)

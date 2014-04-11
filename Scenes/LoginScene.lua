@@ -156,7 +156,7 @@ function scene:onInputBegan( event )
   
 end
 --Button DELEGATE  
-function scene:onButtonTouchEnded( event, buttonID )
+function scene:onButtonTouchEnded( event )
     print( "Working on Scene" )
     if( event.phase == "ended") then
         print( userNameTextField:getText() )

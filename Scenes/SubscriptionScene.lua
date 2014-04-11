@@ -8,6 +8,7 @@ local widget = require( "widget" )
 local native = require( "native" )
 
 local DataService = require( "Network.DataService" )
+local ParameterConfig = require( "ParameterConfig" )
 
 local CButton = require( "Views.Buttons.CButton" )
 local ControlBar = require( "Views.ControlBar" )
@@ -70,25 +71,28 @@ function scene:isErrorCheckOk(responseData)
 end
 
 function scene:saveContent ( appStep, callback ) 
+    local contentData 
     if( step == kStepPersonel ) then
-        local contentData
-        if personalInformationGroup.isVisible == YES then
+        if( isCorporate == 0 )then
             contentData = personalInformationGroup:getContent()
         else
-            contentData = nil -- TODO: enterpriseGroup:getContent()
+            contentData = personalInformationGroup:getContent() -- TODO: enterpriseGroup:getContent()
         end
         
         --Add a check for corporate later
         contentData["step"] = appStep
         contentData["IsCorporate"] = isCorporate--Add value to hold
-        contentData["VerificationCode"] = DataService.verificationCode
+        contentData["VerificationCode"] = "2517"
+        --DataService.verificationCode
         
-        if( DataService.customerId ) then
+        local test = DataService
+        --[[]
+        if( DataService.customerId == not nil ) then
             contentData["CustomerId"] = DataService.customerId
             contentData["CustomerNumber"] = DataService.customerNumber
         end
-        
-        DataService.saveContent( contentData, 
+        --]]
+        DataService:saveContent( contentData, 
                                  function (responseData) -- Success callback
                                      
                                      if scene:isErrorCheckOk(responseData) then
@@ -100,21 +104,25 @@ function scene:saveContent ( appStep, callback )
                                          Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
                                          callback(false, responseData.ErrorMessage)
                                      end
-                                 
+                                     
+                                     scene:shiftUp()
                                      
                                  end, 
                                  
                                  function (errorData) -- Failure callback
                                     Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
                                     callback(false, errorData.ErrorDetail)
+                                    --Shift Up Should Be Removed 
+                                    scene:shiftUp()
                                  end
             )
     elseif( step == kStepRegistry ) then
-        
         -- Cache the meterSerialNumber
         --TODO: Bahadir - DataDataService.meterSerialNumber = _registryView.activeRegisterySerialNoText.text
         -- Yukardakine benzer bi atama olacak, farklı isimler verdiğin için ben atamayı yapamadım. Bu atamayı yapmayı unutma.
-        --DataService.meterId = 
+        
+        --BAHADIR'dan:altta content data'dan aldım o bilgileri
+        --Deneyip silicem
         local contentData = counterInformationGroup:getContent()
         DataService.meterId = contentData["MeterId"]
         contentData["step"] = appStep
@@ -148,11 +156,12 @@ function scene:saveContent ( appStep, callback )
                                          Logger:debug(scene, "Step 2 is failure.", message)
                                          callback(false, responseData.ErrorMessage)
                                      end
-                                     
+                                     scene:shiftUp()
                                  end,
                                  function (errorData) -- Failure callback
                                      Logger:debug(scene, "Step 2 is failure.", message)
                                      callback(false, errorData.ErrorDetail)
+                                     scene:shiftUp()
                                  end
                                  )
         
@@ -187,38 +196,38 @@ function scene:doneStepAnimationBack()
         print( step )
 end
 
-function scene:onBackButtonTouch( event )
-        if( event.phase == "ended" ) then
-                print( "Back" )
-                scene:shiftDown()
-        end
-end
-
-function scene:onNextButtonTouch( event )
-        if( event.phase == "ended" ) then
-                print( "Next" )
-                scene:shiftUp()
-        end
-end
-
 --TextField DELEGATE
 function scene:onInputBegan( event )
   
 end
 --Button DELEGATE  
-function scene:onButtonTouchEnded( event, buttonID )
-    if( buttonID == "backButton" )then
+function scene:onButtonTouchEnded( event )
+    
+    if( event.target.id == "backButton" )then
         print("BACK BUTTON PRESSED")
         scene:shiftDown()
-    elseif( buttonID == "nextButton" )then
+    elseif( event.target.id == "nextButton" )then
         print("NEXT BUTTON PRESSED")
         if( step == 0 )then
-            
+                --Show AlertView or Disable next button as an alternative
         elseif( step == 1 )then
-            --Add check for enterprise
-            scene:saveContent(kStepPersonel, callback)
+            --Checking for personal/corporate
+            if( isCorporate == 0 )then
+                
+            end
+            scene:saveContent(kStepPersonel, function( isSuccessful, errorDetail )
+                if( DataService.phase == Phase.CallPhase  )then
+                    
+                end
+            end)
+        else 
+            --counter
+            --check Data
+            scene:saveContent(kStepRegistry, function( isSuccessful, errorDetail )
+                --
+            end)
         end
-        scene:shiftUp()
+        --scene:shiftUp()
     end
     
 end
@@ -226,7 +235,7 @@ end
 --local corporateInformationGroup
 
 function scene:individualButtonPressed () 
-    isCorporate = false
+    isCorporate = 0
     transition.to( personalInformationGroup, {time=400, y= -235,onComplete= scene.doneStepAnimationNext , transition = easing.outExpo } )
 end
 
@@ -256,8 +265,9 @@ function scene:shiftUp()
                         --transition.to( personalInformationGroup, {time=400, y= -235, transition = easing.outExpo } )
                 elseif( step == 1 ) then
                         isStepAnimationRunning = true
-                        local contentData = personalInformationGroup:getContent()
                         personalInformationGroup:hideGroup(true)
+                        transition.to( counterInformationGroup, {time=400, y= -190,onComplete=scene.doneStepAnimationNext,  transition = easing.outExpo } )
+                                    
                         --saveContent(appStep)
                         --[[
                         saveContent(kStepPersonel, function (responseData)

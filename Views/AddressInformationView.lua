@@ -59,6 +59,8 @@ function AddressInformationView.new()
     local emailLabel2
     local emailField2
     
+    local sameVisitingAndContactAddress
+    
     addressInformationView = display.newGroup()
     contentView = display.newGroup()
     
@@ -187,6 +189,7 @@ function AddressInformationView.new()
             MobilePhoneInvoice = "",
             FaxInvoice = "",
             EmailInvoice = "",
+            SameVisitingAndContactAddress= "",
         }
         
         return contentData

@@ -59,7 +59,9 @@ local fibaLogo
 
 --onComplete
 local function doneStepAnimationNext ()
-
+        if( step == 0 )then
+            addressInformationView:hideGroup(false)
+        end
         step = step  + 1 
         isStepAnimationRunning = false
         print( step )
@@ -71,28 +73,13 @@ local function doneStepAnimationBack()
         isStepAnimationRunning = false
         print( step )
 end
---[[]
-function onBackButtonTouch( event )
-        if( event.phase == "ended" ) then
-                print( "Back" )
-                shiftDown()
-        end
-end
-
-function onNextButtonTouch( event )
-        if( event.phase == "ended" ) then
-                print( "Next" )
-                shiftUp()
-        end
-end
---]]
-
 
 local function saveContent(appStep, callback)
+    local contentData
     if( step == 0 ) then
-        local contentData = appointmentPlanningView:getContent(appStep)
+        contentData = appointmentPlanningView:getContent(appStep)
         
-        if( DataService.appointmentId == null ) then
+        if( DataService.appointmentId ~= null ) then
             --Back from next scene
             contentData["AppointmentId"] = DataService.appointmentId
         end
@@ -104,10 +91,37 @@ local function saveContent(appStep, callback)
             contentData["MeterId"] = ""
             contentData["QuoteId"] = ""
         else if( DataService.phase == Phase.RegistryPhase ) then
-            
+
         else 
             contentData["MeterId"] = DataService.meterId
             contentData["QuoteId"] = DataService.quoteId
+        end
+        end
+        DataService:saveContent(contentData, function (responseData)
+            --check Error
+                                    DataService.appointmentId = responseData.appointmentData
+                                    callback(responseData)
+                                end )
+    else 
+        --Check for back
+        contentData = addressInformationView:getContent()
+        if( DataService.addressIdVisiting ~= null ) then
+            contentData["AdressIdVisiting"] = DataService.addressIdVisiting
+        end
+        contentData["step"] = appStep
+        contentData["CustomerId"] = DataService.CustomerId
+        contentData["AppointmentId"] = DataService.AppointmentId
+        
+        if( DataService.phase == Phase.CallPhase )then
+            contentData["MeterId"] = ""
+            contentData["QuoteId"] = ""
+        elseif( DataService.phase == Phase.RegistryPhase )then
+            contentData["MeterId"] = DataService.MeterId
+            contentData["QuoteId"] = DataService.QuoteId
+        else
+            contentData["MeterId"] = DataService.MeterId
+            contentData["QuoteId"] = DataService.QuoteId
+        end
         end
         
         DataService:saveContent(contentData, function (responseData)
@@ -115,9 +129,6 @@ local function saveContent(appStep, callback)
                                     DataService.appointmentId = responseData.appointmentData
                                     callback(responseData)
                                 end )
-        
-        end
-    end
 end
 
 local function shiftUp()
@@ -128,19 +139,6 @@ local function shiftUp()
             if( step == 0 )then
                 transition.to( addressInformationView, {time=400, y= -220,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
             end
-                --[[
-                if( step == 0 ) then
-                        --Do Nothing
-                        --transition.to( personalInformationGroup, {time=400, y= -235, transition = easing.outExpo } )
-                elseif( step == 1 ) then
-                        isStepAnimationRunning = true
-                        transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
-                else 
-                        --NextScene
-
-                        print( "Next Scene" )
-                end
-                --]]
         end
 end
 
@@ -150,10 +148,11 @@ local function shiftDown()
                 isStepAnimationRunning = true
                 if( step == 0 ) then
                         --Pop previous scene
-                        local previousScene = storyboard.getPrevious()
-                        storyboard.gotoScene(previousScene, "slideRight", 800 )
+                    local previousScene = storyboard.getPrevious()
+                    storyboard.gotoScene(previousScene, "slideRight", 800 )
                 elseif ( step == 1 ) then
-                        transition.to( addressInformationView, {time=400, y= 220,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
+                    addressInformationView:hideGroup(true)
+                    transition.to( addressInformationView, {time=400, y= 220,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 end
         end
 end
@@ -185,6 +184,7 @@ function scene:createScene( event )
 --------------------------------------------
     
         addressInformationView = AddresInformationView.new()
+        addressInformationView:hideGroup(true)
 
 --------------------------------------------
 
@@ -303,26 +303,42 @@ function scene:overlayEnded( event )
 
 end
 
-function scene:onButtonTouchEnded( event, buttonID )
-    if( buttonID == "backButton" )then
+function scene:onButtonTouchEnded( event )
+    if( event.target.id == "backButton" )then
         print("BACK BUTTON PRESSED")
         shiftDown()
-    elseif( buttonID == "nextButton" )then
+    elseif( event.target.id == "nextButton" )then
         print("NEXT BUTTON PRESSED")
-        shiftUp()
-        --[[]
         if( step == 0 )then
-            
+            saveContent( kStepAppointment, function ( isSuccess, errorDetail )
+                if( isSuccess ) then
+                    shiftUp()
+                else 
+                    --Log error message
+                end
+            end)
         elseif( step == 1 )then
             --Add check for enterprise
-            scene:saveContent(kStepPersonel, callback)
+            saveContent(kStepAddress, function( isSuccess, errrorDetail )
+                if( isSuccess )then
+                    shiftUp()
+                else 
+
+                end
+            end)
+        
         end
-        scene:shiftUp()
-        --]]
     end
     
 end
 
+function scene:isErrorCheckOk(responseData)
+    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
+        return true
+    end
+    
+    return false
+end
 ---------------------------------------------------------------------------------
 -- END OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
