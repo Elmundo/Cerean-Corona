@@ -266,6 +266,8 @@ function scene:createScene( event )
     displayGroup.y = centerY
     
     -- Test Environment
+    --TODO: Bahadir - Drop Down Menu how to use example
+    --[[]
     local dataList = { "ISTANBUL", "IZMIR", "ANKARA", "GOTHAM" }
     local ddm = DropDownMenu.new{
                                 dataList = dataList,
@@ -274,7 +276,20 @@ function scene:createScene( event )
                                 buttonHeight = 40,
                                 x = 100,
                                 y = 1,
-                            } 
+                            }
+                            
+    local countryDDM = DropDownMenu.new{
+                                parent = displayGroup,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = 100,
+                                y = 1,
+                            }
+    countryDDM:laodData(dataList)
+    
+    countryDDM:getValue()
+    
+    --]]
 end
 
 local superEnterScene = scene.enterScene
