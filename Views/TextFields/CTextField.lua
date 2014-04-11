@@ -16,6 +16,10 @@ function CTextField.new( xPos, yPos, width, height )
                     textFieldWrapper.delegate:onInputBegan( event )
                 end
             end
+            -- For DDM to handle userInput event
+            -- Normally, Runtime global object is not receiving "userInput event
+            -- so we do it menually
+            Runtime:dispatchEvent{name="userInput", target=textField}
         end
 
         local background = display.newRoundedRect( 0, 0, width, height, 5 )

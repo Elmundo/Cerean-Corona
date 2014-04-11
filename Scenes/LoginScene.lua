@@ -8,6 +8,7 @@ local Utils        = require "libs.Util.Utils"
 local LoadingMask  = require "Views.LoadingMask"
 local BaseScene    = require "Scenes.BaseScene"
 local Logger       = require "libs.Log.Logger"
+local DropDownMenu = require "libs.DDM.DropDownMenu"
 
 local scene = BaseScene.new()
 
@@ -265,6 +266,32 @@ function scene:createScene( event )
     displayGroup:insert( loginButton )
     displayGroup.x = centerX
     displayGroup.y = centerY
+    
+    -- Test Environment
+    --TODO: Bahadir - Drop Down Menu how to use example
+    --[[]
+    local dataList = { "ISTANBUL", "IZMIR", "ANKARA", "GOTHAM" }
+    local ddm = DropDownMenu.new{
+                                dataList = dataList,
+                                parent = displayGroup,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = 100,
+                                y = 1,
+                            }
+                            
+    local countryDDM = DropDownMenu.new{
+                                parent = displayGroup,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = 100,
+                                y = 1,
+                            }
+    countryDDM:laodData(dataList)
+    
+    countryDDM:getValue()
+    
+    --]]
 end
 
 local superEnterScene = scene.enterScene
