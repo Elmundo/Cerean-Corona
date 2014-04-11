@@ -83,7 +83,7 @@ function DataService:generateVerificationCode( )
 	for i=1,4 do
 		val = val * 10
 		temp = math.random(1, 9)
-		val = valr + temp
+		val = val + temp
 	end
 
 	local verificationCode = val .. ""

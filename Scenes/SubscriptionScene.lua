@@ -82,7 +82,7 @@ function scene:saveContent ( appStep, callback )
         --Add a check for corporate later
         contentData["step"] = appStep
         contentData["IsCorporate"] = isCorporate--Add value to hold
-        contentData["VerificationCode"] = "2517"
+        contentData["VerificationCode"] = DataService.verificationCode
         --DataService.verificationCode
         
         local test = DataService

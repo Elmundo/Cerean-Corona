@@ -42,6 +42,7 @@ local counterMultiplierField
 local billAmountLabel
 local billAmountField
 
+local billImageScrollView
 
 counterInformationGroup = display.newGroup( )
 contentGroup = display.newGroup( )
@@ -64,17 +65,17 @@ function counterInformationGroup:getContent ()
             local contentData = {}
             
             contentData = {
-                DistributorId = "123",--distrubitionCompanyField:getText()--Not TextField
-                SkaDescId = "123",--supplierCompanyField:getText()
-                CompanyCode = "123",--companyCodeField:getText()
-                MembershipNumber = "123",--subscriberGroupField:getText()
-                TariffCode = "123",--recieptField:getText()
-                MembershipGroup = "133",--subscriberGroupField:getText()
-                CustomerName = "123",--customerNameField:getText()
-                MeterSerialNumber = "245",--counterSerialNumberField:getText()
-                MeterSerialNumberAgain = "768",--inductiveCounterSerialNumberField:getText()
-                MeterParameter = "1233",--counterMultiplierField:getText()
-                BillAmount = "89761"--billAmountField:getText()
+                DistributorId = "19733ca2-0bf9-e211-ae2c-0050568e1778",--distrubitionCompanyField:getText()--Not TextField
+                SkaDescId = "17d03b5d-6f87-e311-9572-0050568e1778",--supplierCompanyField:getText()
+                CompanyCode = "035.25.16.51.56",--companyCodeField:getText()
+                MembershipNumber = "16516516",--subscriberGroupField:getText()
+                TariffCode = "546545",--recieptField:getText()
+                MembershipGroup = "ff0f17d9-3003-e311-aa19-0050568e1778",--subscriberGroupField:getText()
+                CustomerName = "Bahadır Böge",--customerNameField:getText()
+                MeterSerialNumber = counterSerialNumberField:getText(),
+                MeterSerialNumberAgain = inductiveCounterSerialNumberField:getText(),
+                MeterParameter = "5465",--counterMultiplierField:getText()
+                BillAmount = "454"--billAmountField:getText()
            } 
            
             return contentData
@@ -174,7 +175,9 @@ function counterInformationGroup:getContent ()
         billAmountField  = display.newRoundedRect( centerX-180, 780, 240, 30, 5 )
         billAmountField:setFillColor( 0.5, 0.5, 0.5 )
         --]]
-
+        billImageScrollView = display.newRoundedRect(1280-510-40, 465, 510, 387, 5)
+        billImageScrollView:setFillColor( 0.5, 0.5, 0.5 )
+        
         counterInformationGroup:insert( counterInformationGroupBackground )
         counterInformationGroup:insert( counterInformationHeaderBackground )
         counterInformationGroup:insert( counterInformationHeaderText )
@@ -203,6 +206,7 @@ function counterInformationGroup:getContent ()
         contentGroup:insert( counterMultiplierField )
         contentGroup:insert( billAmountLabel )
         contentGroup:insert( billAmountField )
+        contentGroup:insert( billImageScrollView )
 
         counterInformationGroup:insert( contentGroup )
 

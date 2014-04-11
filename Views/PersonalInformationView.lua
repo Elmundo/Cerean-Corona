@@ -58,15 +58,15 @@ function PersonalInformationView.new()
             local contentData = {}
             
             DataService.customerPhone = mobileField:getText()
-            DataService.customerEmail = emailField:getText()
-            DataService.customerName = nameField:getText()
+            DataService.customerEmail = "mbahadirb@gmail.com"--emailField:getText()
+            DataService.customerName = "Bahadir Boge"--nameField:getText()
             contentData = {
-                Name = nameField:getText(),
+                Name = "Bahadir Boge",--nameField:getText(),
                 TckNo = iDNumberField:getText(),
                 MobilePhone = mobileField:getText(),
-                Email = emailField:getText(),
-                CityId = cityField:getText(),
-                CountyId = countyField:getText()
+                Email = "mbahadirb@gmail.com",--emailField:getText(),
+                CityId = "3a5edc95-0cf9-e211-ae2c-0050568e1778",--cityField:getText(),
+                CountyId = "a53d5df8-14f9-e211-ae2c-0050568e1778",--countyField:getText()
             }
              
             return contentData

@@ -62,6 +62,8 @@ end
 
 local function cacheContents()
     
+    DataServer.verificationCode = DataServer:generateVerificationCode()
+    
     DataServer:getParameters(kParameterCities, nil, function (responseData)
         
         -- Cache Cities list data
