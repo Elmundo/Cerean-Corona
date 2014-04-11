@@ -147,7 +147,7 @@ end
 function PackageScene:createScene( event)
     
     --products = DataService.products
-    products = self:createDummyProductList()
+    products = DataService.products--self:createDummyProductList()
     
     -- View of scene
     local group = self.view
