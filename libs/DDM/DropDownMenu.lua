@@ -36,14 +36,7 @@ local cDefaultButtonValue       = "SEÇİNİZ"
 --]]
 
 function DropDownMenu.new( params )
-    
-    local mask           = nil
-    -- Instantiate Mask
-    mask = display.newRect(params.parent, 0, 0, 1280, 1280)
-    mask.alpha = 0
-    mask.isHitTestable = true
-    
-    
+
     -- New DropDownMenu object
     local dropDownMenu  = display.newGroup()
     
@@ -63,7 +56,6 @@ function DropDownMenu.new( params )
     local buttonBG       = nil
     local buttonLabel    = nil
     
-    
     local ddmValue       = cDefaultButtonValue
     local isTableHidden = true
     
@@ -71,7 +63,7 @@ function DropDownMenu.new( params )
     local buttonImage               = nil
     local buttonDefaultImageName    = (params.defaultImage or nil)
     local buttonOverImageName       = (params.overImage    or nil)
-    local buttonWidth               = (params.buttonWidth or 360)
+    local buttonWidth               = (params.buttonWidth  or 360)
     local buttonHeight              = (params.buttonHeight or 40)
     local isButtonActive            = false
     
@@ -97,7 +89,6 @@ function DropDownMenu.new( params )
     
     buttonLabel = display.newText(dropDownMenu, "SEÇİNİZ", 10, 10, buttonWidth, buttonHeight, nil, cDefaultFontSize)
     buttonLabel:setFillColor(0)
-    --buttonLabel.anchorY = 0.5
     
     -- Table Delegate - Touch Events
     function dropDownMenu.onRowTouch( event )
@@ -131,14 +122,14 @@ function DropDownMenu.new( params )
     end
     
      -- Instantiate Table
-    ddmTableBG = display.newRoundedRect(x-cDefaultBorder, y + cellHeight, buttonWidth + cDefaultBorder*2, (visibleCellCount * cellHeight) + cDefaultBorder*2, 5)
+    ddmTableBG = display.newRoundedRect(-cDefaultBorder,cellHeight, buttonWidth + cDefaultBorder*2, (visibleCellCount * cellHeight) + cDefaultBorder*2, 5)
     ddmTableBG:setFillColor( 0.5, 0.5, 0.5 )
     
     ddmTable = widget.newTableView{
         width = buttonWidth,
         height = visibleCellCount * cellHeight,
-        x = x,
-        y = y + buttonHeight + 2,
+        x = 0,
+        y = buttonHeight + 2,
         
         noLines = (noLines or true),
         backgroundColor = { 1, 1, 1 },
@@ -146,6 +137,8 @@ function DropDownMenu.new( params )
         onRowTouch = dropDownMenu.onRowTouch,
         onRowRender = dropDownMenu.onRowRender,
     }
+    dropDownMenu:insert(dropDownMenu.numChildren+1, ddmTableBG)
+    dropDownMenu:insert(dropDownMenu.numChildren+1, ddmTable)
     
     --Instantiate ddm table
     for i = 1, #dataList do
@@ -175,8 +168,6 @@ function DropDownMenu.new( params )
                                     params     = {value = value}
                               }
         end
-        
-        --ddmTable:reloadData()
     end
     
     function dropDownMenu:insertRow(value)
@@ -188,7 +179,6 @@ function DropDownMenu.new( params )
                                 lineColor  = lineColor,
                                 params     = {value = value}
                           }
-        --ddmTable:reloadData()
     end
     
     function dropDownMenu:removeRow(value)
@@ -200,7 +190,6 @@ function DropDownMenu.new( params )
                                 lineColor  = lineColor,
                                 params     = {value = value}
                           }
-        --ddmTable:reloadData()
     end
     
     function dropDownMenu:hideTable(value)
@@ -224,23 +213,24 @@ function DropDownMenu.new( params )
     end
     
     function dropDownMenu:tap(event)
-        
         return true
     end
     
-    local function screenTouch( event )
+    -- Catch the userInput event which is dispatched by native textfields
+    local function hideDDMTable( event )
         dropDownMenu:hideTable(true)
     end
-    
-    -- Mask Event Listener Method
-    function mask.tap(event)
-        dropDownMenu:hideTable(true)
+
+    -- GETTER METHODS
+    function dropDownMenu:getValue()
+        return ddmValue
     end
-    mask:addEventListener("tap", mask.tap)
     
     -- Add event listeners
     dropDownMenu:addEventListener("touch", dropDownMenu)
     dropDownMenu:addEventListener("tap", dropDownMenu)
+    Runtime:addEventListener("userInput", hideDDMTable)
+    Runtime:addEventListener("tap", hideDDMTable)
     
     -- Default visibilty of table is false
     dropDownMenu:hideTable(isTableHidden)

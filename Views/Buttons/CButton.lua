@@ -13,6 +13,8 @@ function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
                     buttonWrapper.delegate:onButtonTouchEnded( event, iD )
                 end
             end
+            
+            return false
         end
         
 	local button = widget.newButton( 
