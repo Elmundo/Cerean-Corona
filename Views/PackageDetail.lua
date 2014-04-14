@@ -21,9 +21,9 @@ function PackageDetail.new()
     end
     
     function packageDetail:setPackageDetail(options)
-        indexLabel.text  = options.name
-        dateLabel.text   = options.startDate .. options.endDate
-        detailLabel.text = options.detail
+        indexLabel.text  = options.Name
+        dateLabel.text   = options.StartDate .. options.EndDate
+        detailLabel.text = options.Detail
     end
     
     return packageDetail
