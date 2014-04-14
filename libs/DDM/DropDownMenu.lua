@@ -99,7 +99,7 @@ function DropDownMenu.new( params )
         if event.phase == "press" then
 
         elseif event.phase == "release" then
-            local params = event.row.params
+            local params        = event.row.params
             local index         = event.row.index
             local ID            = ID
             ddmValue            = params.value
@@ -107,7 +107,7 @@ function DropDownMenu.new( params )
             dropDownMenu:hideTable(true)
             
             -- Call delegate method
-            delegate.didDDMItemSelected(ddmValue, ID, index)
+            delegate.didDDMItemSelected(params, ID, index)
         end
 
     end
@@ -150,7 +150,7 @@ function DropDownMenu.new( params )
     
     --Instantiate ddm table
     for i = 1, #dataList do
-        local value = dataList[i]
+        local params = dataList[i]
         
         ddmTable:insertRow{
                          
@@ -158,22 +158,21 @@ function DropDownMenu.new( params )
                                 rowHeight  = rowHeight,
                                 rowColor   = rowColor,
                                 lineColor  = lineColor,
-                                params     = {value = value}
+                                params     = params
                           }
     end
     
     -- Drop Down Menu Methods
-    function dropDownMenu:laodData(dataList)
+    function dropDownMenu:loadData(dataList)
         for i = 1, #dataList do
-            local value = dataList[i]
+            local params = dataList[i]
 
             ddmTable:insertRow{
-
                                     isCategory = isCategory,
                                     rowHeight  = rowHeight,
                                     rowColor   = rowColor,
                                     lineColor  = lineColor,
-                                    params     = {value = value}
+                                    params     = params
                               }
         end
     end
@@ -229,9 +228,13 @@ function DropDownMenu.new( params )
         dropDownMenu:hideTable(true)
     end
     
-    -- GETTER METHODS
+    -- GETTER & SETTER METHODS
     function dropDownMenu:getValue()
         return ddmValue
+    end
+    
+    function dropDownMenu:setValue(value)
+        ddmValue = value
     end
     
     -- Add event listeners
