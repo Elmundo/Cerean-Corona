@@ -21,7 +21,7 @@ function LoadingMask.new( options )
     mask:addEventListener("touch", function() return true end)
     mask:addEventListener("tap", function() return true end)
 
-    imageSheet = graphics.newImageSheet("Assets/spinner.jpg",system.ResourceDirectory , {
+    imageSheet = graphics.newImageSheet("Assets/spinner.png",system.ResourceDirectory , {
         frames = {
             {
                 x=0,
