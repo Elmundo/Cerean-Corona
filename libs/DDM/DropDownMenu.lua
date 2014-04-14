@@ -49,6 +49,7 @@ function DropDownMenu.new( params )
     local parent           = params.parent
     local delegate         = params.delegate
     local ID               = params.ID
+    local customParams     = params.customParams
     
     parent:insert(dropDownMenu)
     

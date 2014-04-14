@@ -37,13 +37,37 @@ function PersonalInformationView.new()
         personalInformationGroup = display.newGroup( )
 	contentGroup = display.newGroup( )
         
+        function personalInformationGroup.didDDMItemSelected(ddmValue, ID, index)
+            if( ID == "CityField")then
+                --local index = index
+                --Enable DDM?
+                --Get County List
+                DataService:getParameters(kParameterCounties, index, function(responseData)
+                    print("Success")
+                end, 
+                    function(errorData)
+                        print("Fail")
+                    end)
+            elseif( ID == "CountyField") then
+                
+            end
+        end
+        
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = dataTable[i].Name
+            end
+            return returnTable    
+        end
+        
         function personalInformationGroup:hideGroup ( isHidden )
             
             nameField:hide(isHidden)
             iDNumberField:hide(isHidden)
             mobileField:hide(isHidden)
             emailField:hide(isHidden)
-            cityField:hide(isHidden)
+            --cityField:hide(isHidden)
             countyField:hide(isHidden)
             --[[]
             if( isHidden )then
@@ -122,7 +146,19 @@ function PersonalInformationView.new()
 
     cityLabel = display.newText( "İl", 60, 660, native.systemFontBold, 17 )
     cityLabel:setFillColor( 0, 0, 0 )
-    cityField = CTextField.new(50, 680, 360, 40)
+    local dataList = DataService.cities
+    
+    cityField = DropDownMenu.new{
+                                dataList = getDropDownList(DataService.cities),
+                                ID = "CityField",
+                                parent = personalInformationGroup,
+                                delegate = personalInformationGroup,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = 50,
+                                y = 680,
+                            }
+    --CTextField.new(50, 680, 360, 40)
     --[[]
     cityField = display.newRoundedRect( 50, 680, 360, 40, 5 )
     cityField:setFillColor( 0.5, 0.5, 0.5 )

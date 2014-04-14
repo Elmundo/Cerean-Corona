@@ -282,6 +282,7 @@ function scene:createScene( event )
     
     -- Test Environment
     --TODO: Bahadir - Drop Down Menu how to use example
+    --[[]
     local dataList = { "ISTANBUL", "IZMIR", "ANKARA", "GOTHAM" }
     local ddm = DropDownMenu.new{
                                 dataList = dataList,
@@ -293,6 +294,7 @@ function scene:createScene( event )
                                 x = 100,
                                 y = 1,
                             }
+                --]]
                 --[[]            
     local countryDDM = DropDownMenu.new{
                                 parent = displayGroup,
