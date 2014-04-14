@@ -35,7 +35,7 @@ function PackageView.new(options)
     packageView:insert(bgImage)
 
     -- Header Text
-    indexLabel = display.newText(packageView, product.name, 90, 14, 290, 80, native.systemFontBold, 20)
+    indexLabel = display.newText(packageView, product.Name, 90, 14, 290, 80, native.systemFontBold, 20)
     
     -- Check Icon
     iconImage  = display.newImage(packageView, "Assets/IconSelectTariffPressed.png", system.ResourceDirectory, -12, -9, true)

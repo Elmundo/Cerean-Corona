@@ -14,7 +14,9 @@ local CButton = require( "Views.Buttons.CButton" )
 local ControlBar = require( "Views.ControlBar" )
 local SubscriberTypeView = require( "Views.SubscriberTypeView" )
 local PersonalInformationView = require( "Views.PersonalInformationView" )
+local EnterpriseInformationView = require( "Views.EnterpriseInformationView")
 local CounterInformationView = require( "Views.CounterInformationView" )
+local Utils = require("libs.Util.Utils")
 local Logger = require "libs.Log.Logger"
 ----------------------------------------------------------------------------------
 -- 
@@ -48,7 +50,7 @@ local controlBar
 local subscriberTypeGroup
 
 local personalInformationGroup
-
+local enterpriseInformationGroup
 local counterInformationGroup
 
 
@@ -76,7 +78,7 @@ function scene:saveContent ( appStep, callback )
         if( isCorporate == 0 )then
             contentData = personalInformationGroup:getContent()
         else
-            contentData = personalInformationGroup:getContent() -- TODO: enterpriseGroup:getContent()
+            contentData = enterpriseInformationGroup:getContent() -- TODO: enterpriseGroup:getContent()
         end
         
         --Add a check for corporate later
@@ -156,12 +158,20 @@ function scene:saveContent ( appStep, callback )
                                          Logger:debug(scene, "Step 2 is failure.", message)
                                          callback(false, responseData.ErrorMessage)
                                      end
-                                     scene:shiftUp()
+                                     print("")
+                                     DataService:getProduct(function(responseData)
+                                         DataService.products = responseData
+                                         Utils:printTable(responseData)
+                                         scene:shiftUp()
+                                     end, function(errorData) 
+                                        Utils:printTable(errorData)
+                                     end)
+                                     
                                  end,
                                  function (errorData) -- Failure callback
                                      Logger:debug(scene, "Step 2 is failure.", message)
                                      callback(false, errorData.ErrorDetail)
-                                     scene:shiftUp()
+                                     --scene:shiftUp()
                                  end
                                  )
         
@@ -177,7 +187,11 @@ end
 --onComplete
 function scene:doneStepAnimationNext ()
         if( step == 0 )then
-            personalInformationGroup:hideGroup(false)
+            if( isCorporate == 0 )then
+                personalInformationGroup:hideGroup(false)
+            else 
+                enterpriseInformationGroup:hideGroup(false)
+            end
         elseif( step == 1 )then
             counterInformationGroup:hideGroup(false)
         end
@@ -189,7 +203,11 @@ end
 
 function scene:doneStepAnimationBack()
         if( step == 2 )then
-            personalInformationGroup:hideGroup(false)
+            if( isCorporate == 0 )then
+                personalInformationGroup:hideGroup(false)
+            else 
+                enterpriseInformationGroup:hideGroup(false)
+            end
         end
         step = step - 1
         isStepAnimationRunning = false
@@ -215,16 +233,30 @@ function scene:onButtonTouchEnded( event )
             if( isCorporate == 0 )then
                 
             end
-            scene:saveContent(kStepPersonel, function( isSuccessful, errorDetail )
-                if( DataService.phase == Phase.CallPhase  )then
+            scene:saveContent(kStepPersonel, function( isSuccess, errorDetail )
+                if( isSuccess )then 
+                    print( "SUCCEDED" )
+                else
+                    print( errorDetail )
+                end
+                if( DataService.phase == Phase.ApplicationPhase  )then
+                    local company = DataService:findCompanyForCity(DataService.selectedCity.ID)
+                    if( company ~= null )then
+                        
+                    end
+                else 
                     
                 end
             end)
         else 
             --counter
             --check Data
-            scene:saveContent(kStepRegistry, function( isSuccessful, errorDetail )
-                --
+            scene:saveContent(kStepRegistry, function( isSuccess, errorDetail )
+                if( isSuccess )then 
+                    print( "SUCCEDED" )
+                else
+                    print( errorDetail )
+                end
             end)
         end
         --scene:shiftUp()
@@ -326,7 +358,9 @@ function scene:createScene( event )
 
 --------------------------------------------
         personalInformationGroup = PersonalInformationView.new()
+        enterpriseInformationGroup = EnterpriseInformationView.new()
         personalInformationGroup:hideGroup(true)
+        enterpriseInformationGroup:hideGroup(true)
 
 --------------------------------------------
         subscriberTypeGroup = SubscriberTypeView.new(self)
@@ -334,7 +368,10 @@ function scene:createScene( event )
 		group:insert( logo )
                 group:insert( controlBar )
 		group:insert( subscriberTypeGroup )
+                
+                group:insert( enterpriseInformationGroup )
 		group:insert( personalInformationGroup )
+                
                 group:insert( counterInformationGroup )
                 group:insert( buttomWhiteMask )
                 group:insert( backButton )

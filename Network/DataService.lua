@@ -211,7 +211,7 @@ end
 
 function DataService:getProduct( callback, failure  )
 	
-	request.params = {self.customerId}
+	request.params = {self.customerId, self.meterId}
 	request.method = "getproducts"
 	
 	CereanServer:request(self:completeRequest(baseRequest), callback, failure)

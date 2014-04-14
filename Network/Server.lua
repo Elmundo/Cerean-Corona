@@ -69,7 +69,12 @@ function Server:logResponse( params, responseID )
 	print( "--                                                																										  --" )
 	print( "--												  																										  --" )
 	print("response.body= ")
-	Utils:printTable(params)
+        if( type(params) == "string" )then
+            print(params)
+        else 
+            Utils:printTable(params)
+        end
+	
 	print( "--                                                																										  --" )
 	print( "--												  																										  --" )
 	print( "------------------------------------------------------------------------------------------------------------------------------------------------------------" )
@@ -97,7 +102,12 @@ function Server:request( params, callback, failure, requestType )
                                                     
                                                 else
                                                     local responseData = json.decode( event.response )
-                                                    responseData = responseData.results[1].res
+                                                    if responseData == nil then
+                                                        responseData = event.response
+                                                    else
+                                                        responseData = responseData.results[1].res
+                                                    end
+                                                    
                                                     self:logResponse(responseData, self.requestID)
 
                                                     callback(responseData) -- Call the related callback function
