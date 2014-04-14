@@ -193,6 +193,19 @@ function scene:onButtonTouchEnded( event )
     end
 end
 
+-- TODO: Bahadir - callback func test için
+function scene.didDDMItemSelected(value, id, index)
+        
+        print("TEST ICIN EKLENDI")
+        print("Value = " .. value)
+        print("Id = " .. id)
+        print("Index = " .. index)
+        -- TODO: Bahadir
+        --[[
+                         
+        --]]
+end
+
 --[[]
 function scene:onTouchEnded()
     print( "DELEGATE TOUCH" )
@@ -269,17 +282,18 @@ function scene:createScene( event )
     
     -- Test Environment
     --TODO: Bahadir - Drop Down Menu how to use example
-    --[[]
     local dataList = { "ISTANBUL", "IZMIR", "ANKARA", "GOTHAM" }
     local ddm = DropDownMenu.new{
                                 dataList = dataList,
+                                ID = "ddm",
                                 parent = displayGroup,
+                                delegate = scene, 
                                 buttonWidth = 360,
                                 buttonHeight = 40,
                                 x = 100,
                                 y = 1,
                             }
-                            
+                --[[]            
     local countryDDM = DropDownMenu.new{
                                 parent = displayGroup,
                                 buttonWidth = 360,

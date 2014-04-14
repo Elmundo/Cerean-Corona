@@ -25,6 +25,7 @@ local cDefaultButtonValue       = "SEÇİNİZ"
         visibleCellCount = count,
         cellData = cellData,
         userCustomDataList = Array,
+        ID = ID,
     }
 --]]
 --[[ cellData = {
@@ -46,6 +47,8 @@ function DropDownMenu.new( params )
     local noLines          = params.noLines
     local visibleCellCount = params.visibleCellCount or cDefaultVisibleCellCount
     local parent           = params.parent
+    local delegate         = params.delegate
+    local ID               = params.ID
     
     parent:insert(dropDownMenu)
     
@@ -69,10 +72,10 @@ function DropDownMenu.new( params )
     
     -- Cell Properties
     local isCategory    = cellData.isCategory or false
-    local rowHeight     = cellData.rowHeight or buttonHeight
-    local rowColor      = cellData.rowColor or { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
-    local lineColor     = cellData.lineColor or { 0.5, 0.5, 0.5 }
-    local cellHeight    = cellData.rowHeight or buttonHeight
+    local rowHeight     = cellData.rowHeight  or buttonHeight
+    local rowColor      = cellData.rowColor   or { default={ 1, 1, 1 }, over={ 1, 0.5, 0, 0.2 } }
+    local lineColor     = cellData.lineColor  or { 0.5, 0.5, 0.5 }
+    local cellHeight    = cellData.rowHeight  or buttonHeight
     local cellWidth     = buttonWidth
     
     -- User Data List Property
@@ -97,9 +100,14 @@ function DropDownMenu.new( params )
 
         elseif event.phase == "release" then
             local params = event.row.params
-            ddmValue = params.value
-            buttonLabel.text = ddmValue
+            local index         = event.row.index
+            local ID            = ID
+            ddmValue            = params.value
+            buttonLabel.text    = ddmValue
             dropDownMenu:hideTable(true)
+            
+            -- Call delegate method
+            delegate.didDDMItemSelected(ddmValue, ID, index)
         end
 
     end
@@ -220,7 +228,7 @@ function DropDownMenu.new( params )
     local function hideDDMTable( event )
         dropDownMenu:hideTable(true)
     end
-
+    
     -- GETTER METHODS
     function dropDownMenu:getValue()
         return ddmValue
