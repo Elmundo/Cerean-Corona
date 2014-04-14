@@ -5,6 +5,7 @@ local widget = require( "widget" )
 local CLabel = require( "Views.Labels.Clabel" )
 local CButton = require( "Views.Buttons.CButton" )
 local CTextField = require( "Views.TextFields.CTextField" )
+local DropDownMenu = require "libs.DDM.DropDownMenu"
 
 local AddressInformationView = {}
 

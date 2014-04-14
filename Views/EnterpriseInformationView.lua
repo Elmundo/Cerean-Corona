@@ -5,6 +5,7 @@ local native = require( "native" )
 local widget = require( "widget" )
 local DataService = require( "Network.DataService" )
 local CTextField = require( "Views.TextFields.CTextField" )
+local DropDownMenu = require "libs.DDM.DropDownMenu"
 
 local EnterpriseInformationView = {}
 
@@ -71,19 +72,20 @@ function EnterpriseInformationView.new()
         
         function enterpriseInformationGroup:getContent () 
             local contentData = {}
-            --[[]
-            DataService.customerPhone = mobileField:getText()
-            DataService.customerEmail = "mbahadirb@gmail.com"--emailField:getText()
-            DataService.customerName = "Bahadir Boge"--nameField:getText()
+            DataService.CustomerPhone = phoneField:getText()
+            DataService.CustomerEmail = emailField:getText()
+            DataService.customerName = companyNameField:getText()
             contentData = {
-                Name = "Bahadir Boge",--nameField:getText(),
-                TckNo = iDNumberField:getText(),
-                MobilePhone = mobileField:getText(),
-                Email = "mbahadirb@gmail.com",--emailField:getText(),
-                CityId = "3a5edc95-0cf9-e211-ae2c-0050568e1778",--cityField:getText(),
-                CountyId = "a53d5df8-14f9-e211-ae2c-0050568e1778",--countyField:getText()
+                Name                        = companyNameField:getText(),
+                TaxOffice                   = taxOfficField:getText(),
+                TaxNo                       = taxNumberField:getText(),
+                PrimaryContactFirstName     = representativeNameField:getText(),
+                PrimaryContactLastName      = representativeLastNameField:getText(),
+                MobilePhone                 = representativePhoneField:getText(),
+                Telephone                   = phoneField:getText(),
+                Email                       = emailField:getText(),
             }
-            --]]
+
             return contentData
         end
         
