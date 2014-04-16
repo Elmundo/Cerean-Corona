@@ -23,11 +23,17 @@ local registryPhaseButton
 
 
 
-function onExitButtonTouched( event )
-
+local function onApplicationPhaseButtonTouched( event )
+        --TODO: Delete Later - Baris
+        if event.phase == "ended" then
+            storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
+        end
+        --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
+        
+        return true
 end
 
-function onApplicationPhaseButtonTouched( event )
+local function onCallPhaseButtonTouched( event )
         --TODO: Delete Later - Baris
         storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
         
@@ -36,16 +42,7 @@ function onApplicationPhaseButtonTouched( event )
         return true
 end
 
-function onCallPhaseButtonTouched( event )
-        --TODO: Delete Later - Baris
-        storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
-        
-        --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
-        
-        return true
-end
-
-function onRegistryPhaseButtonTouched( event )
+local function onRegistryPhaseButtonTouched( event )
         --TODO: Delete Later - Baris
         storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
         
