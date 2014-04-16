@@ -17,7 +17,7 @@ local BaseScene   = require "Scenes.BaseScene"
 local scene = BaseScene.new()
 
 local storyboard = require( "storyboard" )
-
+local Logger = require( "libs.Log.Logger" )
 ----------------------------------------------------------------------------------
 -- 
 --      NOTE:
@@ -79,7 +79,7 @@ local function saveContent(appStep, callback)
     if( step == 0 ) then
         contentData = appointmentPlanningView:getContent(appStep)
         
-        if( DataService.appointmentId ~= null ) then
+        if( DataService.appointmentId ~= nil ) then
             --Back from next scene
             contentData["AppointmentId"] = DataService.appointmentId
         end
@@ -96,12 +96,42 @@ local function saveContent(appStep, callback)
             contentData["MeterId"] = DataService.meterId
             contentData["QuoteId"] = DataService.quoteId
         end
+        
         end
+        
+        DataService:saveContent( contentData, 
+                                 function (responseData) -- Success callback
+                                     
+                                     if scene:isErrorCheckOk(responseData) then
+                                         Logger:debug(scene, "scene:saveContent", "Step 1 is success!")
+                                         --DataService.customerId = responseData.CustomerId
+                                         --DataService.customerNumber = responseData.UstomerNumber
+                                         DataService.appointmentId = responseData.AppointmentId
+                                         callback(true, nil )
+                                         --shiftUp()
+                                     else
+                                         Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
+                                         callback(false, responseData.ErrorMessage)
+                                     end
+                                     
+                                     --scene:shiftUp()
+                                     
+                                 end, 
+                                 
+                                 function (errorData) -- Failure callback
+                                    Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
+                                    callback(false, errorData.ErrorDetail)
+                                    --Shift Up Should Be Removed 
+                                    --scene:shiftUp()
+                                 end
+            )
+        --[[]
         DataService:saveContent(contentData, function (responseData)
             --check Error
-                                    DataService.appointmentId = responseData.appointmentData
-                                    callback(responseData)
+                                    DataService.appointmentId = responseData.AppointmentData
+                                    
                                 end )
+        --]]
     else 
         --Check for back
         contentData = addressInformationView:getContent()
@@ -109,8 +139,8 @@ local function saveContent(appStep, callback)
             contentData["AdressIdVisiting"] = DataService.addressIdVisiting
         end
         contentData["step"] = appStep
-        contentData["CustomerId"] = DataService.CustomerId
-        contentData["AppointmentId"] = DataService.AppointmentId
+        contentData["CustomerId"] = DataService.customerId
+        contentData["AppointmentId"] = DataService.appointmentId
         
         if( DataService.phase == Phase.CallPhase )then
             contentData["MeterId"] = ""
@@ -122,13 +152,14 @@ local function saveContent(appStep, callback)
             contentData["MeterId"] = DataService.MeterId
             contentData["QuoteId"] = DataService.QuoteId
         end
-        end
-        
         DataService:saveContent(contentData, function (responseData)
             --check Error
-                                    DataService.appointmentId = responseData.appointmentData
-                                    callback(responseData)
+                                    DataService.addressIdVisiting = responseData.AddressIdVisiting
+                                    callback( true, nil )
                                 end )
+    end
+        
+        
 end
 
 local function shiftUp()
@@ -321,7 +352,8 @@ function scene:onButtonTouchEnded( event )
             --Add check for enterprise
             saveContent(kStepAddress, function( isSuccess, errrorDetail )
                 if( isSuccess )then
-                    shiftUp()
+                    storyboard.gotoScene("Scenes.ConfirmationScene", "slideLeft", 800)
+                    --shiftUp()
                 else 
 
                 end

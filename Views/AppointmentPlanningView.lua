@@ -112,8 +112,8 @@ function AppointmentPlanningView.new()
         local contentData = {}
             
             contentData = {
-                ScheduledStart = "",
-                IntervalTime = ""
+                ScheduledStart = "6 3 2014 00:00:00",
+                IntervalTime = "16"
            } 
            
              
