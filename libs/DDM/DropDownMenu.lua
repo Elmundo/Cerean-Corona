@@ -51,7 +51,7 @@ function DropDownMenu.new( params )
     local ID               = params.ID
     local customParams     = params.customParams
     
-    parent:insert(dropDownMenu)
+    --parent:insert(dropDownMenu)
     
     -- Properties
     local ddmTable       = nil
@@ -98,9 +98,9 @@ function DropDownMenu.new( params )
     function dropDownMenu.onRowTouch( event )
 
         if event.phase == "press" then
-
+            
         elseif event.phase == "release" then
-            local params = event.row.params
+            local params        = event.row.params
             local index         = event.row.index
             local ID            = ID
             ddmValue            = params.value
@@ -108,7 +108,7 @@ function DropDownMenu.new( params )
             dropDownMenu:hideTable(true)
             
             -- Call delegate method
-            delegate.didDDMItemSelected(ddmValue, ID, index)
+            delegate.didDDMItemSelected(dataList[index], ID, index)
         end
 
     end
@@ -151,7 +151,7 @@ function DropDownMenu.new( params )
     
     --Instantiate ddm table
     for i = 1, #dataList do
-        local value = dataList[i]
+        local params = dataList[i]
         
         ddmTable:insertRow{
                          
@@ -159,22 +159,21 @@ function DropDownMenu.new( params )
                                 rowHeight  = rowHeight,
                                 rowColor   = rowColor,
                                 lineColor  = lineColor,
-                                params     = {value = value}
+                                params     = params
                           }
     end
     
     -- Drop Down Menu Methods
-    function dropDownMenu:laodData(dataList)
+    function dropDownMenu:loadData(dataList)
         for i = 1, #dataList do
-            local value = dataList[i]
+            local params = dataList[i]
 
             ddmTable:insertRow{
-
                                     isCategory = isCategory,
                                     rowHeight  = rowHeight,
                                     rowColor   = rowColor,
                                     lineColor  = lineColor,
-                                    params     = {value = value}
+                                    params     = params
                               }
         end
     end
@@ -205,6 +204,11 @@ function DropDownMenu.new( params )
         isTableHidden        = value
         ddmTable.isVisible   = not isTableHidden
         ddmTableBG.isVisible = not isTableHidden
+        delegate.didHideDDMTable( ID, isTableHidden)
+    end
+    
+    function dropDownMenu:hideDDM ( isHidden)
+        self.isVisible = not isHidden
     end
     
     -- Button Touch Methods
@@ -230,21 +234,34 @@ function DropDownMenu.new( params )
         dropDownMenu:hideTable(true)
     end
     
-    -- GETTER METHODS
+    -- GETTER & SETTER METHODS
     function dropDownMenu:getValue()
         return ddmValue
     end
     
+    function dropDownMenu:setValue(value)
+        ddmValue = value
+    end
+    
     -- Add event listeners
+    
     dropDownMenu:addEventListener("touch", dropDownMenu)
     dropDownMenu:addEventListener("tap", dropDownMenu)
-    Runtime:addEventListener("userInput", hideDDMTable)
-    Runtime:addEventListener("tap", hideDDMTable)
-    
     -- Default visibilty of table is false
     dropDownMenu:hideTable(isTableHidden)
+    function DropDownMenu.addListener()
+        
+        Runtime:addEventListener("userInput", hideDDMTable)
+        Runtime:addEventListener("tap", hideDDMTable)
+    end
+    
+    function DropDownMenu.destroy()
+        Runtime:removeEventListener("userInput", hideDDMTable)
+        Runtime:removeEventListener("tap", hideDDMTable)
+    end
     
     return dropDownMenu
 end
+
 
 return DropDownMenu

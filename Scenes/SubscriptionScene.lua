@@ -18,6 +18,8 @@ local EnterpriseInformationView = require( "Views.EnterpriseInformationView")
 local CounterInformationView = require( "Views.CounterInformationView" )
 local Utils = require("libs.Util.Utils")
 local Logger = require "libs.Log.Logger"
+
+local DropDownMenu = require( "libs.DDM.DropDownMenu" )
 ----------------------------------------------------------------------------------
 -- 
 --      NOTE:
@@ -189,7 +191,9 @@ function scene:doneStepAnimationNext ()
         if( step == 0 )then
             if( isCorporate == 0 )then
                 personalInformationGroup:hideGroup(false)
+                enterpriseInformationGroup:hideGroup(true)
             else 
+                personalInformationGroup:hideGroup(true)
                 enterpriseInformationGroup:hideGroup(false)
             end
         elseif( step == 1 )then
@@ -205,9 +209,12 @@ function scene:doneStepAnimationBack()
         if( step == 2 )then
             if( isCorporate == 0 )then
                 personalInformationGroup:hideGroup(false)
+                
             else 
                 enterpriseInformationGroup:hideGroup(false)
             end
+            
+        elseif( step == 1 )then
         end
         step = step - 1
         isStepAnimationRunning = false
@@ -268,7 +275,14 @@ end
 
 function scene:individualButtonPressed () 
     isCorporate = 0
+    enterpriseInformationGroup.isVisible = false
     transition.to( personalInformationGroup, {time=400, y= -235,onComplete= scene.doneStepAnimationNext , transition = easing.outExpo } )
+end
+
+function scene:enterpriseButtonPressed ()
+    isCorporate = 1
+    personalInformationGroup.isVisible = false
+    transition.to( enterpriseInformationGroup, {time=400, y= -235,onComplete = scene.doneStepAnimationNext , transition = easing.outExpo} )
 end
 
 function scene:handleIndividualButtonEvent( event )
@@ -378,7 +392,7 @@ function scene:createScene( event )
                 group:insert( nextButton )
                 group:insert( callCenterLogo )
                 group:insert( fibaLogo )
-
+        DropDownMenu.addListener()
         -----------------------------------------------------------------------------
 
         --      CREATE display objects and add them to 'group' here.
@@ -422,7 +436,9 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
         local group = self.view
-
+        
+        DropDownMenu.destroy()
+        
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)

@@ -27,6 +27,12 @@ function SubscriberTypeView.new(delegate)
                  delegate:individualButtonPressed() 
              end
          end
+         
+         local function handleEnterpriseButton ( event )
+             if( event.phase == "ended" )then
+                 delegate:enterpriseButtonPressed()
+             end
+         end
          --[[
 	 function subscriberTypeGroup:addButtonEventListeners ( personal, corporate )
 		personalButton:addEventListener( "touch", personal )
@@ -55,7 +61,7 @@ function SubscriberTypeView.new(delegate)
 												defaultFile ="Assets/ButtonCorporate.png", 
 												overFile = "Assets/ButtonCorporatePressed.png", 
 												label = "", 
-												onEvent = handleCorporateButtonEvent }
+												onEvent = handleEnterpriseButton }
 			corporateButton.x = centerX + 120-110
 			corporateButton.y = centerY -100
 

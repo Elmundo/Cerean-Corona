@@ -4,6 +4,7 @@ local widget = require( "widget" )
 
 local CTextField = require( "Views.TextFields.CTextField" )
 local DropDownMenu = require "libs.DDM.DropDownMenu"
+local DataService = require( "Network.DataService" )
 
 local CounterInformationView = {}
 
@@ -49,12 +50,12 @@ function CounterInformationView.new()
     contentGroup = display.newGroup( )
 
     function counterInformationGroup:hideGroup( isHidden )
-        distrubitionCompanyField:hide(isHidden)
-        supplierCompanyField:hide(isHidden)
+        --distrubitionCompanyField:hide(isHidden)
+        --supplierCompanyField:hide(isHidden)
         companyCodeField:hide(isHidden)
         subscriberNumberField:hide(isHidden)
         recieptField:hide(isHidden)
-        subscriberGroupField:hide(isHidden)
+        subscriberGroupField:hideDDM(isHidden)
         customerNameField:hide(isHidden)
         counterSerialNumberField:hide(isHidden)
         inductiveCounterSerialNumberField:hide(isHidden)
@@ -62,13 +63,7 @@ function CounterInformationView.new()
         billAmountField:hide(isHidden)
     end
     
-    -- DropDownMenu Delegate
-    function didDDMItemSelected(value, id, index)
-        -- TODO: Bahadir
-        --[[
-                        
-        --]]
-    end
+        
 
     function counterInformationGroup:getContent () 
         local contentData = {}
@@ -89,6 +84,70 @@ function CounterInformationView.new()
 
         return contentData
     end
+    
+    -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable    
+        end
+        
+        function counterInformationGroup.didDDMItemSelected(ddmValue, ID, index)
+            if( ID == "DistrubitionCompany")then
+                --TODO:setBillImage
+            elseif( ID == "SupplierCompany" )then
+                --TODO:setBillImage
+            elseif( ID == "SubscriberGroup" )then
+                --TODO:setBillImage
+            end
+        end
+        
+
+        
+        function counterInformationGroup.didHideDDMTable( ID, isTableHidden)
+            if( ID == "DistrubitionCompany" )then
+                print("IH8DZ")
+                counterInformation.isVisible = isTableHidden
+                companyCodeLabel.isVisible = isTableHidden
+                companyCodeField:hide(not isTableHidden)
+                recieptLabel.isVisible = isTableHidden
+                recieptField:hide(not isTableHidden)
+            elseif( ID == "SupplierCompany" )then
+                
+                subscriberNumberLabel.isVisible = isTableHidden
+                subscriberNumberField:hide(not isTableHidden)
+                subscriberGroupLabel.isVisible = isTableHidden
+                --subscriberGroupField.hideDDM(isTableHidden)
+            elseif( ID == "SubscriberGroup")then
+                inductiveCounterSerialNumberLabel.isVisible = isTableHidden
+                inductiveCounterSerialNumberField:hide(not isTableHidden)
+            end
+        end
+        
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable  
+        end
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --END DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
 
     counterInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
     --counterInformationGroupBackground:setFillColor( 0,0,1 )
@@ -104,14 +163,29 @@ function CounterInformationView.new()
 
     distrubitionCompanyLabel = display.newText( "Dağıtım Şirketi Adı", 60, 485, native.systemFontBold, 15 )
     distrubitionCompanyLabel:setFillColor( 0,0,0 )
-    distrubitionCompanyField = CTextField.new( 50, 505, 240, 30)
+    
+    --CTextField.new( 50, 505, 240, 30)
+    --[[
+    DropDownMenu.new{
+                                dataList = getDropDownList(DataService.cities),
+                                ID = "DistrubitionCompany",
+                                parent = counterInformationGroup,
+                                delegate = counterInformationGroup,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = 50,
+                                y = 680,
+                            }
+    --]]
+    
     --[[]
     distrubitionCompanyField  = display.newRoundedRect( 50, 505, 240, 30, 5 )
     distrubitionCompanyField:setFillColor( 0.5, 0.5, 0.5 )
     --]]
     supplierCompanyLabel = display.newText( "Tedarik Şirketi Adı", 470, 490, native.systemFontBold, 15 )
     supplierCompanyLabel:setFillColor( 0,0,0 )
-    supplierCompanyField = CTextField.new( centerX-60-120, 510, 240, 30)
+    
+    --CTextField.new( centerX-60-120, 510, 240, 30)
     --[[]
     supplierCompanyField = display.newRoundedRect( centerX-60-120, 510, 240, 30, 5 )
     supplierCompanyField:setFillColor( 0.5, 0.5, 0.5 )
@@ -142,7 +216,7 @@ function CounterInformationView.new()
     --]]
     subscriberGroupLabel = display.newText( "Abone Grubu", 470, 605, native.systemFontBold, 15 )
     subscriberGroupLabel:setFillColor( 0,0,0 )
-    subscriberGroupField = CTextField.new( centerX-180, 625, 240, 30)
+    --subscriberGroupField = CTextField.new( centerX-180, 625, 240, 30)
     --[[]
     subscriberGroupField  = display.newRoundedRect( centerX-180, 625, 240, 30, 5 )
     subscriberGroupField:setFillColor( 0.5, 0.5, 0.5 )
@@ -182,7 +256,45 @@ function CounterInformationView.new()
     billAmountField  = display.newRoundedRect( centerX-180, 780, 240, 30, 5 )
     billAmountField:setFillColor( 0.5, 0.5, 0.5 )
     --]]
-    local dummyBillImage = display.newImage("Assets/BillImages/aesas.jpg", 0, 0)
+    subscriberGroupField = DropDownMenu.new{
+                                dataList = getDropDownList(DataService.membershipgroups),
+                                ID = "SubscriberGroup",
+                                parent = counterInformationGroup,
+                                delegate = counterInformationGroup,
+                                buttonWidth = 240,
+                                buttonHeight = 30,
+                                visibleCellCount = 3,
+                                x = centerX-180,
+                                y = 625,
+                            }
+    
+    distrubitionCompanyField = DropDownMenu.new{
+                                dataList = getDropDownList(DataService.companies),
+                                ID = "DistrubitionCompany",
+                                parent = counterInformationGroup,
+                                delegate = counterInformationGroup,
+                                buttonWidth = 240,
+                                buttonHeight = 30,
+                                x = 50,
+                                y = 505,
+                            }
+    supplierCompanyField = DropDownMenu.new{
+                                dataList = getDropDownList(DataService.suppliers),
+                                ID = "SupplierCompany",
+                                parent = counterInformationGroup,
+                                delegate = counterInformationGroup,
+                                buttonWidth = 240,
+                                buttonHeight = 30,
+                                x = centerX-60-120,
+                                y = 505,
+                            }
+    
+                            
+    local dummyBillImage = display.newImage("Assets/BillImages/Akdeniz.jpg", 0, 0, true)
+    --display.newImageRect("Assets/BillImages/b_enerjisa.jpg", 510, 1285, true)
+    --display.newImage("Assets/BillImages/b_enerjisa.jpg", 0, 0)
+    --display.newImageRect("Assets/BillImages/Akdeniz.jpg", 510, 1285)
+    
     billImageScrollView = widget.newScrollView{
         top = 465,
         left = 730,
@@ -200,7 +312,9 @@ function CounterInformationView.new()
     counterInformationGroup:insert( counterInformationGroupBackground )
     counterInformationGroup:insert( counterInformationHeaderBackground )
     counterInformationGroup:insert( counterInformationHeaderText )
-
+    
+    contentGroup:insert( subscriberGroupField )
+    
     contentGroup:insert( distrubitionCompanyInformation )
     contentGroup:insert( distrubitionCompanyLabel )
     contentGroup:insert( distrubitionCompanyField )
@@ -214,7 +328,7 @@ function CounterInformationView.new()
     contentGroup:insert( recieptLabel )
     contentGroup:insert( recieptField )
     contentGroup:insert( subscriberGroupLabel )
-    contentGroup:insert( subscriberGroupField )
+    
     contentGroup:insert( customerNameLabel)
     contentGroup:insert( customerNameField)
     contentGroup:insert( counterSerialNumberLabel )
@@ -231,7 +345,8 @@ function CounterInformationView.new()
 
     counterInformationGroup.y = 230
     --counterInformationGroup.alpha = 0
-
+    
+        
     return counterInformationGroup
 end
 

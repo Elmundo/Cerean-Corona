@@ -194,7 +194,7 @@ function scene:onButtonTouchEnded( event )
 end
 
 -- TODO: Bahadir - callback func test için
-function scene.didDDMItemSelected(value, id, index)
+function scene.didDDMItemSelected(params, id, index)
         
         print("TEST ICIN EKLENDI")
         print("Value = " .. value)
@@ -282,8 +282,25 @@ function scene:createScene( event )
     
     -- Test Environment
     --TODO: Bahadir - Drop Down Menu how to use example
-    --[[]
-    local dataList = { "ISTANBUL", "IZMIR", "ANKARA", "GOTHAM" }
+    local dataList = { 
+                            {
+                                value = "ISTANBUL",
+                                id = 1, 
+                            },
+                            {
+                                value = "IZMIR",
+                                id = 2, 
+                            },
+                            {
+                                value = "ANKARA",
+                                id = 3, 
+                            },
+                            {
+                                value = "SAKARYA",
+                                id = 4, 
+                            },
+                    }
+                    --[[]
     local ddm = DropDownMenu.new{
                                 dataList = dataList,
                                 ID = "ddm",
@@ -294,6 +311,7 @@ function scene:createScene( event )
                                 x = 100,
                                 y = 1,
                             }
+                            --]]
                 --]]
                 --[[]            
     local countryDDM = DropDownMenu.new{

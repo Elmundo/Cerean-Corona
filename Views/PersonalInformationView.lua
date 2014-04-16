@@ -31,21 +31,45 @@ function PersonalInformationView.new()
 	local countyLabel
 	local countyField
 
+        local counties
+
 	local centerX = display.contentCenterX
 	local centerY = display.contentCenterY
         
         personalInformationGroup = display.newGroup( )
 	contentGroup = display.newGroup( )
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable    
+        end
         
         function personalInformationGroup.didDDMItemSelected(ddmValue, ID, index)
             if( ID == "CityField")then
                 --local index = index
                 --Enable DDM?
+                --Start Spinner but first check for Corona Behaviour
+                --Save Sellected City
+                DataService.selectedCity = ddmValue
                 --Get County List
-                DataService:getParameters(kParameterCounties, index, function(responseData)
+                DataService:getParametersWithGuid(kParameterCounties, ddmValue.id, nil, function(responseData)
+                    --Check for error
                     print("Success")
+                    counties = getDropDownList(responseData)
+                    countyField:loadData(counties)
                 end, 
                     function(errorData)
+                        --Error Handling
                         print("Fail")
                     end)
             elseif( ID == "CountyField") then
@@ -56,10 +80,18 @@ function PersonalInformationView.new()
         local function getDropDownList( dataTable )
             local returnTable = {}
             for i=1, #dataTable do
-                returnTable[i] = dataTable[i].Name
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
             end
             return returnTable    
         end
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --END DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
         
         function personalInformationGroup:hideGroup ( isHidden )
             
@@ -68,7 +100,7 @@ function PersonalInformationView.new()
             mobileField:hide(isHidden)
             emailField:hide(isHidden)
             --cityField:hide(isHidden)
-            countyField:hide(isHidden)
+            --countyField:hide(isHidden)
             --[[]
             if( isHidden )then
                 contentGroup.alpha = 0
@@ -77,6 +109,10 @@ function PersonalInformationView.new()
                 contentGroup.alpha = 1
             end
             --]]
+        end
+        
+        function personalInformationGroup.didHideDDMTable( ID, isTableHidden)
+            
         end
         
         function personalInformationGroup:getContent () 
@@ -90,7 +126,7 @@ function PersonalInformationView.new()
                 TckNo = iDNumberField:getText(),
                 MobilePhone = mobileField:getText(),
                 Email = "mbahadirb@gmail.com",--emailField:getText(),
-                CityId = "3a5edc95-0cf9-e211-ae2c-0050568e1778",--cityField:getText(),
+                CityId = "3a5edc95-0cf9-e211-ae2c-0050568e1778",--cityField:getValue(),--cityField:getText(),
                 CountyId = "a53d5df8-14f9-e211-ae2c-0050568e1778",--countyField:getText()
             }
              
@@ -166,7 +202,18 @@ function PersonalInformationView.new()
     
     countyLabel = display.newText( "İlçe", centerX-170, 660, native.systemFontBold, 17 )
     countyLabel:setFillColor( 0, 0, 0 )
-    countyField = CTextField.new(centerX-180, 680, 360, 40)
+    countyField = DropDownMenu.new{
+                                ID = "CountyField",
+                                parent = personalInformationGroup,
+                                delegate = personalInformationGroup,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = centerX-180,
+                                y = 680,
+                            }
+    
+    
+    --CTextField.new(centerX-180, 680, 360, 40)
     --[[]
     countyField = display.newRoundedRect( centerX-180, 680, 360, 40, 5 )
     countyField:setFillColor( 0.5, 0.5, 0.5 )
