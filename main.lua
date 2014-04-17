@@ -10,6 +10,7 @@ local DataService  = require "Network.DataService"
 local Logger       = require "libs.Log.Logger"
 local native       = require "native"
 local DropDownMenu = require "libs.DDM.DropDownMenu"
+local Utils        = require "libs.Util.Utils"
 
 require "ParameterConfig"
 
@@ -28,4 +29,4 @@ Logger:debug("main", "general", "PixelWidth: " .. display.pixelWidth .. " PixelH
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 
-storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400)
+--storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400)

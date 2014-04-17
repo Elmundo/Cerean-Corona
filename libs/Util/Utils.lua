@@ -21,14 +21,23 @@ function Utils:printTable( table )
 	end
 end
 
-function Utils:componentSeperatedByString( string, pattern )
+function Utils:componentSeperatedByString( exp, pattern )
 	local list = {}
 	local i = 1
-	for w in string.gmatch( string, pattern ) do
-		list[i] = w
-		i = i + 1
-	end	
-
+        local w = nil
+        local realExp = string.sub(exp, 2, -1)
+        while(realExp) do
+            index = string.find(realExp, ",")
+            if index == nil then
+                realExp = nil
+            else
+                w = string.sub(realExp, 1, index-1)
+                realExp = string.sub(realExp, index+1, -1)
+                list[i] = w
+                i = i + 1
+            end
+        end
+            
 	return list
 end
 
