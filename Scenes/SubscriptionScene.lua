@@ -104,12 +104,13 @@ function scene:saveContent ( appStep, callback )
                                          DataService.customerId = responseData.CustomerId
                                          DataService.customerNumber = responseData.UstomerNumber
                                          callback(true, nil )
+                                         scene:shiftUp()
                                      else
                                          Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
                                          callback(false, responseData.ErrorMessage)
                                      end
                                      
-                                     scene:shiftUp()
+                                     --scene:shiftUp()
                                      
                                  end, 
                                  
@@ -117,7 +118,7 @@ function scene:saveContent ( appStep, callback )
                                     Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
                                     callback(false, errorData.ErrorDetail)
                                     --Shift Up Should Be Removed 
-                                    scene:shiftUp()
+                                    --scene:shiftUp()
                                  end
             )
     elseif( step == kStepRegistry ) then
@@ -156,18 +157,12 @@ function scene:saveContent ( appStep, callback )
                                          DataService.customerNumber = responseData.CustomerNumber
                                          DataService.meterId        = responseData.MeterId
                                          callback(true, nil)
+                                         scene:shiftUp()
                                      else
                                          Logger:debug(scene, "Step 2 is failure.", message)
                                          callback(false, responseData.ErrorMessage)
                                      end
-                                     print("")
-                                     DataService:getProduct(function(responseData)
-                                         DataService.products = responseData
-                                         Utils:printTable(responseData)
-                                         scene:shiftUp()
-                                     end, function(errorData) 
-                                        Utils:printTable(errorData)
-                                     end)
+                                     
                                      
                                  end,
                                  function (errorData) -- Failure callback
@@ -243,6 +238,7 @@ function scene:onButtonTouchEnded( event )
             scene:saveContent(kStepPersonel, function( isSuccess, errorDetail )
                 if( isSuccess )then 
                     print( "SUCCEDED" )
+                    
                 else
                     print( errorDetail )
                 end
@@ -261,7 +257,18 @@ function scene:onButtonTouchEnded( event )
             scene:saveContent(kStepRegistry, function( isSuccess, errorDetail )
                 if( isSuccess )then 
                     print( "SUCCEDED" )
+                    DataService:getProduct(function(responseData)
+                                         DataService.products = responseData
+                                         Utils:printTable(responseData)
+                                         storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
+                                         --scene:shiftUp()
+                                     end, function(errorData) 
+                                        Utils:printTable(errorData)
+                                     end)
+                    --storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
+                        print( "Next Scene" )
                 else
+                    --Pop Alert
                     print( errorDetail )
                 end
             end)
@@ -323,8 +330,7 @@ function scene:shiftUp()
                         
                 else 
                         --NextScenePackageScene
-                        storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
-                        print( "Next Scene" )
+                        
                 end
         end
 end
@@ -407,7 +413,7 @@ end
 -- Called BEFORE scene has moved onscreen:
 function scene:willEnterScene( event )
         local group = self.view
-        
+        print( "willEnterScene" )
         step = 0
         isStepAnimationRunning = false
 

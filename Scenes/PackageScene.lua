@@ -74,11 +74,21 @@ function PackageScene:saveContent(step, callback)
         promotionCode = ""
     end
     
+    --[[]
+    contentData = {
+            WebFormPage = DataService.webFormPage,
+            ProductId = selectedProduct.ProductId,
+            PromotionCode = promotionCode,
+            CustomerId = DataService.customerId,
+            MeterId = DataService.meterId,
+        }
+    
+    --]]
     if DataService.phase == Phase.RegistryPhase then
         
         contentData = {
             WebFormPage = DataService.webFormPage,
-            ProductId = selectedProduct.productId,
+            ProductId = selectedProduct.ProductId,
             PromotionCode = promotionCode,
             CustomerId = DataService.customerId,
             MeterId = DataService.meterId,
@@ -86,7 +96,7 @@ function PackageScene:saveContent(step, callback)
     else
         contentData = {
             WebFormPage = DataService.webFormPage,
-            ProductId = selectedProduct.productId,
+            ProductId = selectedProduct.ProductId,
             PromotionCode = promotionCode,
             CustomerId = DataService.customerId,
             MeterId = DataService.meterId,
@@ -262,6 +272,7 @@ function PackageScene:didPackageSelect( packageView )
     print "We are here now!"
     
     selectedProduct = packageView.product
+    
     self.packageDetail:setPackageDetail(selectedProduct)
     -- TODO: Set the PackageDetail when it is ready
     self.packageDetail:hideMask()
