@@ -1,6 +1,6 @@
 local widget = require( "widget" )
 local native = require( "native" )
-
+local ProgressBar = require( "libs.ProgressBar.ProgressBar" )
 local CTextField = require( "Views.TextFields.CTextField" )
 local CLabel = require( "Views.Labels.CLabel" )
 local CButton = require( "Views.Buttons.CButton" )
@@ -168,6 +168,7 @@ local function shiftUp()
             isStepAnimationRunning = true
             
             if( step == 0 )then
+                progressBar:setProgress(519)
                 transition.to( addressInformationView, {time=400, y= -220,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
             end
         end
@@ -198,6 +199,9 @@ function scene:createScene( event )
 
         logo = display.newImage( "Assets/Logo.png", 50, 55, true )
         controlBar = ControlBar.new()
+        progressBar = ProgressBar.new({x=323,y=60}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
+        progressBar:setProgress(438)
+        
         buttomWhiteMask = display.newRect( 40, 690, 1200, 110 )
         buttomWhiteMask:setFillColor( 1,0,0 )
         backButton = CButton.new( "GERİ", "backButton", self, 40, 700, 0 )
@@ -220,6 +224,7 @@ function scene:createScene( event )
 --------------------------------------------
 
 		group:insert( logo )
+                group:insert( progressBar )
                 group:insert( controlBar )
                 group:insert( appointmentPlanningView )
                 group:insert( addressInformationView )

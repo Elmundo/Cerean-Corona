@@ -129,7 +129,7 @@ end
 function DataService:findCompanyForCity( cityCode )
 	local companies = self.companies
 	for i,company in ipairs(companies) do
-		local cities = Utils:componentSeperatedByString(company.cityList, ",")
+		local cities = Utils:componentSeperatedByString(company.CityList, ",")
 		for i,city in ipairs(cities) do
 			if (city == cityCode) then
 				return company

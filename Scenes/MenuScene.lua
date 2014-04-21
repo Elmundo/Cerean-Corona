@@ -4,6 +4,7 @@ local CButton = require( "Views.Buttons.CButton" )
 local ControlBar = require( "Views.ControlBar")
 local storyboard = require( "storyboard" )
 local BaseScene   = require "Scenes.BaseScene"
+local DataService = require( "Network.DataService" )
 local scene = BaseScene.new()
 --[[
 local storyboard = require( "storyboard" )
@@ -26,6 +27,8 @@ local registryPhaseButton
 local function onApplicationPhaseButtonTouched( event )
         --TODO: Delete Later - Baris
         if event.phase == "ended" then
+            DataService.phase = Phase.ApplicationPhase
+            DataService.webFormPage = "bayibasvuru"
             storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
         end
         --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
@@ -35,7 +38,11 @@ end
 
 local function onCallPhaseButtonTouched( event )
         --TODO: Delete Later - Baris
-        storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
+        if event.phase == "ended" then
+            DataService.phase = Phase.CallPhase
+            DataService.webFormPage = "bayibeniara"
+            storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
+        end
         
         --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
         
@@ -44,8 +51,11 @@ end
 
 local function onRegistryPhaseButtonTouched( event )
         --TODO: Delete Later - Baris
-        storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
-        
+        if event.phase == "ended" then
+            DataService.phase = Phase.RegistryPhase
+            DataService.webFormPage = "sayac"
+            storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
+        end
         --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
         
         return true

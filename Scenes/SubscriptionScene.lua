@@ -10,6 +10,7 @@ local native = require( "native" )
 local DataService = require( "Network.DataService" )
 local ParameterConfig = require( "ParameterConfig" )
 
+local ProgressBar = require( "libs.ProgressBar.ProgressBar" )
 local CButton = require( "Views.Buttons.CButton" )
 local ControlBar = require( "Views.ControlBar" )
 local SubscriberTypeView = require( "Views.SubscriberTypeView" )
@@ -48,6 +49,7 @@ local isStepAnimationRunning
 local logo
 local progressBar
 local controlBar
+local progressBar
 
 local subscriberTypeGroup
 
@@ -106,6 +108,7 @@ function scene:saveContent ( appStep, callback )
                                          callback(true, nil )
                                          scene:shiftUp()
                                      else
+                                         scene:alert( "Kayıt Başarısız", "Lütfen tekrar deneyiniz." )
                                          Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
                                          callback(false, responseData.ErrorMessage)
                                      end
@@ -242,10 +245,13 @@ function scene:onButtonTouchEnded( event )
                 else
                     print( errorDetail )
                 end
+                
                 if( DataService.phase == Phase.ApplicationPhase  )then
-                    local company = DataService:findCompanyForCity(DataService.selectedCity.ID)
-                    if( company ~= null )then
-                        
+                    --local company = DataService:findCompanyForCity(DataService.selectedCity.id)
+                    print( "Test")
+                    if( DataService.selectedCity ~= null )then
+                        counterInformationGroup:setCompany()
+                        --Set City
                     end
                 else 
                     
@@ -279,16 +285,20 @@ function scene:onButtonTouchEnded( event )
 end
 
 --local corporateInformationGroup
+local function looseFocus()
 
+end
 function scene:individualButtonPressed () 
     isCorporate = 0
     enterpriseInformationGroup.isVisible = false
+    progressBar:setProgress(98)
     transition.to( personalInformationGroup, {time=400, y= -235,onComplete= scene.doneStepAnimationNext , transition = easing.outExpo } )
 end
 
 function scene:enterpriseButtonPressed ()
     isCorporate = 1
     personalInformationGroup.isVisible = false
+    progressBar:setProgress(98)
     transition.to( enterpriseInformationGroup, {time=400, y= -235,onComplete = scene.doneStepAnimationNext , transition = easing.outExpo} )
 end
 
@@ -313,12 +323,14 @@ function scene:shiftUp()
         if( isStepAnimationRunning == false ) then
                 isStepAnimationRunning = true
                 if( step == 0 ) then
+                    scene:alert("Uyarı", "Herhangi bir abonelik tipi seçmediniz!" )
                         --personalInformationGroup:hideGroup(true)
                         --Do Nothing
                         --transition.to( personalInformationGroup, {time=400, y= -235, transition = easing.outExpo } )
                 elseif( step == 1 ) then
                         isStepAnimationRunning = true
                         personalInformationGroup:hideGroup(true)
+                        progressBar:setProgress(150)
                         transition.to( counterInformationGroup, {time=400, y= -190,onComplete=scene.doneStepAnimationNext,  transition = easing.outExpo } )
                                     
                         --saveContent(appStep)
@@ -372,6 +384,8 @@ function scene:createScene( event )
         fibaLogo = display.newImage( "Assets/FibaGroup.png", 1030, 760 )
         --controlBar
         --progressBar
+        progressBar = ProgressBar.new({x=323,y=60}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
+        progressBar:setProgress(46)
 --------------------------------------------
 
         counterInformationGroup = CounterInformationView.new()
@@ -386,6 +400,7 @@ function scene:createScene( event )
         subscriberTypeGroup = SubscriberTypeView.new(self)
         --subscriberTypeGroup:addButtonEventListeners( scene.handleIndividualButtonEvent, scene.handleCorporateButtonEvent)
 		group:insert( logo )
+                group:insert( progressBar )
                 group:insert( controlBar )
 		group:insert( subscriberTypeGroup )
                 

@@ -76,6 +76,20 @@ function PersonalInformationView.new()
                 
             end
         end
+<<<<<<< HEAD
+=======
+        
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable    
+        end
+>>>>>>> 265d43b50b3b0d9695766b81d5f56db0b5bb7e82
         -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
         --END DDM GROUP
@@ -116,8 +130,11 @@ function PersonalInformationView.new()
                 MobilePhone = mobileField:getText(),
                 Email = "mbahadirb@gmail.com",--emailField:getText(),
                 CityId = "3a5edc95-0cf9-e211-ae2c-0050568e1778",--cityField:getValue(),--cityField:getText(),
+<<<<<<< HEAD
                 --DataService.selectedCity = DataService.cities
                 
+=======
+>>>>>>> 265d43b50b3b0d9695766b81d5f56db0b5bb7e82
                 CountyId = "a53d5df8-14f9-e211-ae2c-0050568e1778",--countyField:getText()
             }
              

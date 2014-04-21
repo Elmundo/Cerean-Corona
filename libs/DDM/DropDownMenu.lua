@@ -239,7 +239,20 @@ function DropDownMenu.new( params )
         return ddmValue
     end
     
+    function dropDownMenu:updateButton( value )
+        ddmValue = value 
+        buttonLabel.text = ddmValue.Name
+    end
+    
     function dropDownMenu:setValue(value)
+        --[[]
+        local params        = event.row.params
+        local index         = event.row.index
+        local ID            = ID
+        ddmValue            = params.value
+        buttonLabel.text    = ddmValue
+        dropDownMenu:hideTable(true)
+        --]]
         ddmValue = value
     end
     

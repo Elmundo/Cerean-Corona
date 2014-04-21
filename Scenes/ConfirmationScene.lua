@@ -89,7 +89,15 @@ function ConfirmationScene:sendMail()
             VerificationCode = DataService.verificationCode,
         }
     end
-    
+    DataService:sendMail("1", contentData, function (responseData)
+        if ConfirmationScene:isErrorCheckOk(responseData) == false then
+            ConfirmationScene:alert("UYARI!", responseData.responseDetail, "OK")
+        end
+    end, function (errorData)
+        Logger:error(self, "ConfirmationScene:sendMail", errorData)
+        ConfirmationScene:alert("UYARI!", "Mail gönderme istediğinde hata oluştu!", "OK")
+    end)
+    --[[]
     DataService:sendMail(MailType.MailTypeVerification, contentData, function (responseData)
         if ConfirmationScene:isErrorCheckOk(responseData) == false then
             ConfirmationScene:alert("UYARI!", responseData.responseDetail, "OK")
@@ -98,6 +106,7 @@ function ConfirmationScene:sendMail()
         Logger:error(self, "ConfirmationScene:sendMail", errorData)
         ConfirmationScene:alert("UYARI!", "Mail gönderme istediğinde hata oluştu!", "OK")
     end)
+    --]]
 end
 
 function ConfirmationScene:sendCustomerNumberMail()
@@ -150,54 +159,53 @@ function ConfirmationScene:getContent()
     if DataService.phase == Phase.CallPhase then
         content = {
             WebFormPage = DataService.webFormPage,
-            VerificationCode = confirmationCodeText.text,
+            VerificationCode = verificationTextField:getText(),
             CustomerId = DataService.customerId,
             MeterId = "",
             QuoteId = "",
             AppointmentId = DataService.appointmentId,
-            AddressIdVisition = DataService.addressIdVisiting,
+            AddressIdVisiting = DataService.addressIdVisiting,
         }
     elseif DataService.phase == Phase.RegistryPhase then
         content = {
             WebFormPage = DataService.webFormPage,
-            VerificationCode = confirmationCodeText.text,
+            VerificationCode = verificationTextField:getText(),
             CustomerId = DataService.customerId,
             MeterId = DataService.meterId,
             QuoteId = DataService.quoteId,
             AppointmentId = DataService.appointmentId,
-            AddressIdVisition = DataService.addressIdVisiting,
+            AddressIdVisiting = DataService.addressIdVisiting,
         }
     elseif DataService.phase == Phase.ApplicationPhase then
         content = {
             WebFormPage = DataService.webFormPage,
-            VerificationCode = confirmationCodeText.text,
+            VerificationCode = verificationTextField:getText(),
             CustomerId = DataService.customerId,
-            MeterId = DataService.meterSerialNumber,
+            MeterId = DataService.meterId,
             QuoteId = DataService.quoteId,
             AppointmentId = DataService.appointmentId,
-            AddressIdVisition = DataService.addressIdVisiting,
+            AddressIdVisiting = DataService.addressIdVisiting,
         }
     end
-    
     return content
 end
 
 function ConfirmationScene:saveContent(step, callback)
     local contentData = self:getContent()
-    
+    contentData["step"] = step 
     DataService:saveContent(contentData, function (responseData)
         if ConfirmationScene:isErrorCheckOk(responseData) then
             Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is success!")
             DataService.customerId = responseData.CustomerId
             DataService.customerNumber = responseData.CustomerNumber
-            callback(YES, nil)
+            callback(true, nil)
         else
             Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is failure!")
-            callback(NO, responseData.ErrorDetail)
+            callback(false, responseData.ErrorDetail)
         end
     end, function (errorData)
         Logger:debug(self, "ConfirmationScene:saveContent", "Step 6 is failure!")
-        callback(NO, errorData.Description)
+        callback(false, errorData.Description)
     end)
     
 end
@@ -254,7 +262,7 @@ function ConfirmationScene:createScene( event )
     
     -- VERIFICATION TEXT FIELD
     verificationTextField = CTextField.new(display.contentWidth*0.5 - 320, 
-                                                display.contentHeight*0.5 + 90)
+                                                display.contentHeight*0.5 + 90, 240, 40)
     
     -- SEND AGAIN BUTTON
     sendAgainButton = widget.newButton({left  = 318,

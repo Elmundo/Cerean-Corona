@@ -267,8 +267,8 @@ function scene:createScene( event )
     userNameLabel = CLabel.new( "Kullanıcı Kodu", centerX-120, centerY-35, 15)
     passwordLabel = CLabel.new( "Şifre", centerX-120, centerY+35, 15)
 
-    loginButton = CButton.new( "GİRİŞ YAP", "loginButton", self, centerX-90, centerY+110, 0 )
-
+    loginButton = CButton.new( "GİRİŞ YAP", "loginButton", self, centerX-20, centerY+110, 0 )
+    
     displayGroup:insert( loginBackground )
     displayGroup:insert( loginBox )
     displayGroup:insert( headerLabel )

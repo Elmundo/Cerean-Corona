@@ -5,6 +5,7 @@ local native = require( "native" )
 local widget = require( "widget" )
 
 local CLabel = require( "Views.Labels.Clabel" )
+local Calendar = require( "libs.Calendar.Calendar")
 
 
 function AppointmentPlanningView.new()
@@ -28,9 +29,14 @@ function AppointmentPlanningView.new()
     local backgroundLeftImage
     local backgroundRightImage
     local calendarView
+    local hoursTableHeader
+    local hourIcon
     local hoursTable
     
-    function onRowTouch ( event )
+    local publicFunctions = {}
+    local dayData
+    
+    local function onRowTouch ( event )
     --[[]
         for i = 1, hoursTable:getNumRows() do
             --print(hoursTable:getRowAtIndex( i ))
@@ -86,7 +92,7 @@ function AppointmentPlanningView.new()
     --event.target.index=index
     end 
 
-    function onRowRender( event )
+    local function onRowRender( event )
         local row = event.row
         local id = row.index
         local params = event.row.params
@@ -97,7 +103,7 @@ function AppointmentPlanningView.new()
         ]]
         
         row.hour = CLabel.new( params, 20, 15, 15 )
-        row.hour:setTextColor( 165/255, 161/255, 155/255 )
+        row.hour:setTextColor( 1, 1, 1, 1 )
         row:insert( row.hour )
         
         return true   
@@ -121,20 +127,20 @@ function AppointmentPlanningView.new()
     end
     
     appointmentPlanningBackground = display.newRect( 40, defaultYPos, 1200, 550 )
-    appointmentPlanningBackground:setFillColor( 1, 1, 0 )
+    --appointmentPlanningBackground:setFillColor( 1, 1, 0 )
     
     appointmentPlanningHeaderBackground = display.newRoundedRect( 40, defaultYPos, 1200, 40, 5)
     appointmentPlanningHeaderBackground:setFillColor( 157/255, 20/255, 97/255 )
     
     appointmentPlanningHeaderText = display.newText( "Ziyaret Planlama", 60, defaultYPos+10, native.systemFontBold, 15 )
     appointmentPlanningHeaderText:setFillColor( 1,1,1 )
-    if( phase ) then
+    if( phase ) then --FOR TEST
         backgroundLeftImage = display.newImageRect( "Assets/VisualManLeft.png", 142, 136  )
         backgroundLeftImage.x = 100
         backgroundLeftImage.y = centerY-136/2
         backgroundRightImage = display.newImageRect( "Assets/VisualManRight.png", 142, 136  )
         backgroundRightImage.x = 1180-142
-        backgroundRighttImage.y = centerY-136/2
+        backgroundRightImage.y = centerY-136/2
         
     else 
         backgroundLeftImage = display.newImageRect( "Assets/VisualPhoneLeft.png", 102, 130  )
@@ -145,13 +151,24 @@ function AppointmentPlanningView.new()
         backgroundRightImage.y = centerY-130/2
     end
     
-    --calendarView = display.
+    function publicFunctions:daySellected(newDayData)
+        dayData = newDayData
+        print( dayData )
+        --
+    end
+    
+    calendarView = Calendar.new( publicFunctions, 380, 260, 320, 320 )
+    hoursTableHeader = display.newRect(710, 260, 120, 50)
+    hoursTableHeader:setFillColor(0.5, 1)
+    hourIcon = display.newImageRect("Assets/IconClock.png", 32, 32)
+    hourIcon.x = 755
+    hourIcon.y = 270
     hoursTable = widget.newTableView{
-            left = 640,
-            top = 320,
+            left = 710,
+            top = 310,
             width = 120,
-            height = 220,
-            backgroundColor = { 0.8, 0.8, 0.8, 0.8  },
+            height = 270,
+            backgroundColor = { 165/255, 161/255, 155/255, 1  },
             onRowRender = onRowRender,
             onRowTouch = onRowTouch,
             listener = scrollListener
@@ -163,8 +180,8 @@ function AppointmentPlanningView.new()
             rowWidth = 120,
             isCategory = false,
             lineColor = {0,0,0,0},
-            rowColor = { default = {0, 1, 1, 0}, over = { 74/255, 74/255, 74/255, 1} },
-            params = testData[i]
+            rowColor = { default = {0, 1, 1, 0}, over = { 165/255, 161/255, 155/255, 1}, },--74/255, 74/255, 74/255, 1} },
+            params = testData[i],
         }
     end
     for j = 1, hoursTable:getNumRows() do
@@ -174,8 +191,11 @@ function AppointmentPlanningView.new()
     end
     contentGroup:insert( backgroundLeftImage )
     contentGroup:insert(backgroundRightImage )
-    contentGroup:insert( hoursTable )
-     
+    contentGroup:insert( calendarView )
+    
+    contentGroup:insert( hoursTableHeader )
+    contentGroup:insert( hourIcon )
+    contentGroup:insert( hoursTable ) 
     appointmentPlanningGroup:insert( appointmentPlanningBackground )
     appointmentPlanningGroup:insert( appointmentPlanningHeaderBackground )
     appointmentPlanningGroup:insert( appointmentPlanningHeaderText )

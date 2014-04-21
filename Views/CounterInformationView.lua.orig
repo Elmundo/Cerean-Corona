@@ -63,6 +63,7 @@ function CounterInformationView.new()
         billAmountField:hide(isHidden)
     end
     
+<<<<<<< HEAD
         
 
     function counterInformationGroup:getContent () 
@@ -85,7 +86,36 @@ function CounterInformationView.new()
         return contentData
     end
     
-    function counterInformationGroup.didHideDDMTable( ID, isTableHidden)
+    -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --[[]
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable    
+        end
+        --]]
+        function counterInformationGroup.didDDMItemSelected(ddmValue, ID, index)
+            if( ID == "DistrubitionCompany")then
+                --TODO:setBillImage
+            elseif( ID == "SupplierCompany" )then
+                --TODO:setBillImage
+            elseif( ID == "SubscriberGroup" )then
+                --TODO:setBillImage
+            end
+        end
+        
+
+        
+        function counterInformationGroup.didHideDDMTable( ID, isTableHidden)
             if( ID == "DistrubitionCompany" )then
                 print("IH8DZ")
                 counterInformation.isVisible = isTableHidden
@@ -103,14 +133,65 @@ function CounterInformationView.new()
                 inductiveCounterSerialNumberLabel.isVisible = isTableHidden
                 inductiveCounterSerialNumberField:hide(not isTableHidden)
             end
+        end
+        
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable  
+        end
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --END DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+
+    counterInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
+    --counterInformationGroupBackground:setFillColor( 0,0,1 )
+
+=======
+        
+
+    function counterInformationGroup:getContent () 
+        local contentData = {}
+
+        contentData = {
+            DistributorId = "19733ca2-0bf9-e211-ae2c-0050568e1778",--distrubitionCompanyField:getText()--Not TextField
+            SkaDescId = "17d03b5d-6f87-e311-9572-0050568e1778",--supplierCompanyField:getText()
+            CompanyCode = "035.25.16.51.56",--companyCodeField:getText()
+            MembershipNumber = "16516516",--subscriberGroupField:getText()
+            TariffCode = "546545",--recieptField:getText()
+            MembershipGroup = "ff0f17d9-3003-e311-aa19-0050568e1778",--subscriberGroupField:getText()
+            CustomerName = "Bahadır Böge",--customerNameField:getText()
+            MeterSerialNumber = counterSerialNumberField:getText(),
+            MeterSerialNumberAgain = inductiveCounterSerialNumberField:getText(),
+            MeterParameter = "5465",--counterMultiplierField:getText()
+            BillAmount = "454"--billAmountField:getText()
+       } 
+
+        return contentData
     end
+    
     -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
         --DDM GROUP
         -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
-        
-        
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable    
+        end
         
         function counterInformationGroup.didDDMItemSelected(ddmValue, ID, index)
             if( ID == "DistrubitionCompany")then
@@ -123,9 +204,47 @@ function CounterInformationView.new()
         end
         
 
-        counterInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
-        --counterInformationGroupBackground:setFillColor( 0,0,1 )
+        
+        function counterInformationGroup.didHideDDMTable( ID, isTableHidden)
+            if( ID == "DistrubitionCompany" )then
+                print("IH8DZ")
+                counterInformation.isVisible = isTableHidden
+                companyCodeLabel.isVisible = isTableHidden
+                companyCodeField:hide(not isTableHidden)
+                recieptLabel.isVisible = isTableHidden
+                recieptField:hide(not isTableHidden)
+            elseif( ID == "SupplierCompany" )then
+                
+                subscriberNumberLabel.isVisible = isTableHidden
+                subscriberNumberField:hide(not isTableHidden)
+                subscriberGroupLabel.isVisible = isTableHidden
+                --subscriberGroupField.hideDDM(isTableHidden)
+            elseif( ID == "SubscriberGroup")then
+                inductiveCounterSerialNumberLabel.isVisible = isTableHidden
+                inductiveCounterSerialNumberField:hide(not isTableHidden)
+            end
+        end
+        
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable  
+        end
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --END DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
 
+    counterInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
+    --counterInformationGroupBackground:setFillColor( 0,0,1 )
+
+>>>>>>> 265d43b50b3b0d9695766b81d5f56db0b5bb7e82
     counterInformationHeaderBackground = display.newRoundedRect( 40, 420, 1200, 40, 5 )
     counterInformationHeaderBackground:setFillColor( 255/255, 107/255, 0 )
 
@@ -230,17 +349,6 @@ function CounterInformationView.new()
     billAmountField  = display.newRoundedRect( centerX-180, 780, 240, 30, 5 )
     billAmountField:setFillColor( 0.5, 0.5, 0.5 )
     --]]
-    
-    local function getDropDownList( dataTable )
-            local returnTable = {}
-            for i=1, #dataTable do
-                returnTable[i] = {
-                                    value = dataTable[i].Name,
-                                    id = dataTable[i].ID,
-                                 }
-            end
-            return returnTable    
-        end
     subscriberGroupField = DropDownMenu.new{
                                 dataList = getDropDownList(DataService.membershipgroups),
                                 ID = "SubscriberGroup",
@@ -273,7 +381,8 @@ function CounterInformationView.new()
                                 x = centerX-60-120,
                                 y = 505,
                             }
-                     
+    
+                            
     local dummyBillImage = display.newImage("Assets/BillImages/Akdeniz.jpg", 0, 0, true)
     --display.newImageRect("Assets/BillImages/b_enerjisa.jpg", 510, 1285, true)
     --display.newImage("Assets/BillImages/b_enerjisa.jpg", 0, 0)
@@ -330,32 +439,7 @@ function CounterInformationView.new()
     counterInformationGroup.y = 230
     --counterInformationGroup.alpha = 0
     
-    function counterInformationGroup:setCompany()
-        local company = DataService:findCompanyForCity(DataService.selectedCity.id)
-        if( company == nil )then
-            print( "Nil City" )
-        else 
-            distrubitionCompanyField:updateButton(company)
-            --[[
-            distrubitionCompanyField:updateButton(company)
-            billImageScrollView.dummyBillImage = display.newImage( "Assets/BillImages/" .. company.Image .. ".jpg", 0, 0, true)
-            billImageScrollView = widget.newScrollView{
-                    top = 465,
-                    left = 730,
-                    width = 510,
-                    height = 387,
-                    scrollWidth = 510,
-                    scrollHeight = 1432,
-                    -- Visual Options
-                    backgroundColor = { 0.8, 0.8, 0.8 }
-            }
-            billImageScrollView:insert(dummyBillImage)
-
-            counterInformationGroup:insert(billImageScrollView)
-            --]]
-        end
-    end
-       
+        
     return counterInformationGroup
 end
 
