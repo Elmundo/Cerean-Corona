@@ -84,27 +84,24 @@ function scene:saveContent ( appStep, callback )
         else
             contentData = enterpriseInformationGroup:getContent() -- TODO: enterpriseGroup:getContent()
         end
-        
         --Add a check for corporate later
         contentData["step"] = appStep
         contentData["IsCorporate"] = isCorporate--Add value to hold
         contentData["VerificationCode"] = DataService.verificationCode
         --DataService.verificationCode
         
-        local test = DataService
-        --[[]
-        if( DataService.customerId == not nil ) then
+        if( DataService.customerId ~= "" ) then
             contentData["CustomerId"] = DataService.customerId
             contentData["CustomerNumber"] = DataService.customerNumber
         end
-        --]]
+        
         DataService:saveContent( contentData, 
                                  function (responseData) -- Success callback
                                      
                                      if scene:isErrorCheckOk(responseData) then
                                          Logger:debug(scene, "scene:saveContent", "Step 1 is success!")
                                          DataService.customerId = responseData.CustomerId
-                                         DataService.customerNumber = responseData.UstomerNumber
+                                         DataService.customerNumber = responseData.CustomerNumber
                                          callback(true, nil )
                                          scene:shiftUp()
                                      else
@@ -132,7 +129,7 @@ function scene:saveContent ( appStep, callback )
         --BAHADIR'dan:altta content data'dan aldım o bilgileri
         --Deneyip silicem
         local contentData = counterInformationGroup:getContent()
-        DataService.meterId = contentData["MeterId"]
+        --DataService.meterId = contentData["MeterId"]
         contentData["step"] = appStep
         
         if( DataService.phase == Phase.RegistryPhase ) then
@@ -142,11 +139,13 @@ function scene:saveContent ( appStep, callback )
         end
         
         --Below code for back from forward views
-        if( DataService.meterId == null ) then
-           if( DataService.phase == Phase.RegistryPhase ) then  
+        if( DataService.meterId ~= "" ) then
+            if( DataService.phase == Phase.RegistryPhase ) then  
                 contentData["VerificationCode"] = DataService.verificationCode
                 contentData["CustomerId"] = DataService.customer.customerId
-           else
+            else
+                --contentData["CustomerId"] = DataService.customerId
+                --contentData["CustomerNumber"] = DataService.customerNumber
                 contentData["MeterId"] = DataService.meterId
            end
         end
@@ -444,6 +443,9 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
         local group = self.view
+        if( DataService.meterId ~= "" )then
+            step = 2
+        end
         
         -----------------------------------------------------------------------------
 

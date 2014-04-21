@@ -150,7 +150,7 @@ end
 
 function PackageScene.onBackButton(event)
     if event.phase == "ended" then
-        --storyboard.gotoScene("Scenes.ConfirmationScene", "slideLeft", 400 )
+        storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 400 )
     end
 end
 

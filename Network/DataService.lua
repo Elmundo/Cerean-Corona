@@ -111,13 +111,13 @@ function DataService:resetCachedData( )
 	self.webFormPage = ""
 	self.meterSerialNumber = ""
 
-	self.cities = nil
-	self.companies = nil
-	self.suppliers = nil
-	self.membershipgroups = nil
-	self.meterList = nil
+	--self.cities = nil
+	--self.companies = nil
+	--self.suppliers = nil
+	--self.membershipgroups = nil
+	--self.meterList = nil
 	self.products = nil
-	self.timeIntervals = nil
+	--self.timeIntervals = nil
 
 	self.sellectedCity = nil
 	self.phase = -1

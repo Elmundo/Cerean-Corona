@@ -9,8 +9,8 @@ local Logger      = require "libs.Log.Logger"
 
 -- GLOBAL MailType Enum
 MailType = {
-    MailTypeVerification = 1,
-    MailTypeCustomerNumber = 4,
+    MailTypeVerification = "1",
+    MailTypeCustomerNumber = "4",
 }
 
 -- ConfirmationScene Module
@@ -337,6 +337,7 @@ local superEnterScene = ConfirmationScene.enterScene
 function ConfirmationScene:enterScene(event)
     --Call parent enterScene method
     superEnterScene(self, event)
+    ConfirmationScene:sendMail()
 end
 
 

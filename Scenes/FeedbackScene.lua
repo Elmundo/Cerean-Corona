@@ -4,7 +4,7 @@ local storyboard  = require "storyboard"
 local BaseScene   = require "Scenes.BaseScene"
 local ProgressBar = require "libs.ProgressBar.ProgressBar"
 local CTextField  = require "Views.TextFields.CTextField"
-
+local DataService = require( "Network.DataService" )
 -- FeedbackScene Module
 local FeedbackScene = BaseScene.new()
 
@@ -94,7 +94,9 @@ FeedbackScene:addEventListener("createScene")
 function FeedbackScene:enterScene(event)
     timer.performWithDelay(1000, 
                             function (event)
-                                storyboard.gotoScene("Scenes.PackageScene", "slideRight", 400)
+                                DataService:resetCachedData()
+                                storyboard.purgeAll()
+                                storyboard.gotoScene("Scenes.MenuScene", "slideRight", 400)
                             end, 
                             1)
 end
