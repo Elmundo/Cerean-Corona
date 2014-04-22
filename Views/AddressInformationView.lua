@@ -155,10 +155,12 @@ function AddressInformationView.new()
     postalCodeLabel1 = display.newText( "Posta Kodu", 60, 570, native.systemFontBold, 15 )
     postalCodeLabel1:setFillColor( 0, 0, 0 )
     postalCodeField1 = CTextField.new(50, 590, 240, 40)
+    postalCodeField1:setKeyboardType( "number" )
     
     postalCodeLabel2 = display.newText( "Posta Kodu", 620, 570, native.systemFontBold, 15 )
     postalCodeLabel2:setFillColor( 0, 0, 0 )
     postalCodeField2 = CTextField.new(610, 590, 240, 40)
+    postalCodeField2:setKeyboardType( "number" )
     
     cityLabel1 = display.newText( "İl", 60, 640, native.systemFontBold, 15 )
     cityLabel1:setFillColor( 0, 0, 0 )
@@ -166,34 +168,43 @@ function AddressInformationView.new()
     phoneLabel1 = display.newText( "Sabit Telefon", 60, 710, native.systemFontBold, 15 )
     phoneLabel1:setFillColor( 0, 0, 0 )
     phoneField1 = CTextField.new(50, 730, 240, 40)
+    phoneField1:setKeyboardType( "phone" )
     
     mobileLabel1 = display.newText( "Mobil Telefon", 320, 710, native.systemFontBold, 15 )
     mobileLabel1:setFillColor( 0, 0, 0 )
     mobileField1 = CTextField.new(310, 730, 240, 40)
+    mobileField1:setKeyboardType( "phone" )
     
     phoneLabel2 = display.newText( "Sabit Telefon", 620, 710, native.systemFontBold, 15 )
     phoneLabel2:setFillColor( 0, 0, 0 )
     phoneField2 = CTextField.new(610, 730, 240, 40)
+    phoneField2:setKeyboardType( "phone" )
     
     mobileLabel2 = display.newText( "Mobil Telefon", 880, 710, native.systemFontBold, 15 )
     mobileLabel2:setFillColor( 0, 0, 0 )
     mobileField2 = CTextField.new(870, 730, 240, 40)
+    mobileField2:setKeyboardType( "phone" )
     
     faxLabel1 = display.newText( "Faks", 60, 780, native.systemFontBold, 15 )
     faxLabel1:setFillColor( 0, 0, 0 )
     faxField1 = CTextField.new(50, 800, 240, 40)
+    faxField1:setKeyboardType("phone")
     
     emailLabel1 = display.newText( "E-Posta Adresi", 320, 780, native.systemFontBold, 15 )
     emailLabel1:setFillColor( 0, 0, 0 )
     emailField1 = CTextField.new(310, 800, 240, 40)
+    emailField1:setKeyboardType("email")
     
     faxLabel2 = display.newText( "Faks", 620, 780, native.systemFontBold, 15 )
     faxLabel2:setFillColor( 0, 0, 0 )
     faxField2 = CTextField.new(610, 800, 240, 40)
+    faxField2:setKeyboardType("phone")
     
     emailLabel2 = display.newText( "E-Posta Adresi", 880, 780, native.systemFontBold, 15 )
     emailLabel2:setFillColor( 0, 0, 0 )
     emailField2 = CTextField.new(870, 800, 240, 40)
+    emailField2:setKeyboardType("email")
+    
     function addressInformationView.didHideDDMTable( ID, isTableHidden)
         if( ID ==  "CityField1" )then
             phoneLabel1.isVisible = isTableHidden

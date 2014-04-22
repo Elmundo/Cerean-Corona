@@ -41,12 +41,62 @@ function EnterpriseInformationView.new()
 	local cityField
 	local countyLabel
 	local countyField
+        
+        local counties
 
 	local centerX = display.contentCenterX
 	local centerY = display.contentCenterY
         
         enterpriseInformationGroup = display.newGroup( )
 	contentGroup = display.newGroup( )
+        
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        local function getDropDownList( dataTable )
+            local returnTable = {}
+            for i=1, #dataTable do
+                returnTable[i] = {
+                                    value = dataTable[i].Name,
+                                    id = dataTable[i].ID,
+                                 }
+            end
+            return returnTable    
+        end
+        
+        function enterpriseInformationGroup.didHideDDMTable( ID, isTableHidden)
+            
+        end
+        
+        function enterpriseInformationGroup.didDDMItemSelected(ddmValue, ID, index)
+            if( ID == "CityField")then
+                --local index = index
+                --Enable DDM?
+                --Start Spinner but first check for Corona Behaviour
+                --Save Sellected City
+                DataService.selectedCity = ddmValue
+                --Get County List
+                DataService:getParametersWithGuid(kParameterCounties, ddmValue.id, nil, function(responseData)
+                    --Check for error
+                    print("Success")
+                    counties = getDropDownList(responseData)
+                    countyField:loadData(counties)
+                end, 
+                    function(errorData)
+                        --Error Handling
+                        print("Fail")
+                    end)
+            elseif( ID == "CountyField") then
+                
+            end
+        end
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
+        --END DDM GROUP
+        -------------------------------------------------------------------------------------------------------------
+        -------------------------------------------------------------------------------------------------------------
         
         function enterpriseInformationGroup:hideGroup ( isHidden )
             
@@ -58,8 +108,8 @@ function EnterpriseInformationView.new()
             representativePhoneField:hide(isHidden)
             phoneField:hide(isHidden)
             emailField:hide(isHidden)
-            cityField:hide(isHidden)
-            countyField:hide(isHidden)
+            --cityField:hide(isHidden)
+            --countyField:hide(isHidden)
             --[[]
             if( isHidden )then
                 contentGroup.alpha = 0
@@ -122,6 +172,7 @@ function EnterpriseInformationView.new()
     taxNumberLabel = display.newText( "Vergi Numarası", 2*centerX-400, 500, native.systemFontBold, 15 )
     taxNumberLabel:setFillColor( 0, 0, 0 )
     taxNumberField = CTextField.new(2*centerX-410, 520, 360, 40)
+    taxNumberField:setKeyboardType("number")
     --[[
     mobileField = display.newRoundedRect( 2*centerX-410, 520, 360, 40, 5 )
     mobileField:setFillColor( 0.5, 0.5, 0.5 )
@@ -140,21 +191,35 @@ function EnterpriseInformationView.new()
     representativePhoneLabel = display.newText( "Yetkili Telefon Numarası", 2*centerX-400, 570, native.systemFontBold, 15 )
     representativePhoneLabel:setFillColor( 0,0,0 )
     representativePhoneField = CTextField.new(2*centerX-410, 590, 360, 40)
+    representativePhoneField:setKeyboardType("phone")
     
     phoneLabel = display.newText( "Sabit Telefon", 60, 640, native.systemFontBold, 15 )
     phoneLabel:setFillColor( 0,0,0 )
     phoneField = CTextField.new(50, 660, 360, 40)
+    phoneField:setKeyboardType("phone")
 
     emailLabel = display.newText( "E-Posta Adresi", centerX-170, 640, native.systemFontBold, 15 )
     emailLabel:setFillColor( 0,0,0 )
     emailField = CTextField.new(centerX-180, 660, 360, 40)
+    emailField:setKeyboardType("email")
     
     locationInformation = display.newText( "2. Konum Bilgileri", 60, 710, native.systemFontBold, 17 )
     locationInformation:setFillColor( 0, 0, 0 )
 
     cityLabel = display.newText( "İl", 60, 730, native.systemFontBold, 17 )
     cityLabel:setFillColor( 0, 0, 0 )
-    cityField = CTextField.new(50, 750, 360, 40)
+    cityField = DropDownMenu.new{
+                                dataList = getDropDownList(DataService.cities),
+                                ID = "CityField",
+                                parent = enterpriseInformationGroup,
+                                delegate = enterpriseInformationGroup,
+                                visibleCellCount = 2,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = 50,
+                                y = 750,
+                            }
+    --CTextField.new(50, 750, 360, 40)
     --[[]
     cityField = display.newRoundedRect( 50, 680, 360, 40, 5 )
     cityField:setFillColor( 0.5, 0.5, 0.5 )
@@ -162,7 +227,17 @@ function EnterpriseInformationView.new()
     
     countyLabel = display.newText( "İlçe", centerX-170, 730, native.systemFontBold, 17 )
     countyLabel:setFillColor( 0, 0, 0 )
-    countyField = CTextField.new(centerX-180, 750, 360, 40)
+    countyField = DropDownMenu.new{
+                                ID = "CountyField",
+                                parent = enterpriseInformationGroup,
+                                delegate = enterpriseInformationGroup,
+                                visibleCellCount = 2,
+                                buttonWidth = 360,
+                                buttonHeight = 40,
+                                x = centerX-180,
+                                y = 750,
+                            }
+    --CTextField.new(centerX-180, 750, 360, 40)
     --[[]
     countyField = display.newRoundedRect( centerX-180, 680, 360, 40, 5 )
     countyField:setFillColor( 0.5, 0.5, 0.5 )
@@ -199,7 +274,17 @@ function EnterpriseInformationView.new()
     enterpriseInformationGroup:insert( contentGroup )
     enterpriseInformationGroup.y = 185
     --personalInformationGroup.alpha = 0
-
+    
+    function enterpriseInformationGroup:onViewInit()
+        cityField.addListener()
+        countyField.addListener()
+    end
+    
+    function enterpriseInformationGroup:onViewDelete()
+        cityField.destroy()
+        countyField.destroy()
+    end
+    
     return enterpriseInformationGroup
 end
 

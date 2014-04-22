@@ -287,6 +287,7 @@ local function looseFocus()
 end
 function scene:individualButtonPressed () 
     isCorporate = 0
+    personalInformationGroup.isVisible = true
     enterpriseInformationGroup.isVisible = false
     progressBar:setProgress(98)
     transition.to( personalInformationGroup, {time=400, y= -235,onComplete= scene.doneStepAnimationNext , transition = easing.outExpo } )
@@ -295,6 +296,7 @@ end
 function scene:enterpriseButtonPressed ()
     isCorporate = 1
     personalInformationGroup.isVisible = false
+    enterpriseInformationGroup.isVisible = true
     progressBar:setProgress(98)
     transition.to( enterpriseInformationGroup, {time=400, y= -235,onComplete = scene.doneStepAnimationNext , transition = easing.outExpo} )
 end
