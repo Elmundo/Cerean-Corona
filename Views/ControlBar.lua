@@ -3,7 +3,7 @@ local display = require( "display" )
 local CLabel = require( "Views.Labels.CLabel" )
 --local CButton = require( "Views.Buttons.CButton" )
 
-module( ... )
+local ControlBar = {}
 
 local displayGroup 
 local background
@@ -11,11 +11,13 @@ local background
 local icon
 local userTitleLabel
 
+local delegate
+
 local exitIcon
 local exitText
 local exitButton
 
-function new( )
+function ControlBar.new( delegate )
 
 	displayGroup = display.newGroup( )
         
@@ -26,6 +28,12 @@ function new( )
         userTitleLabel = CLabel.new( "Yeni Kullanıcı", 45, 15, 15 )
         userTitleLabel:setTextColor( 0, 0, 0 )
         
+        delegate = delegate
+        
+        local function onExitButtonTouched( event )
+            delegate:logout()
+        end
+        
         exitIcon = display.newImage( "Assets/IconLogoutGray.png", 1220, 15 )
         exitText = CLabel.new( "Çıkış Yap", 1150, 15, 15 )
         exitText:setTextColor( 0, 0, 0 )
@@ -34,7 +42,8 @@ function new( )
                 y = 15,
    		width = 110,
                 height = 20,
-                label = ""
+                label = "",
+                onEvent = onExitButtonTouched,
 	}
         --[[
         exitButton = widget.newButton{
@@ -73,6 +82,6 @@ function new( )
         displayGroup.y = 0
         
 	return displayGroup
-        
-
 end
+
+return ControlBar

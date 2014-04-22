@@ -262,13 +262,13 @@ function DropDownMenu.new( params )
     dropDownMenu:addEventListener("tap", dropDownMenu)
     -- Default visibilty of table is false
     dropDownMenu:hideTable(isTableHidden)
-    function DropDownMenu.addListener()
+    function dropDownMenu.addListener()
         
         Runtime:addEventListener("userInput", hideDDMTable)
         Runtime:addEventListener("tap", hideDDMTable)
     end
     
-    function DropDownMenu.destroy()
+    function dropDownMenu.destroy()
         Runtime:removeEventListener("userInput", hideDDMTable)
         Runtime:removeEventListener("tap", hideDDMTable)
     end

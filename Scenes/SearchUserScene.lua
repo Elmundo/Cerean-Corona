@@ -46,7 +46,7 @@ local doneSearch
 local testData = {}
 
 
-function onSearchButtonTouched ()
+local function onSearchButtonTouched ()
     testData[1] = { name="Bahadır BÖGE", customerID="12345"}
     testData[2] = { name="Mustafa BÖGE", customerID="12346"}
     testData[3] = { name="John DOE", customerID="12347"}
@@ -65,7 +65,7 @@ function onSearchButtonTouched ()
     end
 end
 
-function onSearchComplete ()
+local function onSearchComplete ()
     resultTable:deleteAllRows()
     for i=1, #testData do
         resultTable:insertRow{
@@ -80,13 +80,13 @@ function onSearchComplete ()
     end
 end
 
-function onRowTouch ( event )
+local function onRowTouch ( event )
 --event.phase="tap", "press", "release", "swipeLeft", "swipeRight"
 --event.target=row
 --event.target.index=index
 end 
 
-function onRowRender( event )
+local function onRowRender( event )
     local row = event.row
     local id = row.index
     local params = event.row.params
@@ -107,18 +107,58 @@ function onRowRender( event )
     return true   
 end
 
-function scrollListener ( event )
+local function scrollListener ( event )
 --event.phase="began", "moved", "ended"
 --event.limitReached for border check
 --event.direction "up", "down"
 end
+
+local function onCancelButtonTouch ()
+    storyboard.removeAll()
+    storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
+end
+
+function scene:logout()
+    storyboard.removeAll()
+    storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
+end
+
+function scene:onInputBegan(event)
+    
+end
+
+local function searchForText( stringArray, searchText )
+    local returnTable = {}
+    for i=0, #stringArray do
+        local pos = string.find(stringArray[i], searchText)
+        
+        if( pos )then
+            returnTable[i] = stringArray[i] 
+        end
+    end
+    
+end
+
+function scene:onInputEdit(event)
+    --[[]
+    local searchText = event.text
+    for i=0,  #testData do
+        local position = string.find( testData[i], searchText )
+        if( position ~= nil )then
+            
+            return
+        end
+    end
+    --]]
+end
+
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
         local group = self.view
         
         doneSearch = false
         --logo = display.newImage( "Assets/Logo.png", 50, 55, true )
-        controlBar = ControlBar.new()
+        controlBar = ControlBar.new( self )
         headerImage = display.newImageRect( "Assets/MenuHeader.png", 1280, 100 )
         headerImage.x = 0
         headerImage.y = 50
@@ -130,7 +170,9 @@ function scene:createScene( event )
 
         searchFieldHeader = CLabel.new( "Müşteri Kodu İle Ara", 50, 240, 15 )
         --MAY NEED TO RESIZE
-        searchField = display.newRoundedRect(45, 260, 360, 40, 5)
+        searchField = CTextField.new(45, 260, 360, 40)
+        searchField:setDelegate(self)
+        --display.newRoundedRect(45, 260, 360, 40, 5)
         searchField:setFillColor( 165/255, 161/255, 155/255 )
         --CTextField.new( 45, 260 )
         searchButton = CButton.new( "ARA", "searchButton", onSearchButtonTouched, 415, 260 )
@@ -153,6 +195,7 @@ function scene:createScene( event )
         group:insert( searchFieldHeader )
         group:insert( searchField )
         group:insert( searchButton )
+        group:insert( resultTable )
 
         -----------------------------------------------------------------------------
 

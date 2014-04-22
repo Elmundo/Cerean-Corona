@@ -232,7 +232,17 @@ function PersonalInformationView.new()
     personalInformationGroup:insert( contentGroup )
     personalInformationGroup.y = 185
     --personalInformationGroup.alpha = 0
-
+    
+    function personalInformationGroup:onViewInit()
+        cityField.addListener()
+        countyField.addListener()
+    end
+    
+    function personalInformationGroup:onViewDelete()
+        cityField.destroy()
+        countyField.destroy()
+    end
+    
     return personalInformationGroup
 end
 

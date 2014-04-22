@@ -19,8 +19,6 @@ local EnterpriseInformationView = require( "Views.EnterpriseInformationView")
 local CounterInformationView = require( "Views.CounterInformationView" )
 local Utils = require("libs.Util.Utils")
 local Logger = require "libs.Log.Logger"
-
-local DropDownMenu = require( "libs.DDM.DropDownMenu" )
 ----------------------------------------------------------------------------------
 -- 
 --      NOTE:
@@ -364,6 +362,10 @@ function scene:shiftDown()
         end
 end
 
+function scene:logout()
+    storyboard.removeAll()
+    storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
+end
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
@@ -373,7 +375,7 @@ function scene:createScene( event )
         isStepAnimationRunning = false
 
         logo = display.newImage( "Assets/Logo.png", 50, 55, true )
-        controlBar = ControlBar.new()
+        controlBar = ControlBar.new( self )
         buttomWhiteMask = display.newRect( 40, 690, 1200, 110 )
         --buttomWhiteMask:setFillColor( 1,0,0 )
         backButton = CButton.new( "GERİ", "backButton", self, 40, 700, 0 )
@@ -412,7 +414,6 @@ function scene:createScene( event )
                 group:insert( nextButton )
                 group:insert( callCenterLogo )
                 group:insert( fibaLogo )
-        DropDownMenu.addListener()
         -----------------------------------------------------------------------------
 
         --      CREATE display objects and add them to 'group' here.
@@ -446,7 +447,8 @@ function scene:enterScene( event )
         if( DataService.meterId ~= "" )then
             step = 2
         end
-        
+        personalInformationGroup:onViewInit()
+        counterInformationGroup:onViewInit()
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -459,8 +461,8 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
         local group = self.view
-        
-        DropDownMenu.destroy()
+        personalInformationGroup:onViewDelete()
+        counterInformationGroup:onViewDelete()
         
         -----------------------------------------------------------------------------
 

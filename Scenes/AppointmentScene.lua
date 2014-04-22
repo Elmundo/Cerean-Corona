@@ -189,6 +189,10 @@ local function shiftDown()
         end
 end
 
+function scene:logout()
+    storyboard.removeAll()
+    storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
+end
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
@@ -198,7 +202,7 @@ function scene:createScene( event )
         isStepAnimationRunning = false
 
         logo = display.newImage( "Assets/Logo.png", 50, 55, true )
-        controlBar = ControlBar.new()
+        controlBar = ControlBar.new( self )
         progressBar = ProgressBar.new({x=323,y=60}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
         progressBar:setProgress(438)
         
@@ -264,6 +268,7 @@ end
 function scene:enterScene( event )
         local group = self.view
         isStepAnimationRunning = false
+        addressInformationView:onViewInit()
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -276,7 +281,7 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
         local group = self.view
-
+        addressInformationView:onViewDelete()
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)

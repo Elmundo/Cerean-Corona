@@ -15,6 +15,10 @@ function CTextField.new( xPos, yPos, width, height )
                 if( textFieldWrapper.delegate ~= nil ) then
                     textFieldWrapper.delegate:onInputBegan( event )
                 end
+            elseif( event.phase == "editing" )then
+                if( textFieldWrapper.delegate ~= nil ) then
+                    textFieldWrapper.delegate:onInputEdit( event )
+                end
             end
             -- For DDM to handle userInput event
             -- Normally, Runtime global object is not receiving "userInput event
@@ -40,7 +44,11 @@ function CTextField.new( xPos, yPos, width, height )
 	function textFieldWrapper:setDelegate( delegate )
             textFieldWrapper.delegate = delegate
 	end
-
+        
+        function textFieldWrapper:setKeyboardType( keyboardType )
+            textField.inputType = keyboardType
+        end
+        
 	function textFieldWrapper:getText()
 		return textField.text
 	end

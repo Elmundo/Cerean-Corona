@@ -355,7 +355,19 @@ function CounterInformationView.new()
             --]]
         end
     end
-       
+    
+    function counterInformationGroup:onViewInit()
+        distrubitionCompanyField.addListener()
+        supplierCompanyField.addListener()
+        subscriberGroupField.addListener()
+    end
+    
+    function counterInformationGroup:onViewDelete()
+        distrubitionCompanyField.destroy()
+        supplierCompanyField.destroy()
+        subscriberGroupField.destroy()
+    end 
+    
     return counterInformationGroup
 end
 

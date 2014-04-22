@@ -371,7 +371,19 @@ function AddressInformationView.new()
     addressInformationView.y = 220
     --addressInformationView.y = -220
     
+    function addressInformationView:onViewInit()
+        cityField1.addListener()
+        countyField1.addListener()
+        cityField2.addListener()
+        countyField2.addListener()
+    end
     
+    function addressInformationView:onViewDelete()
+        cityField1.destroy()
+        countyField1.destroy()
+        cityField2.destroy()
+        countyField2.destroy()
+    end
     
     return addressInformationView
 end

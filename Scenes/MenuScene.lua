@@ -61,6 +61,10 @@ local function onRegistryPhaseButtonTouched( event )
         return true
 end
 
+function scene:logout()
+    storyboard.removeAll()
+    storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
+end
 -------------------------------------------------------------------------------
 --Scene Evenet Handlers
 -------------------------------------------------------------------------------
@@ -68,7 +72,7 @@ function scene:createScene( event )
 	--storyboard.purgeScene( "Scenes.LoginScene" )
 
 	displayGroup = self.view
-        controlBar = ControlBar.new()
+        controlBar = ControlBar.new( self )
 	--testImage  = display.newImage( "avengerMinions.jpg", centerX, centerY, true )
 	menuHeader = display.newImageRect( "Assets/MenuHeader.png", 1280, 100 )
         menuHeader.x = 0
