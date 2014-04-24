@@ -17,18 +17,3 @@ application =
 		fps = 30,
 	},
 }
---[[
-	license =
-    {
-        google =
-        {
-            key = "Your key here",
-            policy = "this is optional",
-        },
-    },
-
-    launchPad = false,
-    
-    showRuntimeErrors = true,
-}
---]]
