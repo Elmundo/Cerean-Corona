@@ -46,7 +46,7 @@ function ConfirmationScene:isErrorCheckOk(responseData)
     return false
 end
 
-function ConfirmationScene.onNextButton(event)
+local function onNextButton(event)
     if event.phase == "ended" then
         ConfirmationScene:saveContent(step, function (success, errorDetail)
             if success then
@@ -62,11 +62,11 @@ function ConfirmationScene.onNextButton(event)
     end
 end
 
-function ConfirmationScene:onBackButton(event)
+local function onBackButton(event)
     if event.phase == "ended" then
         local prevScene = storyboard.getPrevious()
         --storyboard.gotoScene(prevScene, "slideRight", 400)
-        storyboard.gotoScene("Scenes.PackageScene", "slideRight", 400)
+        storyboard.gotoScene("Scenes.AppointmentScene", "slideRight", 400)
     end   
 end
 
@@ -298,7 +298,7 @@ function ConfirmationScene:createScene( event )
         labelAlign = "center",
         labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
         emboss = true,
-        onEvent = self.onBackButton,
+        onEvent = onBackButton
     })
     
     nextButtonBg = display.newRoundedRect( 885, 630, 105, 30, 0.5 )
@@ -312,7 +312,7 @@ function ConfirmationScene:createScene( event )
         labelAlign = "center",
         labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
         emboss = true,
-        onEvent = self.onNextButton,
+        onEvent = onNextButton
     })
     
     group:insert(headerBar)
