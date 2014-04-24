@@ -256,6 +256,10 @@ function DropDownMenu.new( params )
         ddmValue = value
     end
     
+    function dropDownMenu:setID(id)
+        ID = id
+    end
+    
     -- Add event listeners
     
     dropDownMenu:addEventListener("touch", dropDownMenu)

@@ -49,6 +49,9 @@ function CTextField.new( xPos, yPos, width, height )
         function textFieldWrapper:setKeyboardType( keyboardType )
             textField.inputType = keyboardType
         end
+        function textFieldWrapper:setText(text)
+            textField.text = text
+        end
         
 	function textFieldWrapper:getText()
 		return textField.text
