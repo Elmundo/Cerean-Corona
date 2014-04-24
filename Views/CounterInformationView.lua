@@ -5,6 +5,7 @@ local widget = require( "widget" )
 local CTextField = require( "Views.TextFields.CTextField" )
 local DropDownMenu = require "libs.DDM.DropDownMenu"
 local DataService = require( "Network.DataService" )
+local ImageMapper = require( "ImageMapper" )
 
 local CounterInformationView = {}
 
@@ -12,7 +13,11 @@ function CounterInformationView.new()
 
     local centerX = display.contentCenterX
     local centerY = display.contentCenterY
-
+    
+    local sellectedImageName
+    
+    local sellectionFieldMask
+    
     local counterInformationGroup
     local counterInformationGroupBackground
     local counterInformationHeaderText
@@ -48,7 +53,7 @@ function CounterInformationView.new()
 
     counterInformationGroup = display.newGroup( )
     contentGroup = display.newGroup( )
-
+    
     function counterInformationGroup:hideGroup( isHidden )
         --distrubitionCompanyField:hide(isHidden)
         --supplierCompanyField:hide(isHidden)
@@ -109,8 +114,31 @@ function CounterInformationView.new()
         --DDM GROUP
         -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
+        local function setBillImaageOffset ( frame )
+            sellectionFieldMask = display.newRect( frame[1], frame[2], frame[3], frame[4] )
+            --(frame[1]+billImageScrollView.x, billImageScrollView.y, frame[3], frame[4])
+            sellectionFieldMask:setFillColor( 1, 0, 0, 0.5)
+            billImageScrollView:insert(sellectionFieldMask)
+            billImageScrollView:scrollToPosition
+            {
+                x = 0,
+                y = -frame[2]+(billImageScrollView.height/2 ),
+                time = 400,
+                --onComplete = onScrollComplete
+            }
+
+        end
         
+        function counterInformationGroup:onInputBegan( event )
+            if( sellectedImageName )then
+                local imageMapperPosition = ImageMapper:findFieldRect( sellectedImageName, event.target.iD )
+                setBillImaageOffset(imageMapperPosition)
+            end
+        end
         
+        function counterInformationGroup:onInputEdit( event )
+            
+        end
         
         function counterInformationGroup.didDDMItemSelected(ddmValue, ID, index)
             if( ID == "DistrubitionCompany")then
@@ -171,6 +199,7 @@ function CounterInformationView.new()
     companyCodeLabel:setFillColor( 0,0,0 )
     companyCodeField = CTextField.new( 50, 575, 240, 30)
     companyCodeField:setKeyboardType("number")
+    companyCodeField:setDelegate(counterInformationGroup, "companyCode")
     --[[]
     companyCodeField  = display.newRoundedRect( 50, 575, 240, 30, 5 )
     companyCodeField:setFillColor( 0.5, 0.5, 0.5 )
@@ -342,6 +371,7 @@ function CounterInformationView.new()
         if( company == nil )then
             print( "Nil City" )
         else 
+            sellectedImageName = company.Image
             distrubitionCompanyField:updateButton(company)
             --[[
             distrubitionCompanyField:updateButton(company)

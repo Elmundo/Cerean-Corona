@@ -92,7 +92,7 @@ end
 
 local function getRectFromGroup(group, fieldName)
     
-    return gruop[fieldName]
+    return group[fieldName]
 
 end
 
@@ -128,5 +128,5 @@ function ImageMapper:findFieldRect(imageName, fieldName)
     return rectValue
     
 end
-
+init()
 return ImageMapper

@@ -41,8 +41,9 @@ function CTextField.new( xPos, yPos, width, height )
 	textFieldWrapper.x = xPos
 	textFieldWrapper.y = yPos
         
-	function textFieldWrapper:setDelegate( delegate )
+	function textFieldWrapper:setDelegate( delegate, iD )
             textFieldWrapper.delegate = delegate
+            textField.iD = iD
 	end
         
         function textFieldWrapper:setKeyboardType( keyboardType )

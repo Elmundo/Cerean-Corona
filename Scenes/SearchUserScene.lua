@@ -171,7 +171,7 @@ function scene:createScene( event )
         searchFieldHeader = CLabel.new( "Müşteri Kodu İle Ara", 50, 240, 15 )
         --MAY NEED TO RESIZE
         searchField = CTextField.new(45, 260, 360, 40)
-        searchField:setDelegate(self)
+        searchField:setDelegate(self, "searchField")
         --display.newRoundedRect(45, 260, 360, 40, 5)
         searchField:setFillColor( 165/255, 161/255, 155/255 )
         --CTextField.new( 45, 260 )

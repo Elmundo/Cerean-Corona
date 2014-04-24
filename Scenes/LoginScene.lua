@@ -258,7 +258,7 @@ function scene:createScene( event )
         loginBox.x = 1280/2- 378/2
         loginBox.y = 800/2 -498/2
 	userNameTextField = CTextField.new( centerX-120, centerY-15, 240, 40 )
-        userNameTextField:setDelegate(self)
+        userNameTextField:setDelegate(self, "userName")
 	passwordTextField = CTextField.new( centerX-120, centerY+55, 240, 40 ) 
 
     --inputField = native.newTextField(1280, 0, 220, 20, onTextInput )
