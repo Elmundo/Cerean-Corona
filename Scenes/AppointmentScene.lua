@@ -207,7 +207,7 @@ function scene:createScene( event )
         progressBar:setProgress(438)
         
         buttomWhiteMask = display.newRect( 40, 690, 1200, 110 )
-        buttomWhiteMask:setFillColor( 1,0,0 )
+        --buttomWhiteMask:setFillColor( 1,0,0 )
         backButton = CButton.new( "GERİ", "backButton", self, 40, 700, 0 )
         nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 700, 0 )
 

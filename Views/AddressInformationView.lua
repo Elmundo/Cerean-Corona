@@ -64,7 +64,14 @@ function AddressInformationView.new()
     
     local counties
     
-    local sameVisitingAndContactAddress
+    local mirrorDataButton
+    local mirrorDataButtonLabel
+    local communicationButton
+    local communicationButtonLabel
+    
+    local mirrorData
+    local communicationData
+    
     addressInformationView = display.newGroup()
     -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
@@ -126,10 +133,61 @@ function AddressInformationView.new()
         --END DDM GROUP
         -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
-    
-    
-    
     contentView = display.newGroup()
+    
+    local function mirrorDataButtonTouched( event )
+        if( event.phase == "ended" )then
+            print("MirrorData")
+            if( mirrorData )then
+                mirrorData = false 
+                mirrorDataButton:removeSelf()
+                mirrorDataButton = nil
+                mirrorDataButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
+                mirrorDataButton.x = 60
+                mirrorDataButton.y = 880
+                mirrorDataButton:addEventListener("touch", mirrorDataButtonTouched)
+                contentView:insert(mirrorDataButton)
+            else 
+                mirrorData = true 
+                mirrorDataButton:removeSelf()
+                mirrorDataButton = nil
+                mirrorDataButton = display.newImageRect("Assets/SwitchButtonActive.png", 48, 20)
+                mirrorDataButton.x = 60
+                mirrorDataButton.y = 880
+                mirrorDataButton:addEventListener("touch", mirrorDataButtonTouched)
+                contentView:insert(mirrorDataButton)
+            end
+        end
+        
+        if( mirrorData )then
+            
+        end
+    end
+    
+    local function communicationButtonTouched( event )
+        if( event.phase == "ended" )then
+            print("CommunicationData")
+            if( communicationData )then
+                communicationData = false 
+                communicationButton:removeSelf()
+                communicationButton = nil
+                communicationButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
+                communicationButton.x = 560
+                communicationButton.y = 880
+                communicationButton:addEventListener("touch", communicationButtonTouched)
+                contentView:insert(communicationButton)
+            else 
+                communicationData = true 
+                communicationButton:removeSelf()
+                communicationButton = nil
+                communicationButton = display.newImageRect("Assets/SwitchButtonActive.png", 48, 20)
+                communicationButton.x = 560
+                communicationButton.y = 880
+                communicationButton:addEventListener("touch", communicationButtonTouched)
+                contentView:insert(communicationButton)
+            end
+        end
+    end
     
     addressInformationGroupBackground = display.newRect( 40, 420, 1200, 500 )
     --personalInformationGroupBackground:setFillColor( 0, 1, 0 )
@@ -205,6 +263,22 @@ function AddressInformationView.new()
     emailField2 = CTextField.new(870, 800, 240, 40)
     emailField2:setKeyboardType("email")
     
+    mirrorDataButtonLabel = display.newText("Ziyaret adresim aynı zamanda düzenli iletişim adresim.", 120, 880, 0, 0, native.systemFont, 12)
+    mirrorDataButtonLabel:setFillColor( 0.5, 1 )
+    mirrorDataButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
+    mirrorDataButton.x = 60
+    mirrorDataButton.y = 880
+    mirrorData = false
+    mirrorDataButton:addEventListener("touch", mirrorDataButtonTouched)
+    
+    communicationButtonLabel = display.newText("Fatura adresim ziyaret adresimle aynı.", 620, 880, 0, 0, native.systemFont, 12)
+    communicationButtonLabel:setFillColor( 0.5, 1 )
+    communicationButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
+    communicationButton.x = 560
+    communicationButton.y = 880
+    communicationData = false
+    communicationButton:addEventListener("touch", communicationButtonTouched)
+    
     function addressInformationView.didHideDDMTable( ID, isTableHidden)
         if( ID ==  "CityField1" )then
             phoneLabel1.isVisible = isTableHidden
@@ -212,15 +286,15 @@ function AddressInformationView.new()
             faxLabel1.isVisible = isTableHidden
             faxField1:hide(not isTableHidden)
         elseif( ID == "CityField2" )then
-            mobileLabel1.isVisible = isTableHidden
-            mobileField1:hide(not isTableHidden)
-            emailLabel1.isVisible = isTableHidden
-            emailField1:hide(not isTableHidden)
-        elseif( ID == "CountyField1" )then
             phoneLabel2.isVisible = isTableHidden
             phoneField2:hide(not isTableHidden)
             faxLabel2.isVisible = isTableHidden
             faxField2:hide(not isTableHidden)
+        elseif( ID == "CountyField1" )then
+            mobileLabel1.isVisible = isTableHidden
+            mobileField1:hide(not isTableHidden)
+            emailLabel1.isVisible = isTableHidden
+            emailField1:hide(not isTableHidden)
         elseif( ID == "CountyField2" )then
             mobileLabel2.isVisible = isTableHidden
             mobileField2:hide(not isTableHidden)
@@ -376,6 +450,11 @@ function AddressInformationView.new()
     contentView:insert( faxField2 )
     contentView:insert( emailLabel2 )
     contentView:insert( emailField2 )
+    
+    contentView:insert( mirrorDataButtonLabel )
+    contentView:insert( mirrorDataButton )
+    contentView:insert( communicationButtonLabel )
+    contentView:insert( communicationButton )
     
     
     addressInformationView:insert( contentView )
