@@ -90,6 +90,27 @@ function CounterInformationView.new()
         return contentData
     end
     
+    local function setBillImageOffset ( frame )
+        billImageScrollView:setIsLocked( false )
+        if( sellectionFieldMask )then
+            sellectionFieldMask:removeSelf()
+            sellectionFieldMask = nil
+        end
+        sellectionFieldMask = display.newRect( frame[1], frame[2], frame[3], frame[4] )
+        --(frame[1]+billImageScrollView.x, billImageScrollView.y, frame[3], frame[4])
+        sellectionFieldMask:setFillColor( 1, 0, 0, 0.5)
+        billImageScrollView:insert(sellectionFieldMask)
+        billImageScrollView:scrollToPosition
+        {
+            x = 0,
+            y = -frame[2]+(billImageScrollView.height/2 ),
+            time = 400,
+            --onComplete = onScrollComplete
+        }
+
+        billImageScrollView:setIsLocked( true )
+    end
+        
     function counterInformationGroup.didHideDDMTable( ID, isTableHidden)
             if( ID == "DistrubitionCompany" )then
                 print("IH8DZ")
@@ -105,6 +126,12 @@ function CounterInformationView.new()
                 subscriberGroupLabel.isVisible = isTableHidden
                 --subscriberGroupField.hideDDM(isTableHidden)
             elseif( ID == "SubscriberGroup")then
+                if( not isTableHidden )then
+                    if( sellectedImageName )then
+                        local imageMapperPosition = ImageMapper:findFieldRect( sellectedImageName, "membershipGroup" )
+                        setBillImageOffset(imageMapperPosition)
+                    end
+                end
                 inductiveCounterSerialNumberLabel.isVisible = isTableHidden
                 inductiveCounterSerialNumberField:hide(not isTableHidden)
             end
@@ -114,25 +141,12 @@ function CounterInformationView.new()
         --DDM GROUP
         -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
-        local function setBillImaageOffset ( frame )
-            sellectionFieldMask = display.newRect( frame[1], frame[2], frame[3], frame[4] )
-            --(frame[1]+billImageScrollView.x, billImageScrollView.y, frame[3], frame[4])
-            sellectionFieldMask:setFillColor( 1, 0, 0, 0.5)
-            billImageScrollView:insert(sellectionFieldMask)
-            billImageScrollView:scrollToPosition
-            {
-                x = 0,
-                y = -frame[2]+(billImageScrollView.height/2 ),
-                time = 400,
-                --onComplete = onScrollComplete
-            }
-
-        end
+        
         
         function counterInformationGroup:onInputBegan( event )
             if( sellectedImageName )then
                 local imageMapperPosition = ImageMapper:findFieldRect( sellectedImageName, event.target.iD )
-                setBillImaageOffset(imageMapperPosition)
+                setBillImageOffset(imageMapperPosition)
             end
         end
         
@@ -208,6 +222,8 @@ function CounterInformationView.new()
     subscriberNumberLabel:setFillColor( 0,0,0 )
     subscriberNumberField = CTextField.new( centerX-180, 575, 240, 30)
     subscriberNumberField:setKeyboardType("number")
+    subscriberNumberField:setDelegate(counterInformationGroup, "membershipNumber")
+    --subscriberNumberField:setDelegate(counterInformationGroup, "subscri")
     --[[]
     subscriberNumberField  = display.newRoundedRect( centerX-180, 575, 240, 30, 5 )
     subscriberNumberField:setFillColor( 0.5, 0.5, 0.5 )
@@ -216,6 +232,7 @@ function CounterInformationView.new()
     recieptLabel:setFillColor( 0,0,0 )
     recieptField = CTextField.new( 50, 625, 240, 30)
     recieptField:setKeyboardType("number")
+    recieptField:setDelegate(counterInformationGroup, "tariffCode" )
     --[[]
     recieptField  = display.newRoundedRect( 50, 625, 240, 30, 5 )
     recieptField:setFillColor( 0.5, 0.5, 0.5 )
@@ -230,6 +247,7 @@ function CounterInformationView.new()
     customerNameLabel = display.newText( "Müşteri Adı/Ünvanı", 60, 655, native.systemFontBold, 15 )
     customerNameLabel:setFillColor( 0,0,0 ) 
     customerNameField = CTextField.new( 50, 675, 240, 30)
+    customerNameField:setDelegate(counterInformationGroup, "customerName")
     --[[]
     customerNameField = display.newRoundedRect( 50, 675, centerX-50, 30, 5 )
     customerNameField:setFillColor( 0.5,0.5,0.5 )
@@ -238,6 +256,7 @@ function CounterInformationView.new()
     counterSerialNumberLabel:setFillColor( 0,0,0 )
     counterSerialNumberField = CTextField.new( 50, 730, 240, 30)
     counterSerialNumberField:setKeyboardType("number")
+    counterSerialNumberField:setDelegate(counterInformationGroup, "meterSerialNumber")
     --[[]
     counterSerialNumberField  = display.newRoundedRect( 50, 730, 240, 30, 5 )
     counterSerialNumberField:setFillColor( 0.5, 0.5, 0.5 )
@@ -246,6 +265,7 @@ function CounterInformationView.new()
     inductiveCounterSerialNumberLabel:setFillColor( 0,0,0 )
     inductiveCounterSerialNumberField = CTextField.new( centerX-180, 730, 240, 30)
     inductiveCounterSerialNumberField:setKeyboardType("number")
+    inductiveCounterSerialNumberField:setDelegate(counterInformationGroup, "meterSerialNumberAgain")
     --[[]
     inductiveCounterSerialNumberField  = display.newRoundedRect( centerX-180, 730, 240, 30, 5 )
     inductiveCounterSerialNumberField:setFillColor( 0.5, 0.5, 0.5 )
@@ -254,6 +274,7 @@ function CounterInformationView.new()
     counterMultiplierLabel:setFillColor( 0,0,0 )
     counterMultiplierField = CTextField.new( 50, 780, 240, 30)
     counterMultiplierField:setKeyboardType("number")
+    counterMultiplierField:setDelegate(counterInformationGroup, "meterParameter")
     --[[]
     counterMultiplierField  = display.newRoundedRect( 50, 780, 240, 30, 5 )
     counterMultiplierField:setFillColor( 0.5, 0.5, 0.5 )
@@ -262,6 +283,7 @@ function CounterInformationView.new()
     billAmountLabel:setFillColor( 0,0,0 )
     billAmountField = CTextField.new( centerX-180, 780, 240, 30)
     billAmountField:setKeyboardType("number")
+    billAmountField:setDelegate(counterInformationGroup, "billAmount")
     --[[]
     billAmountField  = display.newRoundedRect( centerX-180, 780, 240, 30, 5 )
     billAmountField:setFillColor( 0.5, 0.5, 0.5 )
@@ -325,6 +347,7 @@ function CounterInformationView.new()
         -- Visual Options
         backgroundColor = { 0.8, 0.8, 0.8 }
     }
+    billImageScrollView:setIsLocked(true)
     billImageScrollView:insert(dummyBillImage)
 
     counterInformationGroup:insert(billImageScrollView)

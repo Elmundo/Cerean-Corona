@@ -30,7 +30,7 @@ function CTextField.new( xPos, yPos, width, height )
         background:setFillColor( 0.5, 0.5, 0.5 )
         
 	local textField = native.newTextField(3, 3, width-6, height-6 )
-        textField:setTextColor( 1, 0, 0 )
+        --textField:setTextColor( 1, 0, 0 )
         textField:addEventListener("userInput", onInput )
 
 	textFieldWrapper:insert( background )
