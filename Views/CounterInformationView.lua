@@ -48,7 +48,8 @@ function CounterInformationView.new()
     local counterMultiplierField
     local billAmountLabel
     local billAmountField
-
+    
+    local billImage
     local billImageScrollView
 
     counterInformationGroup = display.newGroup( )
@@ -88,6 +89,15 @@ function CounterInformationView.new()
        } 
 
         return contentData
+    end
+    
+    function counterInformationGroup:updateBillImage(imageName)
+        if( billImage )then
+            billImage:removeSelf()
+            billImage = nil
+        end
+        billImage = display.newImage( "Assets/BillImages/" .. imageName .. ".jpg", 0, 0, true)
+        billImageScrollView:insert( billImage )
     end
     
     local function setBillImageOffset ( frame )
@@ -157,6 +167,12 @@ function CounterInformationView.new()
         function counterInformationGroup.didDDMItemSelected(ddmValue, ID, index)
             if( ID == "DistrubitionCompany")then
                 --TODO:setBillImage
+                print( "Here" )
+                local companyID = ddmValue.id
+                local imageName = DataService:findImageForCompany(companyID)
+                counterInformationGroup:updateBillImage(imageName) 
+                
+                
             elseif( ID == "SupplierCompany" )then
                 --TODO:setBillImage
             elseif( ID == "SubscriberGroup" )then
@@ -332,7 +348,7 @@ function CounterInformationView.new()
                                 y = 505,
                             }
                      
-    local dummyBillImage = display.newImage("Assets/BillImages/Akdeniz.jpg", 0, 0, true)
+    billImage = display.newImage("Assets/BillImages/Akdeniz.jpg", 0, 0, true)
     --display.newImageRect("Assets/BillImages/b_enerjisa.jpg", 510, 1285, true)
     --display.newImage("Assets/BillImages/b_enerjisa.jpg", 0, 0)
     --display.newImageRect("Assets/BillImages/Akdeniz.jpg", 510, 1285)
@@ -348,7 +364,7 @@ function CounterInformationView.new()
         backgroundColor = { 0.8, 0.8, 0.8 }
     }
     billImageScrollView:setIsLocked(true)
-    billImageScrollView:insert(dummyBillImage)
+    billImageScrollView:insert(billImage)
 
     counterInformationGroup:insert(billImageScrollView)
 
@@ -396,6 +412,7 @@ function CounterInformationView.new()
         else 
             sellectedImageName = company.Image
             distrubitionCompanyField:updateButton(company)
+            counterInformationGroup:updateBillImage(company.Image)
             --[[
             distrubitionCompanyField:updateButton(company)
             billImageScrollView.dummyBillImage = display.newImage( "Assets/BillImages/" .. company.Image .. ".jpg", 0, 0, true)
