@@ -4,7 +4,7 @@ local widget          = require "widget"
 local storyboard      = require "storyboard"
 local ProgressBar     = require "libs.ProgressBar.ProgressBar"
 local PackageScroller = require "Views.PackageScroller"
-local PackageView     = require "Views.PackageDetail"
+local PackageDetail     = require "Views.PackageDetail"
 local Utils           = require "libs.Util.Utils"
 local DataService     = require "Network.DataService"
 local Logger          = require "libs.Log.Logger"
@@ -48,11 +48,11 @@ function PackageScene:createDummyProductList()
     local list = {}
     
     for i= 1, 10 do
-        productData = {
-            name = "ENDEKSLİ " .. i,
-            detail = "TARİFE DÖNEMİ BOYUNCA TEDAŞ BİRİM FİYATINA 1.4% İNDİRİM YAPILACAK ŞEKİLDE ELEKTRİK ENERJİSİ TEMİN EDİLECEKTİR",
-            startDate = "12.12.2014",
-            endDate = "12.12.2015", 
+        local productData = {
+            Name = "TICARETHANE UZUN",
+            Detail = "TARİFE DÖNEMİ BOYUNCA TEDAŞ BİRİM FİYATINA 1.4% İNDİRİM YAPILACAK ŞEKİLDE ELEKTRİK ENERJİSİ TEMİN EDİLECEKTİR",
+            StartDate = "12.12.2014",
+            EndDate = "12.12.2015", 
         }
         
         list[i] = productData
@@ -62,7 +62,13 @@ function PackageScene:createDummyProductList()
 end
 
 function PackageScene:getCombinedDateString(startDate, endDate)
-    -- TODO: İmplement later
+    
+    local startDateNewFormat = os.date("%d.%m.%Y", startDate)
+    local endDateNewFormat = os.date("%d.%m.%Y", endDate)
+    
+    local combinedDate = startDateNewFormat .. " - " .. endDateNewFormat
+    
+    return combinedDate
 end
 
 function PackageScene:saveContent(step, callback)
@@ -73,17 +79,7 @@ function PackageScene:saveContent(step, callback)
     if promotionCode == nil then
         promotionCode = ""
     end
-    
-    --[[]
-    contentData = {
-            WebFormPage = DataService.webFormPage,
-            ProductId = selectedProduct.ProductId,
-            PromotionCode = promotionCode,
-            CustomerId = DataService.customerId,
-            MeterId = DataService.meterId,
-        }
-    
-    --]]
+
     if DataService.phase == Phase.RegistryPhase then
         
         contentData = {
@@ -156,8 +152,8 @@ end
 
 function PackageScene:createScene( event)
     
-    products = DataService.products
-    --products = DataService.products--self:createDummyProductList()
+    --products = DataService.products
+    products = self:createDummyProductList()
     
     -- View of scene
     local group = self.view
@@ -187,13 +183,13 @@ function PackageScene:createScene( event)
     promotionText.x, promotionText.y = 30,290
         
     -- PACKAGE DETAIL
-    packageDetail = PackageView.new()
+    packageDetail = PackageDetail.new()
     packageDetail.x = 700
     packageDetail.y = 265
     PackageScene.packageDetail = packageDetail
    
     -- PROMOTION TABLE - SCROLLER
-    packageScroller  = PackageScroller.new({      x               = 30,
+    packageScroller  = PackageScroller.new({            x               = 30,
                                                         y               = 330,
                                                         width           = 640,
                                                         height          = 284,
@@ -269,9 +265,11 @@ PackageScene:addEventListener("destroyScene")
 
 -- Package Delegate
 function PackageScene:didPackageSelect( packageView )
-    print "We are here now!"
-    
+
     selectedProduct = packageView.product
+    
+    --TODO: Baris Open this line when working real data, not dummy ones
+    --selectedProduct.CombinedDate = self:getCombinedDateString(packageView.StartDate, packageView.EndDate)
     
     self.packageDetail:setPackageDetail(selectedProduct)
     -- TODO: Set the PackageDetail when it is ready

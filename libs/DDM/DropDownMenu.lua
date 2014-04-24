@@ -124,6 +124,8 @@ function DropDownMenu.new( params )
         local rowTitle  = display.newText(row, params.value, 0, 0, rowWidth, rowHeight, nil, cDefaultFontSize)
         rowTitle:setFillColor(0)
 
+        row.contentHeight = row.contentHeight + rowTitle.height
+        
         rowTitle.anchorY = 0.5
         rowTitle.x = 6
         rowTitle.y = (rowHeight * 0.5) + cDefaultFontSize/2

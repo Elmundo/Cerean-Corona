@@ -28,11 +28,12 @@ function PackageScroller.new(options)
     
     -- Properties
     packageScroller.yPos = 10
-    packageScroller.packageDataList = packageDataList
     packageScroller.delegate = options.delegate
     packageScroller.prevPackageView = nil
     packageScroller.products = options.products
     
+    local packageView = nil
+    local productData = nil
     function packageScroller:setMyScroller(list)
         
         for i=1,#list do
