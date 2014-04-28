@@ -6,6 +6,7 @@ local widget = require( "widget" )
 
 local CLabel = require( "Views.Labels.Clabel" )
 local Calendar = require( "libs.Calendar.Calendar")
+local DataService = require( "Network.DataService" )
 
 
 function AppointmentPlanningView.new()
@@ -33,63 +34,30 @@ function AppointmentPlanningView.new()
     local hourIcon
     local hoursTable
     
+    local sellectedRow
+    
     local publicFunctions = {}
     local dayData
     
     local function onRowTouch ( event )
-    --[[]
-        for i = 1, hoursTable:getNumRows() do
-            --print(hoursTable:getRowAtIndex( i ))
-            hoursTable:getRowAtIndex( i ):setRowColor{
-              default = { 74/255, 74/255, 74/255, 1 },
-              over = { 74/255, 74/255, 74/255, 1 }
-           }
-        end
-    --]]
-        
-        if( event.phase == "ended") then           
-            for i = 1, hoursTable:getNumRows() do
-                local curRow = hoursTable:getRowAtIndex( i )
-                print( curRow )
-                hoursTable:getRowAtIndex( i ):setRowColor  
-                {   default = {1, 0, 0},
-                    over = { 0,1,0 } }
+        if( event.phase == "release" )then
+            
+            if( sellectedRow )then
+                sellectedRow:setRowColor{ 
+                    default = { 74/255, 74/255, 74/255, 1 },
+                    over = { 74/255, 74/255, 74/255, 1 }
+                }
             end
-            event.target:setRowColor{ 
-                default = { 74/255, 74/255, 74/255, 1 },
-                over = { 74/255, 74/255, 74/255, 1 }
+            
+            hoursTable:getRowAtIndex( event.target.index ):setRowColor{
+                default = { 0, 1, 0, 1 },
+                over = { 0, 0, 0, 1}
             }
             
-            --[[
-            hoursTable:getRowAtIndex( 1 ):setRowColor{ 
-               default = { 1, 0, 0, 1 },--{ 74/255, 74/255, 74/255, 1 },
-               over = { 74/255, 74/255, 74/255, 1 }
-           }
-           hoursTable:getRowAtIndex( 2 ):setRowColor{ 
-               default = { 1, 0, 0, 1 },--{ 74/255, 74/255, 74/255, 1 },
-               over = { 74/255, 74/255, 74/255, 1 }
-           }
-           hoursTable:getRowAtIndex( 3 ):setRowColor{ 
-               default = { 1, 0, 0, 1 },--{ 74/255, 74/255, 74/255, 1 },
-               over = { 74/255, 74/255, 74/255, 1 }
-           }
-           --]]
-            --[[
-            event.target:setRowColor{ 
-                default = { 74/255, 74/255, 74/255, 1 },
-                over = { 74/255, 74/255, 74/255, 1 }
-            }
-            --]]
+            sellectedRow = hoursTable:getRowAtIndex( event.target.index )
+    
         end
-        --[[]
-        for i=1, #testData do
-            hoursTable:getRowAtIndex( i ):setRowColor( {default = {1, 1, 1, 1}, over = { 74/255, 74/255, 74/255, 1}} )
-        end
-        --]]
-        --event.row.setFillColor( 1, 1, 0 )
-    --event.phase="tap", "press", "release", "swipeLeft", "swipeRight"
-    --event.target=row
-    --event.target.index=index
+        
     end 
 
     local function onRowRender( event )
@@ -104,6 +72,10 @@ function AppointmentPlanningView.new()
         
         row.hour = CLabel.new( params, 20, 15, 15 )
         row.hour:setTextColor( 1, 1, 1, 1 )
+        row:setRowColor{ 
+            default = { 74/255, 74/255, 74/255, 1 },
+            over = { 74/255, 74/255, 74/255, 1 }
+        }
         row:insert( row.hour )
         
         return true   
@@ -173,22 +145,24 @@ function AppointmentPlanningView.new()
             onRowTouch = onRowTouch,
             listener = scrollListener
     }
-    
-    for i=1, #testData do
+    local testt = #(DataService.timeIntervals)
+    for i=1, #(DataService.timeIntervals) do
         hoursTable:insertRow{
             rowHeight = 60,
             rowWidth = 120,
             isCategory = false,
             lineColor = {0,0,0,0},
             rowColor = { default = {0, 1, 1, 0}, over = { 165/255, 161/255, 155/255, 1}, },--74/255, 74/255, 74/255, 1} },
-            params = testData[i],
+            params = DataService.timeIntervals[i].Name,
         }
     end
-    for j = 1, hoursTable:getNumRows() do
+    --[[]
+    for j = 1, #(DataService.timeIntervals) do--hoursTable:getNumRows() do
         hoursTable:getRowAtIndex( j ):setRowColor(  
         { default = {1, 0, 0},
         over = { 0,1,0 } })
     end
+    --]]
     contentGroup:insert( backgroundLeftImage )
     contentGroup:insert(backgroundRightImage )
     contentGroup:insert( calendarView )

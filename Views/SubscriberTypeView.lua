@@ -72,6 +72,16 @@ function SubscriberTypeView.new(delegate)
 			contentGroup:insert( corporateButton)
 
 			subscriberTypeGroup:insert( contentGroup )
+                        
+        function subscriberTypeGroup:enableButtons()
+            personalButton:setEnabled(true)
+            corporateButton:setEnabled(true)
+        end
+        
+        function subscriberTypeGroup:disableButtons()
+            personalButton:setEnabled(false)
+            corporateButton:setEnabled(false)
+        end
 
 	return subscriberTypeGroup
 end

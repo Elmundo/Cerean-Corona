@@ -182,7 +182,7 @@ function scene:onComplete ()
 end
 
 --onComplete
-function scene:doneStepAnimationNext ()
+local function doneStepAnimationNext ()
         if( step == 0 )then
             if( isCorporate == 0 )then
                 personalInformationGroup:hideGroup(false)
@@ -200,16 +200,18 @@ function scene:doneStepAnimationNext ()
         print( step )
 end
 
-function scene:doneStepAnimationBack()
+local function doneStepAnimationBack()
         if( step == 2 )then
             if( isCorporate == 0 )then
                 personalInformationGroup:hideGroup(false)
-                
+                enterpriseInformationGroup:hideGroup(true)
             else 
+                personalInformationGroup:hideGroup(true)
                 enterpriseInformationGroup:hideGroup(false)
             end
             
         elseif( step == 1 )then
+            
         end
         step = step - 1
         isStepAnimationRunning = false
@@ -280,17 +282,36 @@ function scene:onButtonTouchEnded( event )
     end
     
 end
+ 
+ 
+function scene:setFocus ( yPos )
+    
+    transition.to(scene.view, {time=400, y= yPos, transition = easing.outExpo})
+    --scene.view.y = yPos
+end 
 
---local corporateInformationGroup
-local function looseFocus()
+function scene:onInputBegan( event )
+        
+    scene:setFocus(-330)
+        
+end
+        
+function scene:onInputEdit( event )
 
 end
+
+function scene:onInputEnd( event )
+    scene:setFocus(0)
+end
+
+
 function scene:individualButtonPressed () 
     isCorporate = 0
     personalInformationGroup.isVisible = true
     enterpriseInformationGroup.isVisible = false
     progressBar:setProgress(98)
-    transition.to( personalInformationGroup, {time=400, y= -235,onComplete= scene.doneStepAnimationNext , transition = easing.outExpo } )
+    transition.to( personalInformationGroup, {time=400, y= -235,onComplete= doneStepAnimationNext , transition = easing.outExpo } )
+    subscriberTypeGroup:disableButtons()
 end
 
 function scene:enterpriseButtonPressed ()
@@ -298,15 +319,17 @@ function scene:enterpriseButtonPressed ()
     personalInformationGroup.isVisible = false
     enterpriseInformationGroup.isVisible = true
     progressBar:setProgress(98)
-    transition.to( enterpriseInformationGroup, {time=400, y= -235,onComplete = scene.doneStepAnimationNext , transition = easing.outExpo} )
+    transition.to( enterpriseInformationGroup, {time=400, y= -235,onComplete = doneStepAnimationNext , transition = easing.outExpo} )
+    subscriberTypeGroup:disableButtons()
 end
-
+--[[]
 function scene:handleIndividualButtonEvent( event )
 	-- body
 	if ( event.phase == "ended") then
             isCorporate = false
             print( "Ind" )
-            transition.to( personalInformationGroup, {time=400, y= -235,onComplete=scene.doneStepAnimationNext , transition = easing.outExpo } )
+            transition.to( personalInformationGroup, {time=400, y= -235,onComplete= doneStepAnimationNext , transition = easing.outExpo } )
+            subscriberTypeGroup:disableButtons()
 	end
 end
 
@@ -317,7 +340,7 @@ function scene:handleCorporateButtonEvent( event )
             print( "Corp" )
 	end
 end
-
+--]]
 function scene:shiftUp()
         if( isStepAnimationRunning == false ) then
                 isStepAnimationRunning = true
@@ -330,7 +353,7 @@ function scene:shiftUp()
                         isStepAnimationRunning = true
                         personalInformationGroup:hideGroup(true)
                         progressBar:setProgress(150)
-                        transition.to( counterInformationGroup, {time=400, y= -190,onComplete=scene.doneStepAnimationNext,  transition = easing.outExpo } )
+                        transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
                                     
                         --saveContent(appStep)
                         --[[
@@ -353,13 +376,27 @@ function scene:shiftDown()
                 if( step == 0 ) then
                         --Pop previous scene
                         local previousScene = storyboard.getPrevious()
+                        --TODO: if coming back from package view change this
                         storyboard.gotoScene(previousScene, "slideRight", 800 )
                 elseif ( step == 1 ) then
-                        personalInformationGroup:hideGroup(true)
-                        transition.to( personalInformationGroup, {time=400, y= 185,onComplete=scene.doneStepAnimationBack,  transition = easing.outExpo } )
+                    if( DataService.phase == Phase.RegistryPhase)then
+                        --back to previous scene
+                        storyboard.gotoScene("Scenes.SearchUserScene", "slideRight", 800 )
+                    else 
+                        if( isCorporate == 0 )then
+                            personalInformationGroup:hideGroup(true)
+                            enterpriseInformationGroup:hideGroup(false)
+                            transition.to( personalInformationGroup, {time=400, y= 185,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
+                        else
+                            personalInformationGroup:hideGroup(false)
+                            enterpriseInformationGroup:hideGroup(true)
+                            transition.to( enterpriseInformationGroup, {time=400, y= 185,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
+                        end
+                        subscriberTypeGroup:enableButtons()
+                    end
                 else 
                         counterInformationGroup:hideGroup(true)
-                        transition.to( counterInformationGroup, {time=400, y= 230,onComplete=scene.doneStepAnimationBack,  transition = easing.outExpo } )
+                        transition.to( counterInformationGroup, {time=400, y= 230,onComplete=doneStepAnimationBack,  transition = easing.outExpo } )
                 end
         end
 end
@@ -378,7 +415,7 @@ function scene:createScene( event )
 
         logo = display.newImage( "Assets/Logo.png", 50, 55, true )
         controlBar = ControlBar.new( self )
-        buttomWhiteMask = display.newRect( 40, 690, 1200, 110 )
+        buttomWhiteMask = display.newRect( 40, 690, 1200, 700 )
         --buttomWhiteMask:setFillColor( 1,0,0 )
         backButton = CButton.new( "GERİ", "backButton", self, 40, 700, 0 )
         nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 700, 0 )
@@ -391,10 +428,10 @@ function scene:createScene( event )
         progressBar:setProgress(46)
 --------------------------------------------
 
-        counterInformationGroup = CounterInformationView.new()
+        counterInformationGroup = CounterInformationView.new(self)
 
 --------------------------------------------
-        personalInformationGroup = PersonalInformationView.new()
+        personalInformationGroup = PersonalInformationView.new( scene )
         enterpriseInformationGroup = EnterpriseInformationView.new()
         personalInformationGroup:hideGroup(true)
         enterpriseInformationGroup:hideGroup(true)

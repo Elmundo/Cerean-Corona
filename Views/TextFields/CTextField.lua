@@ -19,6 +19,10 @@ function CTextField.new( xPos, yPos, width, height )
                 if( textFieldWrapper.delegate ~= nil ) then
                     textFieldWrapper.delegate:onInputEdit( event )
                 end
+            elseif( event.phase == "ended" )then
+                if( textFieldWrapper.delegate ~= nil ) then
+                    textFieldWrapper.delegate:onInputEnd( event )
+                end
             end
             -- For DDM to handle userInput event
             -- Normally, Runtime global object is not receiving "userInput event
