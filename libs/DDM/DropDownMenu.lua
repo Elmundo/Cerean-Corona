@@ -50,7 +50,7 @@ function DropDownMenu.new( params )
     local delegate         = params.delegate
     local ID               = params.ID
     local customParams     = params.customParams
-    
+    local fontSize         = params.fontSize or cDefaultFontSize
     --parent:insert(dropDownMenu)
     
     -- Properties
@@ -91,7 +91,7 @@ function DropDownMenu.new( params )
     button = display.newRect(dropDownMenu, 0, 0, buttonWidth, buttonHeight)
     button:setFillColor( 1, 1, 1 )
     
-    buttonLabel = display.newText(dropDownMenu, "SEÇİNİZ", 10, 10, buttonWidth, buttonHeight, nil, cDefaultFontSize)
+    buttonLabel = display.newText(dropDownMenu, "SEÇİNİZ", 10, 10, buttonWidth, buttonHeight, nil, fontSize)
     buttonLabel:setFillColor(0)
     
     -- Table Delegate - Touch Events
@@ -121,12 +121,12 @@ function DropDownMenu.new( params )
         local rowHeight = row.contentHeight
         local rowWidth  = row.contentWidth
 
-        local rowTitle  = display.newText(row, params.value, 0, 0, rowWidth, rowHeight, nil, cDefaultFontSize)
+        local rowTitle  = display.newText(row, params.value, 0, 0, rowWidth, rowHeight, nil, fontSize)
         rowTitle:setFillColor(0)
 
         rowTitle.anchorY = 0.5
         rowTitle.x = 6
-        rowTitle.y = (rowHeight * 0.5) + cDefaultFontSize/2
+        rowTitle.y = (rowHeight * 0.5) + fontSize/2
 
     end
     

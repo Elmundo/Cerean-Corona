@@ -153,10 +153,13 @@ local function cacheContents()
     end)
 
 end
+
 --TextField DELEGATE
+--[[]
 function scene:onInputBegan( event )
-  
+    --Set Keyboard Focus
 end
+--]]
 --Button DELEGATE  
 function scene:onButtonTouchEnded( event )
     print( "Working on Scene" )
@@ -192,12 +195,25 @@ function scene:onButtonTouchEnded( event )
         return true
     end
 end
+
+local function setFocus ( yPos )
+    
+    transition.to(scene.view, {time=400, y= yPos, transition = easing.outExpo})
+    --scene.view.y = yPos
+end 
+
 function scene:onInputBegan( event )
-            
+        
+    setFocus(-330)
+        
 end
         
 function scene:onInputEdit( event )
 
+end
+
+function scene:onInputEnd( event )
+    setFocus(0)
 end
 -- TODO: Bahadir - callback func test için
 function scene.didDDMItemSelected(params, id, index)
@@ -266,7 +282,7 @@ function scene:createScene( event )
 	userNameTextField = CTextField.new( centerX-120, centerY-15, 240, 40 )
         userNameTextField:setDelegate(self, "userName")
 	passwordTextField = CTextField.new( centerX-120, centerY+55, 240, 40 ) 
-
+        passwordTextField:setDelegate(self, "password")
     --inputField = native.newTextField(1280, 0, 220, 20, onTextInput )
 
     headerLabel = CLabel.new( "Bayi Girişi", centerX-120, centerY-70, 20)

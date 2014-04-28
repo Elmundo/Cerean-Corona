@@ -108,8 +108,8 @@ function EnterpriseInformationView.new()
             representativePhoneField:hide(isHidden)
             phoneField:hide(isHidden)
             emailField:hide(isHidden)
-            --cityField:hide(isHidden)
-            --countyField:hide(isHidden)
+            cityField:hideDDM(isHidden)
+            countyField:hideDDM(isHidden)
             --[[]
             if( isHidden )then
                 contentGroup.alpha = 0

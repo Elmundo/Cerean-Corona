@@ -9,11 +9,11 @@ local ImageMapper = require( "ImageMapper" )
 
 local CounterInformationView = {}
 
-function CounterInformationView.new()
+function CounterInformationView.new(delegate)
 
     local centerX = display.contentCenterX
     local centerY = display.contentCenterY
-    
+    local delegate = delegate
     local sellectedImageName
     
     local sellectionFieldMask
@@ -56,8 +56,8 @@ function CounterInformationView.new()
     contentGroup = display.newGroup( )
     
     function counterInformationGroup:hideGroup( isHidden )
-        --distrubitionCompanyField:hide(isHidden)
-        --supplierCompanyField:hide(isHidden)
+        distrubitionCompanyField:hideDDM(isHidden)
+        supplierCompanyField:hideDDM(isHidden)
         companyCodeField:hide(isHidden)
         subscriberNumberField:hide(isHidden)
         recieptField:hide(isHidden)
@@ -152,16 +152,23 @@ function CounterInformationView.new()
         -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
         
-        
+        local function setFocus ( yPos )
+            delegate:setFocus( yPos )
+        end 
         function counterInformationGroup:onInputBegan( event )
             if( sellectedImageName )then
                 local imageMapperPosition = ImageMapper:findFieldRect( sellectedImageName, event.target.iD )
                 setBillImageOffset(imageMapperPosition)
             end
+            setFocus(-280)
         end
         
         function counterInformationGroup:onInputEdit( event )
             
+        end
+        
+        function counterInformationGroup:onInputEnd( event )
+            setFocus(0)
         end
         
         function counterInformationGroup.didDDMItemSelected(ddmValue, ID, index)
@@ -193,7 +200,7 @@ function CounterInformationView.new()
     distrubitionCompanyInformation = display.newText( "1. Dağıtım Şirketi Bilgileri", 60, 465, native.systemFontBold, 17 )
     distrubitionCompanyInformation:setFillColor( 0, 0, 0 )
 
-    distrubitionCompanyLabel = display.newText( "Dağıtım Şirketi Adı", 60, 485, native.systemFontBold, 15 )
+    distrubitionCompanyLabel = display.newText( "Dağıtım Şirketi Adı", 60, 483, native.systemFontBold, 15 )
     distrubitionCompanyLabel:setFillColor( 0,0,0 )
     
     --CTextField.new( 50, 505, 240, 30)
@@ -214,7 +221,7 @@ function CounterInformationView.new()
     distrubitionCompanyField  = display.newRoundedRect( 50, 505, 240, 30, 5 )
     distrubitionCompanyField:setFillColor( 0.5, 0.5, 0.5 )
     --]]
-    supplierCompanyLabel = display.newText( "Tedarik Şirketi Adı", 470, 490, native.systemFontBold, 15 )
+    supplierCompanyLabel = display.newText( "Tedarik Şirketi Adı", 470, 483, native.systemFontBold, 15 )
     supplierCompanyLabel:setFillColor( 0,0,0 )
     
     --CTextField.new( centerX-60-120, 510, 240, 30)
@@ -324,7 +331,7 @@ function CounterInformationView.new()
                                 buttonHeight = 30,
                                 visibleCellCount = 3,
                                 x = centerX-180,
-                                y = 625,
+                                y = 628,
                             }
     
     distrubitionCompanyField = DropDownMenu.new{
@@ -335,7 +342,8 @@ function CounterInformationView.new()
                                 buttonWidth = 240,
                                 buttonHeight = 30,
                                 x = 50,
-                                y = 505,
+                                y = 508,
+                                fontSize = 10,
                             }
     supplierCompanyField = DropDownMenu.new{
                                 dataList = getDropDownList(DataService.suppliers),
@@ -345,10 +353,10 @@ function CounterInformationView.new()
                                 buttonWidth = 240,
                                 buttonHeight = 30,
                                 x = centerX-60-120,
-                                y = 505,
+                                y = 508,
                             }
                      
-    billImage = display.newImage("Assets/BillImages/Akdeniz.jpg", 0, 0, true)
+    billImage = display.newImage("Assets/BillImages/AKDENIZ.jpg", 0, 0, true)
     --display.newImageRect("Assets/BillImages/b_enerjisa.jpg", 510, 1285, true)
     --display.newImage("Assets/BillImages/b_enerjisa.jpg", 0, 0)
     --display.newImageRect("Assets/BillImages/Akdeniz.jpg", 510, 1285)
@@ -361,7 +369,7 @@ function CounterInformationView.new()
         scrollWidth = 510,
         scrollHeight = 1432,
         -- Visual Options
-        backgroundColor = { 0.8, 0.8, 0.8 }
+        --backgroundColor = { 0.8, 0.8, 0.8 }
     }
     billImageScrollView:setIsLocked(true)
     billImageScrollView:insert(billImage)

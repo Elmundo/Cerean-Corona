@@ -7,7 +7,8 @@ local DropDownMenu = require "libs.DDM.DropDownMenu"
 
 local PersonalInformationView = {}
 
-function PersonalInformationView.new()
+function PersonalInformationView.new(delegate)
+        
         
 	local personalInformationGroup
 	local personalInformationGroupBackground
@@ -15,6 +16,8 @@ function PersonalInformationView.new()
 	local personalInformationHeaderBackground
 	local contentGroup
 
+        local delegate = delegate
+        
 	local personalSubscriptionInformation
 	local nameLabel
 	local nameField
@@ -88,6 +91,8 @@ function PersonalInformationView.new()
             iDNumberField:hide(isHidden)
             mobileField:hide(isHidden)
             emailField:hide(isHidden)
+            cityField:hideDDM(isHidden)
+            countyField:hideDDM(isHidden)
             --cityField:hide(isHidden)
             --countyField:hide(isHidden)
             --[[]
@@ -127,7 +132,7 @@ function PersonalInformationView.new()
 	
 
 	--function personalInformationGroup:
-
+    
     personalInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
     --personalInformationGroupBackground:setFillColor( 0, 1, 0 )
 
@@ -143,6 +148,7 @@ function PersonalInformationView.new()
     nameLabel = display.newText( "Ad - Soyad", 60, 500, native.systemFontBold, 15 )
     nameLabel:setFillColor( 0, 0, 0 )
     nameField = CTextField.new(50, 520, 360, 40)
+    nameField:setDelegate(personalInformationGroup, "nameField")
     --[[
     nameField = display.newRoundedRect( 50, 520, 360, 40, 5 )
     nameField:setFillColor( 0.5, 0.5, 0.5 )
@@ -151,7 +157,7 @@ function PersonalInformationView.new()
     iDNumberLabel:setFillColor( 0, 0, 0 )
     iDNumberField = CTextField.new(centerX-180, 520, 360, 40)
     iDNumberField:setKeyboardType("number")
-    
+    iDNumberField:setDelegate(personalInformationGroup, "iDNumberField")
     --[[]
     iDNumberField = display.newRoundedRect( centerX-180, 520, 360, 40, 5 )
     iDNumberField:setFillColor( 0.5, 0.5, 0.5 )
@@ -160,6 +166,7 @@ function PersonalInformationView.new()
     mobileLabel:setFillColor( 0, 0, 0 )
     mobileField = CTextField.new(2*centerX-410, 520, 360, 40)
     mobileField:setKeyboardType("phone")
+    mobileField:setDelegate(personalInformationGroup, "mobileField")
     --[[
     mobileField = display.newRoundedRect( 2*centerX-410, 520, 360, 40, 5 )
     mobileField:setFillColor( 0.5, 0.5, 0.5 )
@@ -168,14 +175,15 @@ function PersonalInformationView.new()
     emailLabel:setFillColor( 0,0,0 )
     emailField = CTextField.new(50, 590, 360, 40)
     emailField:setKeyboardType("email")
+    emailField:setDelegate(personalInformationGroup, "emailField")
     --[[]
     emailField = display.newRoundedRect( 50, 590, 360, 40, 5 )
     emailField:setFillColor( 0.5, 0.5, 0.5 )
     --]]
-    locationInformation = display.newText( "2. Konum Bilgileri", 60, 640, native.systemFontBold, 17 )
+    locationInformation = display.newText( "2. Konum Bilgileri", 60, 635, native.systemFontBold, 17 )
     locationInformation:setFillColor( 0, 0, 0 )
 
-    cityLabel = display.newText( "İl", 60, 660, native.systemFontBold, 17 )
+    cityLabel = display.newText( "İl", 60, 655, native.systemFontBold, 17 )
     cityLabel:setFillColor( 0, 0, 0 )
     local dataList = DataService.cities
     
@@ -195,7 +203,7 @@ function PersonalInformationView.new()
     cityField:setFillColor( 0.5, 0.5, 0.5 )
     --]]
     
-    countyLabel = display.newText( "İlçe", centerX-170, 660, native.systemFontBold, 17 )
+    countyLabel = display.newText( "İlçe", centerX-170, 655, native.systemFontBold, 17 )
     countyLabel:setFillColor( 0, 0, 0 )
     countyField = DropDownMenu.new{
                                 ID = "CountyField",
@@ -245,6 +253,24 @@ function PersonalInformationView.new()
     function personalInformationGroup:onViewDelete()
         cityField.destroy()
         countyField.destroy()
+    end
+    
+    local function setFocus ( yPos )
+        delegate:setFocus( yPos )
+    end 
+
+    function personalInformationGroup:onInputBegan( event )
+
+        setFocus(-230)
+
+    end
+
+    function personalInformationGroup:onInputEdit( event )
+
+    end
+
+    function personalInformationGroup:onInputEnd( event )
+        setFocus(0)
     end
     
     return personalInformationGroup
