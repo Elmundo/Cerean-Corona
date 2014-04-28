@@ -192,7 +192,13 @@ function scene:onButtonTouchEnded( event )
         return true
     end
 end
+function scene:onInputBegan( event )
+            
+end
+        
+function scene:onInputEdit( event )
 
+end
 -- TODO: Bahadir - callback func test için
 function scene.didDDMItemSelected(params, id, index)
         

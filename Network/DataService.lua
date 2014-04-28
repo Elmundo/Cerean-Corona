@@ -152,6 +152,18 @@ function DataService:findCityForCityID( cityCode )
 	return nil
 end
 
+function DataService:findImageForCompany( companyCode )
+    local companies = self.companies
+    for i,company in ipairs(companies)do
+        if( company.ID == companyCode )then
+            return company.Image
+        end
+    end
+    
+    return nil
+    
+end
+
 function DataService:completeRequest( params )
 	local jsonFormat = json.encode( params )
 	local completedData = "d=" .. jsonFormat

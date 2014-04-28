@@ -167,6 +167,9 @@ function DropDownMenu.new( params )
     
     -- Drop Down Menu Methods
     function dropDownMenu:loadData(dataList)
+        
+        ddmTable:deleteAllRows()
+        
         for i = 1, #dataList do
             local params = dataList[i]
 
