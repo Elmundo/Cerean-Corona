@@ -33,9 +33,10 @@ function PackageView.new(options)
     -- Backgorund Image
     bgImage = display.newImageRect("Assets/Tariff.png", width, height)
     packageView:insert(bgImage)
-
+    
     -- Header Text
-    indexLabel = display.newText(packageView, product.Name, 90, 14, 290, 80, native.systemFontBold, 20)
+    indexLabel = display.newText(packageView, product.Name, width/2, 12, 0, 0, native.systemFontBold, 20)
+    indexLabel.anchorX = 0.5
     
     -- Check Icon
     iconImage  = display.newImage(packageView, "Assets/IconSelectTariffPressed.png", system.ResourceDirectory, -12, -9, true)
@@ -43,6 +44,7 @@ function PackageView.new(options)
     
     packageView:translate(options.x, options.y)
     
+    -- Touch event receivet
     -- Button - Only functionalty, no visual elements
     detailButton = widget.newButton{
         left    = 102,
@@ -60,10 +62,11 @@ function PackageView.new(options)
                         elseif event.phase == "ended" then
                             delegate:didPackageSelect(packageView)
                         end
+                    
                     end, 
     }
-    detailButton.isVisible = true
-    
+    detailButton.isVisible = false
+    detailButton.isHitTestable = true
     packageView:insert(detailButton)
     
     -- METHODS

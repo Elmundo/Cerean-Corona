@@ -29,7 +29,4 @@ Logger:debug("main", "general", "PixelWidth: " .. display.pixelWidth .. " PixelH
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 Logger:debug("main", "general", "ContentWidth: " .. display.contentWidth .. " ContentHeight: " .. display.contentHeight)
 
-
---storyboard.gotoScene( "Scenes.AppointmentScene", "slideLeft", 400)
-
 storyboard.gotoScene( "Scenes.LoginScene", "slideLeft", 400)
