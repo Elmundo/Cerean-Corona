@@ -40,19 +40,15 @@ function AppointmentPlanningView.new()
     local dayData
     
     local function onRowTouch ( event )
+        if( event.phase == "press" )then
+            event.row.background:setFillColor(74/255, 74/255, 74/255, 1)
+        end
+        
         if( event.phase == "release" )then
             
             if( sellectedRow )then
-                sellectedRow:setRowColor{ 
-                    default = { 74/255, 74/255, 74/255, 1 },
-                    over = { 74/255, 74/255, 74/255, 1 }
-                }
+                sellectedRow.background:setFillColor(165/255, 161/255, 155/255, 1)
             end
-            
-            hoursTable:getRowAtIndex( event.target.index ):setRowColor{
-                default = { 0, 1, 0, 1 },
-                over = { 0, 0, 0, 1}
-            }
             
             sellectedRow = hoursTable:getRowAtIndex( event.target.index )
     
@@ -69,13 +65,19 @@ function AppointmentPlanningView.new()
         row.bg:setFillColor( 0.9, 0.9, 0.9 )
         row:insert( row.bg )
         ]]
-        
+        row.background = display.newRect( 0, 0, 120, 60 )
+        row.background:setFillColor(165/255, 161/255, 155/255, 1)
         row.hour = CLabel.new( params, 20, 15, 15 )
         row.hour:setTextColor( 1, 1, 1, 1 )
+        --[[]
         row:setRowColor{ 
-            default = { 74/255, 74/255, 74/255, 1 },
-            over = { 74/255, 74/255, 74/255, 1 }
+            default = { 0, 1 },
+            over = { 0.5, 0.5 }
         }
+        --]]
+        
+        
+        row:insert( row.background )
         row:insert( row.hour )
         
         return true   

@@ -14,7 +14,7 @@ function DateBox.new( dateBoxType, dateText, delegate, xPos, yPos, width, height
     elseif( dateBoxType == DateBoxType.Sellectable )then
         background:setFillColor( 255/255, 107/255, 0/255, 1 )
     elseif( dateBoxType == DateBoxType.Sellected )then
-        background:setFillColor( 255/255, 107/255, 0/255, 1 )
+        background:setFillColor( 74/255, 74/255, 74/255, 1 )
     end
     
     local function onTap (event)
@@ -28,7 +28,7 @@ function DateBox.new( dateBoxType, dateText, delegate, xPos, yPos, width, height
             sellected = dateBox
         }
         delegate:dateBoxDelegate(params)
-        background:setFillColor( 0/255, 107/255, 0/255, 1 )
+        background:setFillColor( 74/255, 74/255, 74/255, 1 )
     end
     
     function dateBox:desellect()

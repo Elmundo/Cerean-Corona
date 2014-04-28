@@ -6,7 +6,6 @@ settings =
         default = "landscapeRight",
         supported = { "landscapeRight", "landscapeLeft" },
     },
-
     android =
     {
 
@@ -18,4 +17,3 @@ settings =
         },
     },
 }
-

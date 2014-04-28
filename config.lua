@@ -1,3 +1,4 @@
+
 application =
 {
 	content = 
@@ -7,7 +8,6 @@ application =
 		scale  = "letterbox",
 		xAlign = "left",
 		yAlign = "top",
-
 		imageSuffix = 
 		{
 			["-small"] = 0.375,

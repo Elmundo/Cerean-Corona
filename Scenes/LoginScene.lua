@@ -273,6 +273,7 @@ end
 --Scene Evenet Handlers
 -------------------------------------------------------------------------------
 function scene:createScene( event )
+    
 	displayGroup = self.view
 	loginBackground = display.newImageRect( "Assets/LoginBackground.png", 1280, 800 )
         

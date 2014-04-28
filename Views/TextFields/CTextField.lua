@@ -33,7 +33,10 @@ function CTextField.new( xPos, yPos, width, height )
         local background = display.newRoundedRect( 0, 0, width, height, 5 )
         background:setFillColor( 0.5, 0.5, 0.5 )
         
-	local textField = native.newTextField(3, 3, width-6, height-6 )
+	local textField = native.newTextField(4, height/2, width-8, height-8 )
+        textField.anchorY = 0.5
+        
+        textField.size = 10
         --textField:setTextColor( 1, 0, 0 )
         textField:addEventListener("userInput", onInput )
 

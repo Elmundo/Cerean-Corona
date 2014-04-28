@@ -8,8 +8,12 @@ local button
 
 function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
 	local buttonWrapper = display.newGroup( )
+        local label
         local function onButtonTouch( event )
-            if( event.phase == "ended" )then
+            if( event.phase == "began" )then
+               label:setFillColor( 0.5, 0.5 ) 
+            elseif( event.phase == "ended" )then
+                label:setFillColor( 1, 1 )
                 if( buttonWrapper.delegate ~= nil )then
                     buttonWrapper.delegate:onButtonTouchEnded( event )
                 end
@@ -18,6 +22,23 @@ function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
             return false
         end
         
+        --button = display.newRoundedRect(0, 0, 140, 40, 5)
+        --button:setFillColor(0, 1)
+        
+        label = display.newText( {
+            text = buttonLabel,
+            x = 70,
+            y = 20,
+            font = native.systemFont,
+            fontSize = 18,
+            align = "center",
+            })
+        --label:setTextColor(1, 1)
+        label:setFillColor( 1, 1 )
+        label.anchorX = 0.5
+        label.anchorY = 0.5
+        --button:addEventListener("touch", onButtonTouch )
+        --[[]
 	button = widget.newButton( 
 	{
 		left = 0,
@@ -33,13 +54,16 @@ function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
 		labelColor = { default={ 1, 1, 1 }, over={ 1, 1, 1, 0.5 } }
 			
 	} )
+        --]]
         buttonWrapper.delegate = delegate
         
 	local background = display.newRoundedRect( 0, 0, 140, 40, 5 )
 	background:setFillColor( 113/255, 27/255, 69/255 )
-	
+	background:addEventListener("touch", onButtonTouch )
+        background.id = buttonID
 	buttonWrapper:insert( background )
-	buttonWrapper:insert( button )
+        buttonWrapper:insert( label )
+	--buttonWrapper:insert( button )
 
 	buttonWrapper.x = xPos
 	buttonWrapper.y = yPos
