@@ -11,7 +11,7 @@ local DataService = require( "Network.DataService")
 
 local AddressInformationView = {}
 
-function AddressInformationView.new()
+function AddressInformationView.new( delegate )
     
     local addressInformationView
     local contentView
@@ -19,6 +19,8 @@ function AddressInformationView.new()
     local addressInformationGroupBackground
     local addressInformationHeaderText
     local addressInformationHeaderBackground
+    
+    local delegate = delegate
     
     local visitingAddressLabel
     local billingAddressLabel

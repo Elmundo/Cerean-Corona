@@ -10,7 +10,8 @@ local ImageMapper = require( "ImageMapper" )
 local CounterInformationView = {}
 
 function CounterInformationView.new(delegate)
-
+    local  viewFontSize= 8
+    
     local centerX = display.contentCenterX
     local centerY = display.contentCenterY
     local delegate = delegate
@@ -203,24 +204,6 @@ function CounterInformationView.new(delegate)
     distrubitionCompanyLabel = display.newText( "Dağıtım Şirketi Adı", 60, 483, native.systemFontBold, 15 )
     distrubitionCompanyLabel:setFillColor( 0,0,0 )
     
-    --CTextField.new( 50, 505, 240, 30)
-    --[[
-    DropDownMenu.new{
-                                dataList = getDropDownList(DataService.cities),
-                                ID = "DistrubitionCompany",
-                                parent = counterInformationGroup,
-                                delegate = counterInformationGroup,
-                                buttonWidth = 360,
-                                buttonHeight = 40,
-                                x = 50,
-                                y = 680,
-                            }
-    --]]
-    
-    --[[]
-    distrubitionCompanyField  = display.newRoundedRect( 50, 505, 240, 30, 5 )
-    distrubitionCompanyField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
     supplierCompanyLabel = display.newText( "Tedarik Şirketi Adı", 470, 483, native.systemFontBold, 15 )
     supplierCompanyLabel:setFillColor( 0,0,0 )
     
@@ -237,6 +220,7 @@ function CounterInformationView.new(delegate)
     companyCodeField = CTextField.new( 50, 575, 240, 30)
     companyCodeField:setKeyboardType("number")
     companyCodeField:setDelegate(counterInformationGroup, "companyCode")
+    companyCodeField:setFont(native.systemFont, viewFontSize)
     --[[]
     companyCodeField  = display.newRoundedRect( 50, 575, 240, 30, 5 )
     companyCodeField:setFillColor( 0.5, 0.5, 0.5 )
@@ -246,6 +230,7 @@ function CounterInformationView.new(delegate)
     subscriberNumberField = CTextField.new( centerX-180, 575, 240, 30)
     subscriberNumberField:setKeyboardType("number")
     subscriberNumberField:setDelegate(counterInformationGroup, "membershipNumber")
+    subscriberNumberField:setFont(native.systemFont, viewFontSize)
     --subscriberNumberField:setDelegate(counterInformationGroup, "subscri")
     --[[]
     subscriberNumberField  = display.newRoundedRect( centerX-180, 575, 240, 30, 5 )
@@ -256,21 +241,19 @@ function CounterInformationView.new(delegate)
     recieptField = CTextField.new( 50, 625, 240, 30)
     recieptField:setKeyboardType("number")
     recieptField:setDelegate(counterInformationGroup, "tariffCode" )
+    recieptField:setFont(native.systemFont, viewFontSize)
     --[[]
     recieptField  = display.newRoundedRect( 50, 625, 240, 30, 5 )
     recieptField:setFillColor( 0.5, 0.5, 0.5 )
     --]]
     subscriberGroupLabel = display.newText( "Abone Grubu", 470, 605, native.systemFontBold, 15 )
     subscriberGroupLabel:setFillColor( 0,0,0 )
-    --subscriberGroupField = CTextField.new( centerX-180, 625, 240, 30)
-    --[[]
-    subscriberGroupField  = display.newRoundedRect( centerX-180, 625, 240, 30, 5 )
-    subscriberGroupField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+    
     customerNameLabel = display.newText( "Müşteri Adı/Ünvanı", 60, 655, native.systemFontBold, 15 )
     customerNameLabel:setFillColor( 0,0,0 ) 
     customerNameField = CTextField.new( 50, 675, 240, 30)
     customerNameField:setDelegate(counterInformationGroup, "customerName")
+    customerNameField:setFont(native.systemFont, viewFontSize)
     --[[]
     customerNameField = display.newRoundedRect( 50, 675, centerX-50, 30, 5 )
     customerNameField:setFillColor( 0.5,0.5,0.5 )
@@ -280,6 +263,7 @@ function CounterInformationView.new(delegate)
     counterSerialNumberField = CTextField.new( 50, 730, 240, 30)
     counterSerialNumberField:setKeyboardType("number")
     counterSerialNumberField:setDelegate(counterInformationGroup, "meterSerialNumber")
+    counterSerialNumberField:setFont(native.systemFont, viewFontSize)
     --[[]
     counterSerialNumberField  = display.newRoundedRect( 50, 730, 240, 30, 5 )
     counterSerialNumberField:setFillColor( 0.5, 0.5, 0.5 )
@@ -289,6 +273,7 @@ function CounterInformationView.new(delegate)
     inductiveCounterSerialNumberField = CTextField.new( centerX-180, 730, 240, 30)
     inductiveCounterSerialNumberField:setKeyboardType("number")
     inductiveCounterSerialNumberField:setDelegate(counterInformationGroup, "meterSerialNumberAgain")
+    inductiveCounterSerialNumberField:setFont(native.systemFont, viewFontSize)
     --[[]
     inductiveCounterSerialNumberField  = display.newRoundedRect( centerX-180, 730, 240, 30, 5 )
     inductiveCounterSerialNumberField:setFillColor( 0.5, 0.5, 0.5 )
@@ -298,6 +283,7 @@ function CounterInformationView.new(delegate)
     counterMultiplierField = CTextField.new( 50, 780, 240, 30)
     counterMultiplierField:setKeyboardType("number")
     counterMultiplierField:setDelegate(counterInformationGroup, "meterParameter")
+    counterMultiplierField:setFont(native.systemFont, viewFontSize)
     --[[]
     counterMultiplierField  = display.newRoundedRect( 50, 780, 240, 30, 5 )
     counterMultiplierField:setFillColor( 0.5, 0.5, 0.5 )
@@ -307,6 +293,7 @@ function CounterInformationView.new(delegate)
     billAmountField = CTextField.new( centerX-180, 780, 240, 30)
     billAmountField:setKeyboardType("number")
     billAmountField:setDelegate(counterInformationGroup, "billAmount")
+    billAmountField:setFont(native.systemFont, viewFontSize)
     --[[]
     billAmountField  = display.newRoundedRect( centerX-180, 780, 240, 30, 5 )
     billAmountField:setFillColor( 0.5, 0.5, 0.5 )
@@ -314,6 +301,10 @@ function CounterInformationView.new(delegate)
     
     local function getDropDownList( dataTable )
             local returnTable = {}
+            if( dataTable == nil )then
+                    print "Error with Name of DDM"
+                end
+        
             for i=1, #dataTable do
                 returnTable[i] = {
                                     value = dataTable[i].Name,

@@ -149,37 +149,25 @@ function PersonalInformationView.new(delegate)
     nameLabel:setFillColor( 0, 0, 0 )
     nameField = CTextField.new(50, 520, 360, 40)
     nameField:setDelegate(personalInformationGroup, "nameField")
-    --[[
-    nameField = display.newRoundedRect( 50, 520, 360, 40, 5 )
-    nameField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+
     iDNumberLabel =  display.newText( "TC Kimlik No", centerX-170, 500, native.systemFontBold, 15 )
     iDNumberLabel:setFillColor( 0, 0, 0 )
     iDNumberField = CTextField.new(centerX-180, 520, 360, 40)
     iDNumberField:setKeyboardType("number")
     iDNumberField:setDelegate(personalInformationGroup, "iDNumberField")
-    --[[]
-    iDNumberField = display.newRoundedRect( centerX-180, 520, 360, 40, 5 )
-    iDNumberField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+
     mobileLabel = display.newText( "Mobil Telefon", 2*centerX-400, 500, native.systemFontBold, 15 )
     mobileLabel:setFillColor( 0, 0, 0 )
     mobileField = CTextField.new(2*centerX-410, 520, 360, 40)
     mobileField:setKeyboardType("phone")
     mobileField:setDelegate(personalInformationGroup, "mobileField")
-    --[[
-    mobileField = display.newRoundedRect( 2*centerX-410, 520, 360, 40, 5 )
-    mobileField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+
     emailLabel = display.newText( "E-Posta Adresi", 60, 570, native.systemFontBold, 15 )
     emailLabel:setFillColor( 0,0,0 )
     emailField = CTextField.new(50, 590, 360, 40)
     emailField:setKeyboardType("email")
     emailField:setDelegate(personalInformationGroup, "emailField")
-    --[[]
-    emailField = display.newRoundedRect( 50, 590, 360, 40, 5 )
-    emailField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+
     locationInformation = display.newText( "2. Konum Bilgileri", 60, 635, native.systemFontBold, 17 )
     locationInformation:setFillColor( 0, 0, 0 )
 
@@ -197,11 +185,6 @@ function PersonalInformationView.new(delegate)
                                 x = 50,
                                 y = 680,
                             }
-    --CTextField.new(50, 680, 360, 40)
-    --[[]
-    cityField = display.newRoundedRect( 50, 680, 360, 40, 5 )
-    cityField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
     
     countyLabel = display.newText( "İlçe", centerX-170, 655, native.systemFontBold, 17 )
     countyLabel:setFillColor( 0, 0, 0 )
@@ -214,13 +197,7 @@ function PersonalInformationView.new(delegate)
                                 x = centerX-180,
                                 y = 680,
                             }
-    
-    
-    --CTextField.new(centerX-180, 680, 360, 40)
-    --[[]
-    countyField = display.newRoundedRect( centerX-180, 680, 360, 40, 5 )
-    countyField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+
     
     personalInformationGroup:insert( personalInformationGroupBackground )
     personalInformationGroup:insert( personalInformationHeaderBackground )

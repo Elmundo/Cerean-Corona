@@ -2,6 +2,8 @@ local widget = require( "widget" )
 local native = require( "native" )
 local storyboard = require( "storyboard" )
 
+local DataService = require "Network.DataService"
+
 local CTextField = require( "Views.TextFields.CTextField" )
 local CLabel = require( "Views.Labels.CLabel" )
 local CButton = require( "Views.Buttons.CButton" )
@@ -43,38 +45,60 @@ local resultMessage
 local resultTable
 local doneSearch
 
-local testData = {}
+local searchData = {}
 
+
+local function isErrorCheckOk(responseData)
+    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
+        return true
+    end
+    
+    return false
+end
 
 local function onSearchButtonTouched ()
+    local customerId = searchField:getText()
+    
+    DataService:isCustomer(customerId, 
+        function(responseData)
+            if(isErrorCheckOk(responseData) )then
+                searchData = responseData
+                if( doneSearch ) then
+                    doneSearch = false
+                else 
+                    doneSearch = true
+                    resultTable:reloadData()
+                end
+
+                if( doneSearch ) then
+                    onSearchComplete()
+                end
+            end
+        end, 
+        function(errorData)
+            print "Error finding user"
+        end)
+    --[[]
     testData[1] = { name="Bahadır BÖGE", customerID="12345"}
     testData[2] = { name="Mustafa BÖGE", customerID="12346"}
     testData[3] = { name="John DOE", customerID="12347"}
     testData[4] = { name="Jane DOE", customerID="12348"}
     testData[5] = { name="Jack SPARROW", customerID="12349"}
     --Clear TableView
-    if( doneSearch ) then
-        doneSearch = false
-    else 
-        doneSearch = true
-        resultTable:reloadData()
-    end
     
-    if( doneSearch ) then
-        onSearchComplete()
-    end
+    --]]
 end
 
 local function onSearchComplete ()
     resultTable:deleteAllRows()
-    for i=1, #testData do
+    for i=1, #searchData do
         resultTable:insertRow{
             rowHeight = 60,
             isCategory = false,
             rowColor = { default = {1, 0, 0, 0}, over = { 0, 0, 0, 0} },
             params = {
-                name = testData[i].name,
-                id = testData[i].customerID
+                name = searchData[i].name,
+                id = searchData[i].customerID
             }
         }
     end
@@ -123,8 +147,18 @@ function scene:logout()
     storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
 end
 
-function scene:onInputBegan(event)
-    
+function scene:onInputBegan( event )
+        
+    --scene:setFocus(-330)
+        
+end
+        
+function scene:onInputEdit( event )
+
+end
+
+function scene:onInputEnd( event )
+    --scene:setFocus(0)
 end
 
 local function searchForText( stringArray, searchText )
@@ -173,7 +207,7 @@ function scene:createScene( event )
         searchField = CTextField.new(45, 260, 360, 40)
         searchField:setDelegate(self, "searchField")
         --display.newRoundedRect(45, 260, 360, 40, 5)
-        searchField:setFillColor( 165/255, 161/255, 155/255 )
+        --searchField:setFillColor( 165/255, 161/255, 155/255 )
         --CTextField.new( 45, 260 )
         searchButton = CButton.new( "ARA", "searchButton", onSearchButtonTouched, 415, 260 )
         

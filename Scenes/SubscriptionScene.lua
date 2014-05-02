@@ -64,7 +64,21 @@ local callCenterLogo
 local fibaLogo
 
 -- METHODS
+local function setFocus ( yPos )
+    transition.to(scene.view, {time=400, y= yPos, transition = easing.outExpo})
+end 
 
+local function onSceneTouch( event )
+    if( "began" == event.phase )then
+        if( event.target.isKeyboard )then
+        
+        else 
+            setFocus(0)
+            native.setKeyboardFocus(nil)
+        end
+            
+    end
+end
 -- Network Error handler, check type 2
 function scene:isErrorCheckOk(responseData)
     if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
@@ -220,7 +234,7 @@ end
 
 --TextField DELEGATE
 function scene:onInputBegan( event )
-  
+    setFocus( -330 )
 end
 --Button DELEGATE  
 function scene:onButtonTouchEnded( event )
@@ -263,14 +277,17 @@ function scene:onButtonTouchEnded( event )
                 if( isSuccess )then 
                     print( "SUCCEDED" )
                     DataService:getProduct(function(responseData)
-                                         DataService.products = responseData
-                                         Utils:printTable(responseData)
-                                         storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
+                                        if( responseData )then
+                                            DataService.products = responseData
+                                            Utils:printTable(responseData)
+                                            storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
+                                        else 
+                                            scene:alert("Servis Hatası", "Paket listesi boş geldi.")
+                                        end
                                          --scene:shiftUp()
                                      end, function(errorData) 
                                         Utils:printTable(errorData)
                                      end)
-                    --storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
                         print( "Next Scene" )
                 else
                     --Pop Alert
@@ -354,16 +371,9 @@ function scene:shiftUp()
                         personalInformationGroup:hideGroup(true)
                         progressBar:setProgress(150)
                         transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
-                                    
-                        --saveContent(appStep)
-                        --[[
-                        saveContent(kStepPersonel, function (responseData)
-                                                                transition.to( counterInformationGroup, {time=400, y= -190,onComplete=doneStepAnimationNext,  transition = easing.outExpo } )
-                                                            end )
-                                                            --]]
                         
                 else 
-                        --NextScenePackageScene
+                        
                         
                 end
         end
@@ -432,7 +442,7 @@ function scene:createScene( event )
 
 --------------------------------------------
         personalInformationGroup = PersonalInformationView.new( scene )
-        enterpriseInformationGroup = EnterpriseInformationView.new()
+        enterpriseInformationGroup = EnterpriseInformationView.new( scene )
         personalInformationGroup:hideGroup(true)
         enterpriseInformationGroup:hideGroup(true)
 
@@ -488,6 +498,7 @@ function scene:enterScene( event )
         end
         personalInformationGroup:onViewInit()
         counterInformationGroup:onViewInit()
+        scene.view:addEventListener("touch", onSceneTouch)
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -502,7 +513,7 @@ function scene:exitScene( event )
         local group = self.view
         personalInformationGroup:onViewDelete()
         counterInformationGroup:onViewDelete()
-        
+        scene.view:removeEventListener("touch", onSceneTouch)
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)

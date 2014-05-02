@@ -9,14 +9,16 @@ local DropDownMenu = require "libs.DDM.DropDownMenu"
 
 local EnterpriseInformationView = {}
 
-function EnterpriseInformationView.new()
+function EnterpriseInformationView.new( delegate )
         
 	local enterpriseInformationGroup
 	local enterpriseInformationGroupBackground
 	local enterpriseInformationHeaderText
 	local enterpriseInformationHeaderBackground
 	local contentGroup
-
+        
+        local delegate = delegate
+        
 	local enterpriseSubscriptionInformation
 	local companyNameLabel
 	local companyNameField
@@ -50,6 +52,23 @@ function EnterpriseInformationView.new()
         enterpriseInformationGroup = display.newGroup( )
 	contentGroup = display.newGroup( )
         
+        local function setFocus ( yPos )
+            delegate:setFocus( yPos )
+        end 
+        
+        function enterpriseInformationGroup:onInputBegan( event )
+
+            setFocus(-230)
+
+        end
+
+        function enterpriseInformationGroup:onInputEdit( event )
+
+        end
+
+        function enterpriseInformationGroup:onInputEnd( event )
+            setFocus(0)
+        end
         -------------------------------------------------------------------------------------------------------------
         -------------------------------------------------------------------------------------------------------------
         --DDM GROUP
@@ -158,50 +177,46 @@ function EnterpriseInformationView.new()
     companyNameLabel = display.newText( "Şirket Adı", 60, 500, native.systemFontBold, 15 )
     companyNameLabel:setFillColor( 0, 0, 0 )
     companyNameField = CTextField.new(50, 520, 360, 40)
-    --[[
-    nameField = display.newRoundedRect( 50, 520, 360, 40, 5 )
-    nameField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+    companyNameField:setDelegate(enterpriseInformationGroup, "companyNameField")
+    
     taxOfficeLabel =  display.newText( "Vergi Dairesi", centerX-170, 500, native.systemFontBold, 15 )
     taxOfficeLabel:setFillColor( 0, 0, 0 )
     taxOfficField = CTextField.new(centerX-180, 520, 360, 40)
-    --[[]
-    iDNumberField = display.newRoundedRect( centerX-180, 520, 360, 40, 5 )
-    iDNumberField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+    taxOfficField:setDelegate(enterpriseInformationGroup, "taxOfficField")
+
     taxNumberLabel = display.newText( "Vergi Numarası", 2*centerX-400, 500, native.systemFontBold, 15 )
     taxNumberLabel:setFillColor( 0, 0, 0 )
     taxNumberField = CTextField.new(2*centerX-410, 520, 360, 40)
     taxNumberField:setKeyboardType("number")
-    --[[
-    mobileField = display.newRoundedRect( 2*centerX-410, 520, 360, 40, 5 )
-    mobileField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+    taxNumberField:setDelegate(enterpriseInformationGroup, "taxNumberField")
+    
     representativeNameLabel = display.newText( "Şirket Yetkilisi Adı", 60, 570, native.systemFontBold, 15 )
     representativeNameLabel:setFillColor( 0,0,0 )
     representativeNameField = CTextField.new(50, 590, 360, 40)
-    --[[]
-    emailField = display.newRoundedRect( 50, 590, 360, 40, 5 )
-    emailField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+    representativeNameField:setDelegate(enterpriseInformationGroup, "representativeNameField" )
+    
     representativeLastNameLabel = display.newText( "Şirket Yetkilisi Soyadı", centerX-170, 570, native.systemFontBold, 15 )
     representativeLastNameLabel:setFillColor( 0,0,0 )
     representativeLastNameField = CTextField.new(centerX-180, 590, 360, 40)
+    representativeLastNameField:setDelegate(enterpriseInformationGroup, "representativeLastNameField" )
     
     representativePhoneLabel = display.newText( "Yetkili Telefon Numarası", 2*centerX-400, 570, native.systemFontBold, 15 )
     representativePhoneLabel:setFillColor( 0,0,0 )
     representativePhoneField = CTextField.new(2*centerX-410, 590, 360, 40)
     representativePhoneField:setKeyboardType("phone")
+    representativePhoneField:setDelegate(enterpriseInformationGroup, "representativePhoneField")
     
     phoneLabel = display.newText( "Sabit Telefon", 60, 640, native.systemFontBold, 15 )
     phoneLabel:setFillColor( 0,0,0 )
     phoneField = CTextField.new(50, 660, 360, 40)
     phoneField:setKeyboardType("phone")
+    phoneField:setDelegate(enterpriseInformationGroup, "phoneField" )
 
     emailLabel = display.newText( "E-Posta Adresi", centerX-170, 640, native.systemFontBold, 15 )
     emailLabel:setFillColor( 0,0,0 )
     emailField = CTextField.new(centerX-180, 660, 360, 40)
     emailField:setKeyboardType("email")
+    emailField:setDelegate(enterpriseInformationGroup, "emailField" )
     
     locationInformation = display.newText( "2. Konum Bilgileri", 60, 710, native.systemFontBold, 17 )
     locationInformation:setFillColor( 0, 0, 0 )
@@ -219,11 +234,7 @@ function EnterpriseInformationView.new()
                                 x = 50,
                                 y = 750,
                             }
-    --CTextField.new(50, 750, 360, 40)
-    --[[]
-    cityField = display.newRoundedRect( 50, 680, 360, 40, 5 )
-    cityField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
+
     
     countyLabel = display.newText( "İlçe", centerX-170, 730, native.systemFontBold, 17 )
     countyLabel:setFillColor( 0, 0, 0 )
@@ -237,11 +248,6 @@ function EnterpriseInformationView.new()
                                 x = centerX-180,
                                 y = 750,
                             }
-    --CTextField.new(centerX-180, 750, 360, 40)
-    --[[]
-    countyField = display.newRoundedRect( centerX-180, 680, 360, 40, 5 )
-    countyField:setFillColor( 0.5, 0.5, 0.5 )
-    --]]
     
     enterpriseInformationGroup:insert( enterpriseInformationGroupBackground )
     enterpriseInformationGroup:insert( enterpriseInformationHeaderBackground )
@@ -273,7 +279,6 @@ function EnterpriseInformationView.new()
 
     enterpriseInformationGroup:insert( contentGroup )
     enterpriseInformationGroup.y = 185
-    --personalInformationGroup.alpha = 0
     
     function enterpriseInformationGroup:onViewInit()
         cityField.addListener()
