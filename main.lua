@@ -6,11 +6,11 @@ local json         = require "json"
 local string       = require "string"
 local timer        = require "timer"
 local storyboard   = require "storyboard"
-local DataService  = require "Network.DataService"
 local Logger       = require "libs.Log.Logger"
 local native       = require "native"
 local DropDownMenu = require "libs.DDM.DropDownMenu"
 local Utils        = require "libs.Util.Utils"
+local DataService = require "Network.DataService"
 
 require "ParameterConfig"
 

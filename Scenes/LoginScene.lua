@@ -1,7 +1,6 @@
 local widget       = require( "widget" )
 local native       = require( "native" )
 local CTextField   = require( "Views.TextFields.CTextField" )
-local CT           = require( "Views.TextFields.CT" )
 local CLabel       = require( "Views.Labels.CLabel" )
 local CButton      = require( "Views.Buttons.CButton" )
 local DataServer   = require "Network.DataService"
