@@ -4,6 +4,8 @@ local json    = require("json")
 local mime    = require("mime")
 local Utils   = require("libs.Util.Utils") 
 local Logger  = require "libs.Log.Logger"
+local native  = require "native"
+local storyboard = require "storyboard"
 
 -- Parameters for network config
 local params = {
@@ -70,6 +72,18 @@ function Server:logResponse( params, responseID )
 	print( "--												  																										  --" )
 	print("response.body= ")
         if( type(params) == "string" )then
+            native.showAlert("Server Response Message", params, {"TAMAM"}, function(event)
+                if "clicked" == event.action then
+                    local i = event.index
+                    if 1 == i then
+                        storyboard.purgeAll()
+                        storyboard.gotoScene( "Scenes.LoginScene", "slideRight", 400)
+                        local DataService = require "Network.DataService"
+                        DataService:resetCachedData()
+                    end
+                end
+            end)
+            
             print(params)
         else 
             Utils:printTable(params)
@@ -97,7 +111,17 @@ function Server:request( params, callback, failure, requestType )
                                                     
                                                     local errorData = json.decode( event.response )
                                                     Logger:error(self, "Server:request", "Connection Error! " .. errorData)
-                                                    
+                                                    native.showAlert("Server Response Message", params, {"TAMAM"}, function(event)
+                                                        if "clicked" == event.action then
+                                                            local i = event.index
+                                                            if 1 == i then
+                                                                storyboard.purgeAll()
+                                                                storyboard.gotoScene( "Scenes.LoginScene", "slideRight", 400)
+                                                                local DataService = require "Network.DataService"
+                                                                DataService:resetCachedData()
+                                                            end
+                                                        end
+                                                    end)
                                                     failure(errorData) -- Call the related error callback function
                                                     
                                                 else
