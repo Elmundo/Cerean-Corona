@@ -1,11 +1,13 @@
+local CLabel = {}
+
 local display = require( "display" )
 local native = require( "native" )
 
-module( ... )
 
 
 
-function new( text, xPos, yPos, fontSize )
+
+function CLabel.new( text, xPos, yPos, fontSize )
 	local labelWrapper = display.newGroup( )
 	local background
 	local text = display.newText( text, 0, 0, "PTSans-Bold", fontSize )
@@ -30,3 +32,4 @@ function new( text, xPos, yPos, fontSize )
 	return labelWrapper
 end
 
+return CLabel

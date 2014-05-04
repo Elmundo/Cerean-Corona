@@ -1,7 +1,6 @@
 local widget = require( "widget" )
 local display = require( "display" )
 local CLabel = require( "Views.Labels.CLabel" )
---local CButton = require( "Views.Buttons.CButton" )
 
 local ControlBar = {}
 

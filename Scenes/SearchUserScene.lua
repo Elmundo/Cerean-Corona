@@ -49,44 +49,11 @@ local searchData = {}
 
 
 local function isErrorCheckOk(responseData)
-    if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
+    if( type(responseData) == "table" )then
         return true
+    else 
+        return false
     end
-    
-    return false
-end
-
-local function onSearchButtonTouched ()
-    local customerId = searchField:getText()
-    
-    DataService:isCustomer(customerId, 
-        function(responseData)
-            if(isErrorCheckOk(responseData) )then
-                searchData = responseData
-                if( doneSearch ) then
-                    doneSearch = false
-                else 
-                    doneSearch = true
-                    resultTable:reloadData()
-                end
-
-                if( doneSearch ) then
-                    onSearchComplete()
-                end
-            end
-        end, 
-        function(errorData)
-            print "Error finding user"
-        end)
-    --[[]
-    testData[1] = { name="Bahadır BÖGE", customerID="12345"}
-    testData[2] = { name="Mustafa BÖGE", customerID="12346"}
-    testData[3] = { name="John DOE", customerID="12347"}
-    testData[4] = { name="Jane DOE", customerID="12348"}
-    testData[5] = { name="Jack SPARROW", customerID="12349"}
-    --Clear TableView
-    
-    --]]
 end
 
 local function onSearchComplete ()
@@ -97,8 +64,9 @@ local function onSearchComplete ()
             isCategory = false,
             rowColor = { default = {1, 0, 0, 0}, over = { 0, 0, 0, 0} },
             params = {
-                name = searchData[i].name,
-                id = searchData[i].customerID
+                name = searchData[i].CustomerName,
+                id = searchData[i].CustomerNumber,
+                customerData = searchData[i]
             }
         }
     end
@@ -128,13 +96,13 @@ local function onRowRender( event )
     
     row.id = CLabel.new( params.id, 170, 15, 15 )
     row:insert( row.id )
+    
+    row.data = params.customerData
     return true   
 end
 
 local function scrollListener ( event )
---event.phase="began", "moved", "ended"
---event.limitReached for border check
---event.direction "up", "down"
+
 end
 
 local function onCancelButtonTouch ()
@@ -148,9 +116,7 @@ function scene:logout()
 end
 
 function scene:onInputBegan( event )
-        
-    --scene:setFocus(-330)
-        
+
 end
         
 function scene:onInputEdit( event )
@@ -158,7 +124,7 @@ function scene:onInputEdit( event )
 end
 
 function scene:onInputEnd( event )
-    --scene:setFocus(0)
+    
 end
 
 local function searchForText( stringArray, searchText )
@@ -186,6 +152,34 @@ function scene:onInputEdit(event)
     --]]
 end
 
+function scene:onButtonTouchEnded( event )
+    
+    if( event.target.id == "cancelButton" )then
+        
+    elseif( event.target.id == "searchButton" )then
+        local customerId = searchField:getText()
+    
+    DataService:isCustomer(customerId, 
+        function(responseData)
+            if(isErrorCheckOk(responseData) )then
+                searchData = responseData
+                if( doneSearch ) then
+                    doneSearch = false
+                else 
+                    doneSearch = true
+                    resultTable:reloadData()
+                end
+
+                if( doneSearch ) then
+                    onSearchComplete()
+                end
+            end
+        end, 
+        function(errorData)
+            print "Error finding user"
+        end)
+    end
+end
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
         local group = self.view
@@ -197,7 +191,7 @@ function scene:createScene( event )
         headerImage.x = 0
         headerImage.y = 50
         
-        cancelButton = CButton.new( "VAZGEÇ", "cancelButton", onCancelButtonTouch, 1100, 80, 5 )
+        cancelButton = CButton.new( "VAZGEÇ", "cancelButton", scene, 1100, 80, 5 )
         
         --BOLD
         headerText = CLabel.new( "Sayaç Ekle", 50, 200, 20 )
@@ -209,7 +203,8 @@ function scene:createScene( event )
         --display.newRoundedRect(45, 260, 360, 40, 5)
         --searchField:setFillColor( 165/255, 161/255, 155/255 )
         --CTextField.new( 45, 260 )
-        searchButton = CButton.new( "ARA", "searchButton", onSearchButtonTouched, 415, 260 )
+        searchButton = CButton.new( "ARA", "searchButton", scene, 415, 260 )
+        
         
         
         resultTable = widget.newTableView{
