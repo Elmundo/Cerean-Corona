@@ -36,6 +36,21 @@ local errorLabel
 local loginButton
 --TestData For Keyboard
 local cachedDataIndex = 0
+local errorImage
+local function checkData()
+    if( userNameTextField:getText() == "" )then
+        errorImage.x = centerX+100
+        errorImage.y = centerY
+        errorImage.isVisible = true
+        return false
+    elseif( passwordTextField:getText() == "" )then
+        errorImage.x = centerX+100
+        errorImage.y = centerY+70
+        errorImage.isVisible = true
+        return false
+    end
+    return true
+end
 
 -- Network Error handler, check type 2
 local function isErrorCheckOk(responseData)
@@ -166,13 +181,17 @@ end
 --Button DELEGATE  
 function scene:onButtonTouchEnded( event )
     print( "Working on Scene" )
+    if( checkData() )then
+    else
+        return
+    end
     if( event.phase == "ended") then
         print( userNameTextField:getText() )
         print( passwordTextField:getText() )
-
+        --"Crmuser", "CaCu2013!"
         scene:showMask()
         -- TODO: Hard-Coded Data Insert
-        DataServer:login("Crmuser", "CaCu2013!", 
+        DataServer:login("Crmuser", "CaCu2013!",--userNameTextField:getText(), passwordTextField:getText(), 
                                             function (responseData)
 
                                                 if isErrorCheckOk(responseData) then
@@ -204,8 +223,8 @@ local function setFocus ( yPos )
 end 
 
 function scene:onInputBegan( event )
-        
-    setFocus(-330)
+    errorImage.isVisible = false  
+    setFocus(-105)
         
 end
         
@@ -271,9 +290,11 @@ function scene:createScene( event )
     passwordLabel = CLabel.new( "Şifre", centerX-120, centerY+35, 15)
 
     loginButton = CButton.new( "GİRİŞ YAP", "loginButton", self, centerX-20, centerY+110, 0 )
+    
+    errorImage = display.newImageRect("Assets/IconWarningSmall.png", 17, 14)
+    errorImage.isVisible = false
+
     -----------------
-    local colored = display.newRect( 0, 0 ,100, 100 )
-    colored:setFillColor(0, 10, 0, 1)
 
     displayGroup:insert( loginBackground )
     displayGroup:insert( loginBox )
@@ -283,6 +304,7 @@ function scene:createScene( event )
     displayGroup:insert( userNameLabel )
     displayGroup:insert( passwordLabel )
     displayGroup:insert( loginButton )
+    displayGroup:insert( errorImage )
     displayGroup.x = centerX
     displayGroup.y = centerY
     
@@ -292,6 +314,7 @@ local superEnterScene = scene.enterScene
 function  scene:enterScene( event )
     superEnterScene(self, event)
     scene.view:addEventListener("touch", onSceneTouch)
+    cachedDataIndex = 0
     --userNameTextField:addRuntimeEventListener()
     --passwordTextField:addRuntimeEventListener()
 end

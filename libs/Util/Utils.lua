@@ -50,4 +50,68 @@ function cColorM(r, g, b, a)
     return r/255, g/255, b/255, (a or 1)
 end
 
+function addLetterToStringForPhone (_text, _addedLetter )
+    local text = _text
+    local addedLetter = _addedLetter
+    
+    if( addedLetter:match("%W") == false )then
+        return addedLetter
+    end
+    local returnText
+    
+    local textLength = string.len(text)
+    
+    if( 0 == textLength )then
+        --Need to check this
+        returnText = "(" .. addedLetter
+    elseif( 1 == textLength )then
+        returnText = text .. addedLetter
+    elseif( 2 == textLength )then
+        returnText = text .. addedLetter 
+    elseif( 3 == textLength )then
+        returnText = text .. addedLetter .. ") "
+    elseif( 4 == textLength )then
+        returnText = text .. ") " .. addedLetter
+    elseif( 5 == textLength )then
+        returnText = " " .. text .. addedLetter
+    elseif( 6 == textLength )then
+        returnText = text .. addedLetter
+    elseif( 7 == textLength )then
+        returnText = text .. addedLetter
+    elseif( 8 == textLength )then
+        returnText = text .. addedLetter "-"
+    elseif( 9 == textLength )then
+        returnText = text .. addedLetter
+    elseif( 10 == textLength )then
+        returnText = text .. addedLetter
+    elseif( 11 == textLength )then
+        returnText = text .. addedLetter
+    elseif( 12 == textLength )then
+        returnText = text .. addedLetter
+    elseif( 13 == textLength )then
+        returnText = text .. addedLetter
+    else 
+        return text
+    end
+    
+    return returnText
+end
+
+function isValidEmail(_text)
+    local text = _text
+    
+    if (text:match("[A-Za-z0-9%.%%%+%-]+@[A-Za-z0-9%.%%%+%-]+%.%w%w%w?%w?")) then
+        return true
+    end
+    
+    return false
+end
+
+function isValidID(_text)
+    local text = _text
+    
+    local textLength = string.len(text)
+    
+end
+
 return Utils

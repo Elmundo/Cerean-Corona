@@ -145,7 +145,7 @@ function scene:saveContent ( appStep, callback )
         contentData["step"] = appStep
         
         if( DataService.phase == Phase.RegistryPhase ) then
-            contentData["CustomerId"] = DataService.customer.customerId
+            contentData["CustomerId"] = DataService.customer.CustomerId
         else
             contentData["CustomerId"] = DataService.customerId
         end
@@ -254,6 +254,9 @@ function scene:onButtonTouchEnded( event )
             scene:saveContent(kStepPersonel, function( isSuccess, errorDetail )
                 if( isSuccess )then 
                     print( "SUCCEDED" )
+                    if( Phase.CallPhase == DataService.phase )then
+                        storyboard.gotoScene("Scenes.AppointmentScene", "slideLeft", 800)
+                    end
                     
                 else
                     print( errorDetail )
@@ -499,6 +502,15 @@ function scene:enterScene( event )
         personalInformationGroup:onViewInit()
         counterInformationGroup:onViewInit()
         scene.view:addEventListener("touch", onSceneTouch)
+        
+        if( Phase.RegistryPhase == DataService.phase)then
+            if( step == 0 )then
+                step = 2
+                transition.to( personalInformationGroup, {time=400, y= -190,  transition = easing.outExpo } )
+                transition.to( enterpriseInformationGroup, {time=400, y= -190,  transition = easing.outExpo } )
+                transition.to( counterInformationGroup, {time=400, y= -235,  transition = easing.outExpo } )
+            end
+        end
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)

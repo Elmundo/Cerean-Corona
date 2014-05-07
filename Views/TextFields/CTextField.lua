@@ -14,10 +14,16 @@ function CTextField.new( xPos, yPos, width, height )
         textField.font = native.newFont( native.systemFont, 12)
         textField.hasBackground = false
         
+        local background = display.newRoundedRect( 0, 0, width, height, 5 )
+        background:setFillColor( 0.5, 0.5, 0.5 )
+        local whiteBackground = display.newRoundedRect( 4, 4, width-8, height-8, 5 )
+        whiteBackground:setFillColor(1, 1, 1 )
+        
         
         local function onInput( event )
             if( event.phase == "began")then
                 --TODO Need to add a button id
+                whiteBackground:setFillColor(1, 250/255, 205/255, 1)
                 if( textFieldWrapper.delegate ~= nil ) then
                     textFieldWrapper.delegate:onInputBegan( event )
                 end
@@ -26,6 +32,7 @@ function CTextField.new( xPos, yPos, width, height )
                     textFieldWrapper.delegate:onInputEdit( event )
                 end
             elseif( event.phase == "ended" )then
+                whiteBackground:setFillColor(1, 1, 1 )
                 if( textFieldWrapper.delegate ~= nil ) then
                     textFieldWrapper.delegate:onInputEnd( event )
                 end
@@ -50,10 +57,7 @@ function CTextField.new( xPos, yPos, width, height )
             end
         end
         
-        local background = display.newRoundedRect( 0, 0, width, height, 5 )
-        background:setFillColor( 0.5, 0.5, 0.5 )
-        local whiteBackground = display.newRoundedRect( 4, 4, width-8, height-8, 5 )
-        whiteBackground:setFillColor(1, 1, 1 )
+        
 	
         textField:addEventListener("userInput", onInput )
         

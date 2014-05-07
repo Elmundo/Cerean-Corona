@@ -2,8 +2,7 @@ local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
 
-local CLabel = require( "Views.Labels.Clabel" )
-local CButton = require( "Views.Buttons.CButton" )
+--local CButton = require( "Views.Buttons.CButton" )
 local CTextField = require( "Views.TextFields.CTextField" )
 local DropDownMenu = require "libs.DDM.DropDownMenu"
 
@@ -65,7 +64,7 @@ function AddressInformationView.new( delegate )
     local emailField2
     
     local counties
-    
+    local sameVisitingAndContactAdress
     local mirrorDataButton
     local mirrorDataButtonLabel
     local communicationButton
@@ -140,6 +139,8 @@ function AddressInformationView.new( delegate )
     local function mirrorDataButtonTouched( event )
         if( event.phase == "ended" )then
             print("MirrorData")
+            
+            
             if( mirrorData )then
                 mirrorData = false 
                 mirrorDataButton:removeSelf()
@@ -150,6 +151,20 @@ function AddressInformationView.new( delegate )
                 mirrorDataButton:addEventListener("touch", mirrorDataButtonTouched)
                 contentView:insert(mirrorDataButton)
             else 
+                addressField2:setText(addressField1:getText())
+
+                postalCodeField2:setText(postalCodeField1:getText())
+
+                phoneField2:setText(phoneField1:getText())
+
+                mobileField2:setText(mobileField1:getText())
+
+                faxField2:setText(faxField1:getText())
+
+                addressField2:setText(addressField1:getText())
+
+                emailField2:setText(emailField1:getText())
+                
                 mirrorData = true 
                 mirrorDataButton:removeSelf()
                 mirrorDataButton = nil
@@ -207,65 +222,76 @@ function AddressInformationView.new( delegate )
     addressLabel1 = display.newText( "Adres", 60, 500, native.systemFontBold, 15 )
     addressLabel1:setFillColor( 0, 0, 0 )
     addressField1 = CTextField.new(50, 520, 500, 40)
+    addressField1:setDelegate(addressInformationView, "addressField1")
     
     addressLabel2 = display.newText( "Adres", 620, 500, native.systemFontBold, 15 )
     addressLabel2:setFillColor( 0, 0, 0 )
     addressField2 = CTextField.new(610, 520, 500, 40)
+    addressField2:setDelegate(addressInformationView, "addressField2")
     
     postalCodeLabel1 = display.newText( "Posta Kodu", 60, 570, native.systemFontBold, 15 )
     postalCodeLabel1:setFillColor( 0, 0, 0 )
     postalCodeField1 = CTextField.new(50, 590, 240, 40)
     postalCodeField1:setKeyboardType( "number" )
+    postalCodeField1:setDelegate(addressInformationView, "postalCode1")
     
     postalCodeLabel2 = display.newText( "Posta Kodu", 620, 570, native.systemFontBold, 15 )
     postalCodeLabel2:setFillColor( 0, 0, 0 )
     postalCodeField2 = CTextField.new(610, 590, 240, 40)
     postalCodeField2:setKeyboardType( "number" )
+    postalCodeField2:setDelegate(addressInformationView, "postalCode2")
     
     cityLabel1 = display.newText( "İl", 60, 640, native.systemFontBold, 15 )
     cityLabel1:setFillColor( 0, 0, 0 )
-    --cityField1 = CTextField.new(50, 660, 240, 40)
     phoneLabel1 = display.newText( "Sabit Telefon", 60, 710, native.systemFontBold, 15 )
     phoneLabel1:setFillColor( 0, 0, 0 )
     phoneField1 = CTextField.new(50, 730, 240, 40)
     phoneField1:setKeyboardType( "phone" )
+    phoneField1:setDelegate(addressInformationView, "phoneField1")
     
     mobileLabel1 = display.newText( "Mobil Telefon", 320, 710, native.systemFontBold, 15 )
     mobileLabel1:setFillColor( 0, 0, 0 )
     mobileField1 = CTextField.new(310, 730, 240, 40)
     mobileField1:setKeyboardType( "phone" )
-    
+    mobileField1:setDelegate(addressInformationView, "mobileField1")
+
     phoneLabel2 = display.newText( "Sabit Telefon", 620, 710, native.systemFontBold, 15 )
     phoneLabel2:setFillColor( 0, 0, 0 )
     phoneField2 = CTextField.new(610, 730, 240, 40)
     phoneField2:setKeyboardType( "phone" )
-    
+    phoneField2:setDelegate(addressInformationView, "phoneField2")
+
     mobileLabel2 = display.newText( "Mobil Telefon", 880, 710, native.systemFontBold, 15 )
     mobileLabel2:setFillColor( 0, 0, 0 )
     mobileField2 = CTextField.new(870, 730, 240, 40)
     mobileField2:setKeyboardType( "phone" )
+    mobileField2:setDelegate(addressInformationView, "mobileField2")
     
     faxLabel1 = display.newText( "Faks", 60, 780, native.systemFontBold, 15 )
     faxLabel1:setFillColor( 0, 0, 0 )
     faxField1 = CTextField.new(50, 800, 240, 40)
     faxField1:setKeyboardType("phone")
+    faxField1:setDelegate(addressInformationView, "faxField1")
     
     emailLabel1 = display.newText( "E-Posta Adresi", 320, 780, native.systemFontBold, 15 )
     emailLabel1:setFillColor( 0, 0, 0 )
     emailField1 = CTextField.new(310, 800, 240, 40)
     emailField1:setKeyboardType("email")
+    emailField1:setDelegate(addressInformationView, "emailField1")
     
     faxLabel2 = display.newText( "Faks", 620, 780, native.systemFontBold, 15 )
     faxLabel2:setFillColor( 0, 0, 0 )
     faxField2 = CTextField.new(610, 800, 240, 40)
     faxField2:setKeyboardType("phone")
+    faxField2:setDelegate(addressInformationView, "faxField2")
     
     emailLabel2 = display.newText( "E-Posta Adresi", 880, 780, native.systemFontBold, 15 )
     emailLabel2:setFillColor( 0, 0, 0 )
     emailField2 = CTextField.new(870, 800, 240, 40)
     emailField2:setKeyboardType("email")
+    emailField2:setDelegate(addressInformationView, "emailField2")
     
-    mirrorDataButtonLabel = display.newText("Ziyaret adresim aynı zamanda düzenli iletişim adresim.", 120, 880, 0, 0, native.systemFont, 12)
+    mirrorDataButtonLabel = display.newText("Ziyaret adresim aynı zamanda düzenli iletişim adresim.", 620, 880, 0, 0, native.systemFont, 12)
     mirrorDataButtonLabel:setFillColor( 0.5, 1 )
     mirrorDataButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
     mirrorDataButton.x = 60
@@ -273,7 +299,7 @@ function AddressInformationView.new( delegate )
     mirrorData = false
     mirrorDataButton:addEventListener("touch", mirrorDataButtonTouched)
     
-    communicationButtonLabel = display.newText("Fatura adresim ziyaret adresimle aynı.", 620, 880, 0, 0, native.systemFont, 12)
+    communicationButtonLabel = display.newText("Fatura adresim ziyaret adresimle aynı.", 120, 880, 0, 0, native.systemFont, 12)
     communicationButtonLabel:setFillColor( 0.5, 1 )
     communicationButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
     communicationButton.x = 560
@@ -391,23 +417,23 @@ function AddressInformationView.new( delegate )
         local contentData = {}
         
         contentData = {
-            AddressDetailVisiting = "test1",
-            PostalCodeVisiting = "12345",
-            CityVisiting = "c45ddc95-0cf9-e211-ae2c-0050568e1778",
-            CountyVisiting = "2f385df8-14f9-e211-ae2c-0050568e1778",
-            TelephoneVisiting = "(212) 549-8798",
-            MobilePhoneVisiting = "(540) 897-9898",
-            FaxVisiting = "(508) 785-4489",
-            EmailVisiting = "mbahadirb@gmail.com",
-            AddressDetailInvoice = "test1",
-            PostalCodeInvoice = "12345",
-            CityInvoice = "c45ddc95-0cf9-e211-ae2c-0050568e1778",
-            CountyInvoice = "2f385df8-14f9-e211-ae2c-0050568e1778",
-            TelephoneInvoice = "(212) 549-8798",
-            MobilePhoneInvoice = "(540) 897-9898",
-            FaxInvoice = "(508) 785-4489",
-            EmailInvoice = "mbahadirb@gmail.com",
-            SameVisitingAndContactAddress= "True",
+            AddressDetailVisiting = addressField1:getText(),
+            PostalCodeVisiting = postalCodeField1:getText(),
+            CityVisiting = cityField1:getID(),
+            CountyVisiting = countyField1:getID(),
+            TelephoneVisiting = phoneField1:getText(),
+            MobilePhoneVisiting = mobileField1:getText(),
+            FaxVisiting = faxField1:getText(),
+            EmailVisiting = emailField1:getText(),
+            AddressDetailInvoice = addressField1:getText(),
+            PostalCodeInvoice = postalCodeField1:getText(),
+            CityInvoice = cityField1:getID(),
+            CountyInvoice = countyField1:getID(),
+            TelephoneInvoice = phoneField1:getText(),
+            MobilePhoneInvoice = mobileField1:getText(),
+            FaxInvoice = faxField1:getText(),
+            EmailInvoice = emailField1:getText(),
+            SameVisitingAndContactAddress= communicationData,
         }
         
         return contentData
@@ -475,6 +501,38 @@ function AddressInformationView.new( delegate )
         countyField1.destroy()
         cityField2.destroy()
         countyField2.destroy()
+    end
+    
+    local function setFocus ( yPos )
+        delegate:setFocus( yPos )
+    end 
+
+    function addressInformationView:onInputBegan( event )
+        setFocus(-230)
+    end
+
+    function addressInformationView:onInputEdit( event )
+        if(mirrorData)then
+            if( "addressField1" == event.target.iD )then
+                addressField2:setText(addressField1:getText())
+            elseif( "postalCode1" == event.target.iD )then
+                postalCodeField2:setText(postalCodeField1:getText())
+            elseif( "phoneField1" == event.target.iD )then
+                phoneField2:setText(phoneField1:getText())
+            elseif( "mobileField1" == event.target.iD )then
+                mobileField2:setText(mobileField1:getText())
+            elseif( "faxField1" == event.target.iD )then
+                faxField2:setText(faxField1:getText())
+            elseif( "addressField1" == event.target.iD )then
+                addressField2:setText(addressField1:getText())
+            elseif( "emailField1" == event.target.iD )then
+                emailField2:setText(emailField1:getText())
+            end
+        end
+    end
+
+    function addressInformationView:onInputEnd( event )
+        setFocus(0)
     end
     
     return addressInformationView

@@ -3,7 +3,7 @@ application =
 {
 	content = 
 	{
-		width  = 800,
+		width  = 720,
 		height = 1280,
 		scale  = "letterbox",
 		xAlign = "left",

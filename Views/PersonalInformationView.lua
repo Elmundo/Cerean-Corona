@@ -113,17 +113,17 @@ function PersonalInformationView.new(delegate)
             local contentData = {}
             
             DataService.customerPhone = mobileField:getText()
-            DataService.customerEmail = "mbahadirb@gmail.com"--emailField:getText()
-            DataService.customerName = "Bahadir Boge"--nameField:getText()
+            DataService.customerEmail = emailField:getText()
+            DataService.customerName = nameField:getText()
             contentData = {
-                Name = "Bahadir Boge",--nameField:getText(),
+                Name = nameField:getText(),
                 TckNo = iDNumberField:getText(),
                 MobilePhone = mobileField:getText(),
-                Email = "mbahadirb@gmail.com",--emailField:getText(),
-                CityId = "3a5edc95-0cf9-e211-ae2c-0050568e1778",--cityField:getValue(),--cityField:getText(),
+                Email = emailField:getText(),
+                CityId = cityField:getID(),--cityField:getText(),
                 --DataService.selectedCity = DataService.cities
                 
-                CountyId = "a53d5df8-14f9-e211-ae2c-0050568e1778",--countyField:getText()
+                CountyId = countyField:getID(),--countyField:getText()
             }
              
             return contentData

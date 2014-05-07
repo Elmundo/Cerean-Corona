@@ -9,6 +9,9 @@ local Utils           = require "libs.Util.Utils"
 local DataService     = require "Network.DataService"
 local Logger          = require "libs.Log.Logger"
 
+local CTextField = require "Views.TextFields.CTextField"
+local CButton = require "Views.Buttons.CButton"
+local ControlBar = require "Views.ControlBar"
 -- PackageScene Module
 local PackageScene    = BaseScene.new()
 
@@ -25,6 +28,7 @@ local progressBar
 local bgHeaderText
 local headerText
 local promotionText
+local promotionTextField
 local packageDetail
 local packageScroller
 local backButtonBg
@@ -33,6 +37,52 @@ local nextButtonBg
 local nextButton
 
 -- METHODS
+function PackageScene:onButtonTouchEnded( event )
+    
+    if( event.target.id == "backButton" )then
+        print("BACK BUTTON PRESSED")
+        storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 400 )        
+    elseif( event.target.id == "nextButton" )then
+        print("NEXT BUTTON PRESSED")
+        if selectedProduct == nil then
+            --TODO: Buarada hata mesajı verdir. 
+        end
+        
+        PackageScene:saveContent(step, function (success, errorDetail)
+            if success then
+                storyboard.gotoScene("Scenes.AppointmentScene", "slideLeft", 400 )
+            else
+                Logger:error(PackageScene, "PackageScene:saveContent", errorDetail)
+                PackageScene:alert("UYARI!", errorDetail, {"OK"})
+            end
+            
+        end)
+        
+    end
+end
+        
+function PackageScene:onInputBegan( event )
+        
+end
+        
+function PackageScene:onInputEdit( event )
+    
+end
+
+function PackageScene:onInputEnd( event )
+
+end
+
+local function onSceneTouch( event )
+    if( "began" == event.phase )then
+        if( event.target.isKeyboard )then
+            
+        else
+            native.setKeyboardFocus(nil)
+        end
+            
+    end
+end
 
 -- Network Error handler, check type 2
 function PackageScene:isErrorCheckOk(responseData)
@@ -75,7 +125,7 @@ function PackageScene:saveContent(step, callback)
     
     local contentData
     
-    local promotionCode =  promotionText.text
+    local promotionCode =  promotionTextField:getText()
     if promotionCode == nil then
         promotionCode = ""
     end
@@ -96,13 +146,14 @@ function PackageScene:saveContent(step, callback)
             PromotionCode = promotionCode,
             CustomerId = DataService.customerId,
             MeterId = DataService.meterId,
+            UserCode = DataService.userId,
         }
     end
     
     contentData.step = step
     
-    if DataService.productId then
-        contentData.QuoteId = DataService.quoteId 
+    if DataService.productId == "" then
+        --contentData.QuoteId = DataService.quoteId 
     end
     
     DataService:saveContent(contentData, function (responseData)
@@ -159,37 +210,39 @@ function PackageScene:createScene( event)
     local group = self.view
  
     -- HEADER BAR
-    headerBar = display.newRect( 0, 0, 1024, 50 )
+    headerBar = display.newRect( 0, 0, 1280, 50 )
     headerBar:setFillColor( 74/255, 74/255, 74/255 )
 
     -- CEREAN LOGO
     logo = display.newImage( "Assets/Logo.png" )
-    logo.x, logo.y = 30, 70
+    logo.x, logo.y = 40, 70
 
     -- EPIC PROGRESS BAR 
-    progressBar = ProgressBar.new({x=280,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
+    progressBar = ProgressBar.new({x=290,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
     progressBar:setProgress(242)
     
     -- HEADER TEXT
-    bgHeaderText = display.newRoundedRect( 30, 220, 960, 40, 5 )
+    bgHeaderText = display.newRoundedRect( 40, 220, 1200, 40, 5 )
     bgHeaderText:setFillColor( 1,0,0 )
     headerText     = display.newText( "Size Özel Paketler", 0, 0, native.systemFontBold, 18 )
     headerText:setFillColor( 1, 1, 1 )
-    headerText.x, headerText.y = 40,230
+    headerText.x, headerText.y = 50,230
 
     -- PROMOTION TEXT
     promotionText  = display.newText( "PROMOSYON KODU", 0, 50, native.systemFont, 24 )
     promotionText:setFillColor( 0,0,0 )
-    promotionText.x, promotionText.y = 30,290
-        
+    promotionText.x, promotionText.y = 40,260
+    promotionTextField = CTextField.new( 40, 290, 240, 40 ) 
+    promotionTextField:setDelegate(self, "promotionText")
+  
     -- PACKAGE DETAIL
     packageDetail = PackageDetail.new()
-    packageDetail.x = 700
+    packageDetail.x = 950
     packageDetail.y = 265
     PackageScene.packageDetail = packageDetail
    
     -- PROMOTION TABLE - SCROLLER
-    packageScroller  = PackageScroller.new({            x               = 30,
+    packageScroller  = PackageScroller.new({            x               = 40,
                                                         y               = 330,
                                                         width           = 640,
                                                         height          = 284,
@@ -201,10 +254,13 @@ function PackageScene:createScene( event)
                                                         products = products,
                                                         })
     -- SCENE BUTTONS
-    backButtonBg = display.newRoundedRect( 30, 630, 105, 29, 0.5 )
+    backButton = CButton.new( "GERİ", "backButton", self, 40, 630, 0 )
+    nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 630, 0 )
+    --[[]
+    backButtonBg = display.newRoundedRect( 40, 630, 105, 29, 0.5 )
     backButtonBg:setFillColor( 165/255, 161/255, 155/255 )
     backButton = widget.newButton({
-        left    = 30,
+        left    = 40,
         top     = 630,
         width   = 105,
         height  = 29,
@@ -214,11 +270,12 @@ function PackageScene:createScene( event)
         emboss = true,
         onEvent = self.onBackButton,
     })
-    
-    nextButtonBg = display.newRoundedRect( 885, 630, 105, 30, 0.5 )
+    --]]
+    --[[]
+    nextButtonBg = display.newRoundedRect( 1135, 630, 105, 30, 0.5 )
     nextButtonBg:setFillColor( 165/255, 161/255, 155/255 )
     nextButton = widget.newButton({
-        left    = 885,
+        left    = 1135,
         top     = 630,
         width   = 105,
         height  = 29,
@@ -228,18 +285,19 @@ function PackageScene:createScene( event)
         emboss = true,
         onEvent = self.onNextButton,
     })
-    
+    --]]
     group:insert(headerBar)
     group:insert(logo)
     group:insert(progressBar)
     group:insert(bgHeaderText)
     group:insert(headerText)
     group:insert(promotionText)
+    group:insert(promotionTextField)
     group:insert(packageDetail)
     group:insert(packageScroller)
-    group:insert(backButtonBg)
+    --group:insert(backButtonBg)
     group:insert(backButton)
-    group:insert(nextButtonBg)
+    --group:insert(nextButtonBg)
     group:insert(nextButton)
 end
 PackageScene:addEventListener("createScene")
@@ -249,12 +307,13 @@ local superEnterScene = PackageScene.enterScene
 function PackageScene:enterScene(event)
     -- Call superclass method
     superEnterScene(self, event)
+    PackageScene.view:addEventListener("touch", onSceneTouch)
 end
 
 PackageScene:addEventListener("enterScene")
 
 function PackageScene:didExitScene(event)
-    
+   PackageScene.view:removeEventListener("touch", onSceneTouch) 
 end
 PackageScene:addEventListener("didExitScene")
 

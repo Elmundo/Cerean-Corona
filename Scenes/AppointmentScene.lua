@@ -74,6 +74,21 @@ local function doneStepAnimationBack()
         print( step )
 end
 
+local function setFocus ( yPos )
+    transition.to(scene.view, {time=400, y= yPos, transition = easing.outExpo})
+end 
+
+local function onSceneTouch( event )
+    if( "began" == event.phase )then
+        if( event.target.isKeyboard )then
+        else
+            setFocus(0)
+            native.setKeyboardFocus(nil)
+        end
+            
+    end
+end
+
 local function saveContent(appStep, callback)
     local contentData
     if( step == 0 ) then
@@ -162,6 +177,10 @@ local function saveContent(appStep, callback)
         
 end
 
+function scene:setFocus ( yPos )
+    transition.to(scene.view, {time=400, y= yPos, transition = easing.outExpo})
+end 
+
 local function shiftUp()
     
         if( isStepAnimationRunning == false ) then
@@ -222,7 +241,7 @@ function scene:createScene( event )
 
 --------------------------------------------
     
-        addressInformationView = AddresInformationView.new()
+        addressInformationView = AddresInformationView.new(scene)
         addressInformationView:hideGroup(true)
 
 --------------------------------------------
@@ -269,6 +288,7 @@ function scene:enterScene( event )
         local group = self.view
         isStepAnimationRunning = false
         addressInformationView:onViewInit()
+        scene.view:addEventListener("touch", onSceneTouch)
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -282,6 +302,7 @@ end
 function scene:exitScene( event )
         local group = self.view
         addressInformationView:onViewDelete()
+        scene.view:removeEventListener("touch", onSceneTouch)
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)

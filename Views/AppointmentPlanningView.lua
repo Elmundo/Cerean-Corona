@@ -4,7 +4,6 @@ local display = require( "display" )
 local native = require( "native" )
 local widget = require( "widget" )
 
-local CLabel = require( "Views.Labels.Clabel" )
 local Calendar = require( "libs.Calendar.Calendar")
 local DataService = require( "Network.DataService" )
 
@@ -14,7 +13,7 @@ function AppointmentPlanningView.new()
     local appointmentPlanningGroup = display.newGroup()
     
     local phase
-    
+    local dayData
     local centerX = display.contentCenterX
     local centerY = display.contentCenterY
     local defaultYPos = 150
@@ -24,6 +23,8 @@ function AppointmentPlanningView.new()
     local appointmentPlanningHeaderBackground
     
     local sellectedRow
+    
+    local hoursTable
     
     local function onRowTouch ( event )
         if( event.phase == "press" )then
@@ -36,7 +37,7 @@ function AppointmentPlanningView.new()
                 sellectedRow.background:setFillColor(165/255, 161/255, 155/255, 1)
             end
             
-            --sellectedRow = hoursTable:getRowAtIndex( event.target.index )
+            sellectedRow = hoursTable:getRowAtIndex( event.target.index )
     
         end
         
@@ -49,13 +50,11 @@ function AppointmentPlanningView.new()
         
         row.background = display.newRect( 0, 0, 120, 60 )
         row.background:setFillColor(165/255, 161/255, 155/255, 1)
-        --row.hour = CLabel.new( params, 20, 15, 15 )
-        --row.hour:setTextColor( 1, 1, 1, 1 )
-       
-        
+        row.hour = display.newText(params, 15, 15, native.systemFont, 10)
+        row.hour:setFillColor( 1,1,1,1 )        
         
         row:insert( row.background )
-        --row:insert( row.hour )
+        row:insert( row.hour )
         
         return true   
     end
@@ -73,7 +72,7 @@ function AppointmentPlanningView.new()
     local calendarView = Calendar.new(appointmentPlanningGroup, 380, 260, 320, 320)
     contentGroup:insert(calendarView)
     
-    local hoursTablehoursTable = widget.newTableView{
+    hoursTable = widget.newTableView{
             left = 710,
             top = 310,
             width = 120,
@@ -83,7 +82,30 @@ function AppointmentPlanningView.new()
             onRowTouch = onRowTouch,
             --listener = scrollListener
     }
-    contentGroup:insert(hoursTablehoursTable)
+    if( DataService.phase == Phase.ApplicationPhase )then
+        for i=14, #(DataService.timeIntervals) do
+            hoursTable:insertRow{
+                rowHeight = 60,
+                rowWidth = 120,
+                isCategory = false,
+                lineColor = {0,0,0,0},
+                rowColor = { default = {0, 1, 1, 0}, over = { 165/255, 161/255, 155/255, 1}, },--74/255, 74/255, 74/255, 1} },
+                params = DataService.timeIntervals[i].Name,
+            }
+        end
+    else
+        for i=1, 13 do
+            hoursTable:insertRow{
+                rowHeight = 60,
+                rowWidth = 120,
+                isCategory = false,
+                lineColor = {0,0,0,0},
+                rowColor = { default = {0, 1, 1, 0}, over = { 165/255, 161/255, 155/255, 1}, },--74/255, 74/255, 74/255, 1} },
+                params = DataService.timeIntervals[i].Name,
+            }
+        end
+    end
+    contentGroup:insert(hoursTable)
     
     appointmentPlanningBackground = display.newRect( 40, defaultYPos, 1200, 550 )
     
@@ -124,17 +146,23 @@ function AppointmentPlanningView.new()
         local contentData = {}
             
             contentData = {
-                ScheduledStart = "6 3 2014 00:00:00",
-                IntervalTime = "16"
+                ScheduledStart = dayData,--"6 3 2014 00:00:00",
+                IntervalTime = sellectedRow.row,
            }
-           
+           --[[]
            contentData = {
                 ScheduledStart = "6 3 2014 00:00:00",
                 IntervalTime = sellectedRow.row
            }
-           
+           --]]
              
             return contentData
+    end
+    
+    function appointmentPlanningGroup:daySellected(newDayData)
+        dayData = newDayData
+        print( dayData )
+        --
     end
     
     return appointmentPlanningGroup

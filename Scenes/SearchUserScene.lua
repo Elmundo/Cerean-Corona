@@ -73,6 +73,10 @@ local function onSearchComplete ()
 end
 
 local function onRowTouch ( event )
+    if( "release" == event.phase )then
+        storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 800)
+        DataService.customer = event.row.params.customerData
+    end
 --event.phase="tap", "press", "release", "swipeLeft", "swipeRight"
 --event.target=row
 --event.target.index=index
@@ -155,7 +159,8 @@ end
 function scene:onButtonTouchEnded( event )
     
     if( event.target.id == "cancelButton" )then
-        
+        storyboard.removeAll()
+    storyboard.gotoScene("Scenes.MenuScene", "slideRight", 800)
     elseif( event.target.id == "searchButton" )then
         local customerId = searchField:getText()
     

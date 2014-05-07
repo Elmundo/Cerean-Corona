@@ -30,20 +30,24 @@ function ControlBar.new( delegate )
         delegate = delegate
         
         local function onExitButtonTouched( event )
-            delegate:logout()
+            if( event.phase == "ended")then
+                delegate:logout()
+            end
         end
         
         exitIcon = display.newImage( "Assets/IconLogoutGray.png", 1220, 15 )
         exitText = CLabel.new( "Çıkış Yap", 1150, 15, 15 )
         exitText:setTextColor( 0, 0, 0 )
-        exitButton  = widget.newButton{
+        exitButton  = display.newRect(1140, 15, 110, 20)
+        exitButton:addEventListener("touch", onExitButtonTouched)
+        --[[widget.newButton{
                 x = 1140,
                 y = 15,
    		width = 110,
                 height = 20,
                 label = "",
                 onEvent = onExitButtonTouched,
-	}
+	}--]]
         --[[
         exitButton = widget.newButton{
              width = 200,

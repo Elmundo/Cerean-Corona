@@ -7,6 +7,8 @@ local CTextField  = require "Views.TextFields.CTextField"
 local DataService = require "Network.DataService"
 local Logger      = require "libs.Log.Logger"
 
+local CButton = require "Views.Buttons.CButton"
+
 -- GLOBAL MailType Enum
 MailType = {
     MailTypeVerification = "1",
@@ -36,7 +38,53 @@ local nextButtonBg
 local nextButton
 
 -- METHODS
+local function setFocus ( yPos )
+    transition.to(ConfirmationScene.view, {time=400, y= yPos, transition = easing.outExpo})
+end 
 
+local function onSceneTouch( event )
+    if( "began" == event.phase )then
+        if( event.target.isKeyboard )then
+        else
+            setFocus(0)
+            native.setKeyboardFocus(nil)
+        end
+            
+    end
+end
+
+function ConfirmationScene:onInputBegan( event )
+        
+    setFocus(-330)
+        
+end
+        
+function ConfirmationScene:onInputEdit( event )
+    
+end
+
+function ConfirmationScene:onInputEnd( event )
+    --scene:alert("SetFocus TEST", "SettingFocusTo 0")
+    setFocus(0)
+end
+
+function ConfirmationScene:onButtonTouchEnded( event )
+    
+    if( event.target.id == "backButton" )then
+        storyboard.gotoScene("Scenes.AppointmentScene", "slideRight", 400)
+    elseif( event.target.id == "nextButton" )then
+        ConfirmationScene:saveContent(step, function (success, errorDetail)
+            if success then
+                ConfirmationScene:sendCustomerNumberMail()
+                storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)
+            else
+                Logger:debug(ConfirmationScene, "ConfirmationScene.onNextButton", "Step 6 is failure!")
+                ConfirmationScene:alert("UYARI!", errorDetail, {"OK"})
+            end
+            
+        end)
+    end
+end
 -- Network Error handler, check type 2
 function ConfirmationScene:isErrorCheckOk(responseData)
     if responseData.ErrorCode == "00" and responseData.ErrorDetail == nil then
@@ -46,29 +94,6 @@ function ConfirmationScene:isErrorCheckOk(responseData)
     return false
 end
 
-local function onNextButton(event)
-    if event.phase == "ended" then
-        ConfirmationScene:saveContent(step, function (success, errorDetail)
-            if success then
-                ConfirmationScene:sendCustomerNumberMail()
-                storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)
-            else
-                Logger:debug(self, "ConfirmationScene.onNextButton", "Step 6 is failure!")
-                ConfirmationScene:alert("UYARI!", errorDetail, {"OK"})
-            end
-            
-        end)
-        
-    end
-end
-
-local function onBackButton(event)
-    if event.phase == "ended" then
-        local prevScene = storyboard.getPrevious()
-        --storyboard.gotoScene(prevScene, "slideRight", 400)
-        storyboard.gotoScene("Scenes.AppointmentScene", "slideRight", 400)
-    end   
-end
 
 function ConfirmationScene:sendMail()
     
@@ -218,27 +243,27 @@ function ConfirmationScene:createScene( event )
     local group = self.view
     
     -- HEADER BAR
-    headerBar = display.newRect( 0, 0, 1024, 50 )
+    headerBar = display.newRect( 0, 0, 1280, 50 )
     headerBar:setFillColor( 74/255, 74/255, 74/255 )
 
     -- CEREAN LOGO
     logo = display.newImage( "Assets/Logo.png" )
-    logo.x, logo.y = 30, 70
+    logo.x, logo.y = 40, 70
 
     -- EPIC PROGRESS BAR 
-    progressBar = ProgressBar.new({x=280,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
+    progressBar = ProgressBar.new({x=290,y=66}, "Assets/ProgressBar.png", "Assets/ProgressBarMask.png")
     progressBar:setProgressWithPercentage(100)
     
     -- HEADER TEXT
-    bgHeaderText = display.newRoundedRect( 30, 170, 960, 40, 5 )
+    bgHeaderText = display.newRoundedRect( 40, 170, 1200, 40, 5 )
     bgHeaderText:setFillColor( cColorM(157, 20, 97, 1) )
     headerText     = display.newText( "E-Posta Onaylama", 0, 0, native.systemFontBold, 18 )
     headerText:setFillColor( 1, 1, 1 )
-    headerText.x, headerText.y = 40,180
+    headerText.x, headerText.y = 50,180
     
     -- INFORMATION TEXT
     informationText = display.newText("Mail ve SMS olarak gönderilen onay kodunu girerek başvurunuzu tamamlayınız", 
-                                            display.contentWidth*0.5, 
+                                            display.contentWidth*0.5+150, 
                                             display.contentHeight*0.5 - 30, 
                                             1000, 
                                             100, 
@@ -250,7 +275,7 @@ function ConfirmationScene:createScene( event )
     
     -- CONFIRMATIN CODE TEXT
     confirmationCodeText = display.newText("ONAY KODU", 
-                                            display.contentWidth*0.5 - 182, 
+                                            display.contentWidth*0.5, 
                                             display.contentHeight*0.5 + 84, 
                                             200, 
                                             100, 
@@ -261,12 +286,29 @@ function ConfirmationScene:createScene( event )
     confirmationCodeText:setFillColor(cColorM(0, 0, 0))
     
     -- VERIFICATION TEXT FIELD
-    verificationTextField = CTextField.new(display.contentWidth*0.5 - 320, 
+    verificationTextField = CTextField.new(display.contentWidth*0.5 - 120, 
                                                 display.contentHeight*0.5 + 90, 240, 40)
+    verificationTextField:setDelegate(self, "verificationTextField")            
+    verificationTextField:setKeyboardType("number")
     
     -- SEND AGAIN BUTTON
-    sendAgainButton = widget.newButton({left  = 318,
-                                            top     = 530,
+    sendAgainButton = display.newRoundedRect(520, 495, 105, 29, 3)
+    sendAgainButton:setFillColor(0.5, 1)
+    sendAgainButton:addEventListener("touch", function(event)
+                                                if( event.phase == "ended" )then
+                                                    sendAgainButton:setFillColor(0.5, 1)
+                                                    self:resendMail()
+                                                elseif( event.phase == "began" )then
+                                                    sendAgainButton:setFillColor(0.5, 0.5)
+                                                elseif( event.phase == "moved")then
+                                                    sendAgainButton:setFillColor(0.5, 1)
+                                                end
+                                             end)
+                                             
+    local sendAgainText = display.newText("TEKRAR GÖNDER", 530, 500, native.systemFont, 10)
+    --[[]
+    sendAgainButton = widget.newButton({left  = 520,
+                                            top     = 485,
                                             width   = 105,
                                             height  = 29,
                                             label   = "TEKRAR GÖNDER",
@@ -278,42 +320,17 @@ function ConfirmationScene:createScene( event )
                                                             if event.phase == "ended" then
                                                                 self:resendMail()
                                                             end 
-                                                      end,})
+                                                      end,})--]]
     
     -- VISUAL ENVELOPE
     envelopeImage = display.newImage("Assets/VisualEnvelope.png", 
                                             system.ResourceDirectory, 
-                                            150, 
+                                            350, 
                                             display.contentHeight*0.5)
     
     -- SCENE BUTTONS
-    backButtonBg = display.newRoundedRect( 30, 630, 105, 29, 0.5 )
-    backButtonBg:setFillColor( 165/255, 161/255, 155/255 )
-    backButton = widget.newButton({
-        left    = 30,
-        top     = 630,
-        width   = 105, 
-        height  = 29,
-        label   = "GERİ",
-        labelAlign = "center",
-        labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
-        emboss = true,
-        onEvent = onBackButton
-    })
-    
-    nextButtonBg = display.newRoundedRect( 885, 630, 105, 30, 0.5 )
-    nextButtonBg:setFillColor( 165/255, 161/255, 155/255 )
-    nextButton = widget.newButton({
-        left    = 885,
-        top     = 630,
-        width   = 105,
-        height  = 29,
-        label   = "DEVAM",
-        labelAlign = "center",
-        labelColor = { default={ 1, 1, 1 }, over={ 1, 0, 0, 0.5 } },
-        emboss = true,
-        onEvent = onNextButton
-    })
+    backButton = CButton.new( "GERİ", "backButton", self, 40, 630, 0 )
+    nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 630, 0 )
     
     group:insert(headerBar)
     group:insert(logo)
@@ -325,10 +342,11 @@ function ConfirmationScene:createScene( event )
     group:insert(verificationTextField)
     group:insert(envelopeImage)
     group:insert(sendAgainButton)
+    group:insert(sendAgainText)
     
-    group:insert(backButtonBg)
+    --group:insert(backButtonBg)
     group:insert(backButton)
-    group:insert(nextButtonBg)
+    --group:insert(nextButtonBg)
     group:insert(nextButton)
     
 end
@@ -338,11 +356,12 @@ function ConfirmationScene:enterScene(event)
     --Call parent enterScene method
     superEnterScene(self, event)
     ConfirmationScene:sendMail()
+    ConfirmationScene.view:addEventListener("touch", onSceneTouch)
 end
 
 
 function ConfirmationScene:didExitScene(event)
-    
+    ConfirmationScene.view:removeEventListener("touch", onSceneTouch)
 end
 
 

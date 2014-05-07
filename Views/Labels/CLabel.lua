@@ -4,13 +4,10 @@ local display = require( "display" )
 local native = require( "native" )
 
 
-
-
-
 function CLabel.new( text, xPos, yPos, fontSize )
 	local labelWrapper = display.newGroup( )
 	local background
-	local text = display.newText( text, 0, 0, "PTSans-Bold", fontSize )
+	local text = display.newText( text, 0, 0, native.systemFont, fontSize )
 
 	text:setFillColor( 113/255, 27/255, 69/255 )
 	text.align = "left"

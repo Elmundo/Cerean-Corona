@@ -51,6 +51,8 @@ function DropDownMenu.new( params )
     local ID               = params.ID
     local customParams     = params.customParams
     local fontSize         = params.fontSize or cDefaultFontSize
+    
+    local dataDDM
     --parent:insert(dropDownMenu)
     
     -- Properties
@@ -62,7 +64,7 @@ function DropDownMenu.new( params )
     
     local ddmValue       = cDefaultButtonValue
     local isTableHidden = true
-    
+
     -- Button Properties
     local buttonImage               = nil
     local buttonDefaultImageName    = (params.defaultImage or nil)
@@ -108,6 +110,7 @@ function DropDownMenu.new( params )
             dropDownMenu:hideTable(true)
             
             -- Call delegate method
+            dataDDM = event.row.params.id
             delegate.didDDMItemSelected(dataList[index], ID, index)
         end
 
@@ -242,6 +245,10 @@ function DropDownMenu.new( params )
     -- GETTER & SETTER METHODS
     function dropDownMenu:getValue()
         return ddmValue
+    end
+    
+    function dropDownMenu:getID()
+        return dataDDM
     end
     
     function dropDownMenu:updateButton( value )

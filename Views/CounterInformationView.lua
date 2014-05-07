@@ -76,17 +76,17 @@ function CounterInformationView.new(delegate)
         local contentData = {}
 
         contentData = {
-            DistributorId = "19733ca2-0bf9-e211-ae2c-0050568e1778",--distrubitionCompanyField:getText()--Not TextField
-            SkaDescId = "17d03b5d-6f87-e311-9572-0050568e1778",--supplierCompanyField:getText()
-            CompanyCode = "035.25.16.51.56",--companyCodeField:getText()
-            MembershipNumber = "16516516",--subscriberGroupField:getText()
-            TariffCode = "546545",--recieptField:getText()
-            MembershipGroup = "ff0f17d9-3003-e311-aa19-0050568e1778",--subscriberGroupField:getText()
-            CustomerName = "Bahadır Böge",--customerNameField:getText()
+            DistributorId = distrubitionCompanyField:getID(),
+            SkaDescId = supplierCompanyField:getID(),
+            CompanyCode = companyCodeField:getText(),
+            MembershipNumber = subscriberNumberField:getText(),
+            TariffCode = recieptField:getText(),
+            MembershipGroup = subscriberGroupField:getID(),
+            CustomerName = customerNameField:getText(),
             MeterSerialNumber = counterSerialNumberField:getText(),
             MeterSerialNumberAgain = inductiveCounterSerialNumberField:getText(),
-            MeterParameter = "5465",--counterMultiplierField:getText()
-            BillAmount = "454"--billAmountField:getText()
+            MeterParameter = counterMultiplierField:getText(),
+            BillAmount = billAmountField:getText()
        } 
 
         return contentData
