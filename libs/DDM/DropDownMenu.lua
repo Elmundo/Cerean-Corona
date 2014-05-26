@@ -93,7 +93,7 @@ function DropDownMenu.new( params )
     button = display.newRect(dropDownMenu, 0, 0, buttonWidth, buttonHeight)
     button:setFillColor( 1, 1, 1 )
     
-    buttonLabel = display.newText(dropDownMenu, "SEÇİNİZ", 10, 10, buttonWidth, buttonHeight, nil, fontSize)
+    buttonLabel = display.newText(dropDownMenu, "", 10, 10, buttonWidth, buttonHeight, nil, fontSize)
     buttonLabel:setFillColor(0)
     
     -- Table Delegate - Touch Events
@@ -166,6 +166,9 @@ function DropDownMenu.new( params )
                                 lineColor  = lineColor,
                                 params     = params
                           }
+                          
+        isButtonActive = true
+        buttonLabel.text = "SEÇİNİZ"
     end
     
     -- Drop Down Menu Methods
@@ -184,6 +187,9 @@ function DropDownMenu.new( params )
                                     params     = params
                               }
         end
+        
+        isButtonActive = true
+        buttonLabel.text = "SEÇİNİZ"
     end
     
     function dropDownMenu:insertRow(value)
@@ -221,6 +227,10 @@ function DropDownMenu.new( params )
     
     -- Button Touch Methods
     function dropDownMenu:touch(event)
+        
+        if isButtonActive == false then
+            return true
+        end
         
         if event.phase == "began" then
         
