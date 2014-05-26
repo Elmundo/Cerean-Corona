@@ -4,6 +4,8 @@ local storyboard = require( "storyboard" )
 
 local DataService = require "Network.DataService"
 
+local LoadingMask  = require "Views.LoadingMask"
+
 local CTextField = require( "Views.TextFields.CTextField" )
 local CLabel = require( "Views.Labels.CLabel" )
 local CButton = require( "Views.Buttons.CButton" )
@@ -74,13 +76,31 @@ end
 
 local function onRowTouch ( event )
     if( "release" == event.phase )then
-        storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 800)
-        DataService.customer = event.row.params.customerData
+        if( DataService.phase == Phase.EditPhase )then
+            DataService.customer = event.row.params.customerData
+            storyboard.gotoScene("Scenes.SearchMeterScene", "slideRight", 800)
+        elseif( DataService.phase == Phase.RegistryPhase)then 
+            DataService.customer = event.row.params.customerData
+            scene:hideMask()
+            storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 800)
+        end
+        
     end
 --event.phase="tap", "press", "release", "swipeLeft", "swipeRight"
 --event.target=row
 --event.target.index=index
 end 
+
+local function onSceneTouch( event )
+    if( "began" == event.phase )then
+        if( event.target.isKeyboard )then
+        else
+            --setFocus(0)
+            native.setKeyboardFocus(nil)
+        end
+            
+    end
+end
 
 local function onRowRender( event )
     local row = event.row
@@ -91,8 +111,12 @@ local function onRowRender( event )
     row.bg:setFillColor( 0, 1, 0 )
     row:insert( row.bg )
     
-    row.editButton = CButton.new( "Düzenle", params.id, onEditButtonTouched, 15, 10  )
+    row.editButton = display.newRoundedRect(0, 5, 140, 40, 5)--CButton.new( "Düzenle", params.id, onEditButtonTouched, 15, 10  )
+    row.editButton:setFillColor(113/255, 27/255, 69/255)
+    row.editButtonText = display.newText("DÜZENLE",40 ,13 ,native.systemFont, 16)
+    
     row:insert( row.editButton )
+    row:insert(row.editButtonText)
 
     row.nameText = CLabel.new( params.name, 320, 15, 15 )
     row.nameText:setTextColor( 165/255, 161/255, 155/255 )
@@ -163,7 +187,7 @@ function scene:onButtonTouchEnded( event )
     storyboard.gotoScene("Scenes.MenuScene", "slideRight", 800)
     elseif( event.target.id == "searchButton" )then
         local customerId = searchField:getText()
-    
+        scene:showMask()
     DataService:isCustomer(customerId, 
         function(responseData)
             if(isErrorCheckOk(responseData) )then
@@ -171,6 +195,7 @@ function scene:onButtonTouchEnded( event )
                 if( doneSearch ) then
                     doneSearch = false
                 else 
+                    scene:hideMask()
                     doneSearch = true
                     resultTable:reloadData()
                 end
@@ -255,11 +280,12 @@ function scene:willEnterScene( event )
 
 end
 
-
+local superEnterScene = scene.enterScene
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
+        superEnterScene(self, event)
         local group = self.view
-        
+        scene.view:addEventListener("touch", onSceneTouch)
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -271,8 +297,9 @@ end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
+    native.setKeyboardFocus(nil)
         local group = self.view
-
+        scene.view:removeEventListener("touch", onSceneTouch)
         -----------------------------------------------------------------------------
 
         --      INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)

@@ -1,6 +1,8 @@
 local widget = require( "widget" )
 local display = require( "display" )
 local CLabel = require( "Views.Labels.CLabel" )
+local DataService = require "Network.DataService"
+
 
 local ControlBar = {}
 
@@ -24,7 +26,7 @@ function ControlBar.new( delegate )
         background:setFillColor(0.5, 0.5, 0.5, 1)
         
         icon = display.newImage("Assets/IconIdentityGray.png", 20, 15 )
-        userTitleLabel = CLabel.new( "Yeni Kullanıcı", 45, 15, 15 )
+        userTitleLabel = CLabel.new( DataService.userName .. " - " .. DataService.userBusinessUnitName , 45, 15, 15 )
         userTitleLabel:setTextColor( 0, 0, 0 )
         
         delegate = delegate

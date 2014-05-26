@@ -210,6 +210,7 @@ end
 
 function scene:logout()
     storyboard.removeAll()
+    DataService:resetCachedData()
     storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
 end
 
@@ -301,6 +302,7 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
         local group = self.view
+        native.setKeyboardFocus(nil)
         addressInformationView:onViewDelete()
         scene.view:removeEventListener("touch", onSceneTouch)
         -----------------------------------------------------------------------------

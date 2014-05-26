@@ -29,13 +29,15 @@ local bgHeaderText
 local headerText
 local promotionText
 local promotionTextField
+local usedPackageText
 local packageDetail
 local packageScroller
 local backButtonBg
 local backButton
 local nextButtonBg
+local cancelButton
 local nextButton
-
+local usedPackage
 -- METHODS
 function PackageScene:onButtonTouchEnded( event )
     
@@ -59,6 +61,12 @@ function PackageScene:onButtonTouchEnded( event )
         end)
         
     end
+end
+        
+function PackageScene:logout()
+    storyboard.removeAll()
+    DataService:resetCachedData()
+    storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
 end
         
 function PackageScene:onInputBegan( event )
@@ -200,10 +208,28 @@ function PackageScene.onBackButton(event)
         storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 400 )
     end
 end
+local function arrangeProducts(productList)
+    local returnList = {}
+    for i=1, #productList do
+        if( productList[i].IsUsed == true )then
+            usedPackage = productList[i]
+            usedPackageText = display.newText( DataService.customer.CustomerName .."/".. usedPackage.Name .. "/" .. usedPackage.TotalOpenAmount .. "/" .. usedPackage.EndDate, 0, 50, native.systemFont, 18 )
+            usedPackageText:setFillColor( 0,0,0 ) 
+            usedPackageText.x, usedPackageText.y = 300, 260
+            --group:insert(usedPackageText )
+        else
+            table.insert( returnList, productList[i])
+        end
+    end
+    return returnList
+end
 
 function PackageScene:createScene( event)
-    
-    products = DataService.products
+    if( DataService.phase == Phase.EditPhase )then
+        products = arrangeProducts( DataService.products )
+    else
+        products = DataService.products
+    end
     --products = self:createDummyProductList()
     
     -- View of scene
@@ -234,7 +260,17 @@ function PackageScene:createScene( event)
     promotionText.x, promotionText.y = 40,260
     promotionTextField = CTextField.new( 40, 290, 240, 40 ) 
     promotionTextField:setDelegate(self, "promotionText")
-  
+    -- used
+    if( DataService.phase == Phase.EditPhase)then
+        --usedPackageText = display.newText( "Test", 0, 50, native.systemFont, 24 )
+        --usedPackageText:setFillColor( 0,0,0 )
+        --usedPackageText.x, usedPackageText.y = 300, 260
+        cancelButton = CButton.new( "VAZGEÇ", "cancelButton", self, 200, 630, 0 )
+        if( usedPackageText )then
+            group:insert( usedPackageText )
+        end
+        group:insert( cancelButton )
+    end
     -- PACKAGE DETAIL
     packageDetail = PackageDetail.new()
     packageDetail.x = 950
@@ -314,6 +350,7 @@ PackageScene:addEventListener("enterScene")
 
 function PackageScene:didExitScene(event)
    PackageScene.view:removeEventListener("touch", onSceneTouch) 
+   native.setKeyboardFocus(nil)
 end
 PackageScene:addEventListener("didExitScene")
 

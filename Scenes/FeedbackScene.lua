@@ -80,7 +80,7 @@ end
 FeedbackScene:addEventListener("enterScene")
 
 function FeedbackScene:didExitScene(event)
-    
+    native.setKeyboardFocus(nil)
 end
 FeedbackScene:addEventListener("didExitScene")
 

@@ -5,8 +5,10 @@ local CLabel       = require( "Views.Labels.CLabel" )
 local CButton      = require( "Views.Buttons.CButton" )
 local DataServer   = require "Network.DataService"
 local Utils        = require "libs.Util.Utils"
+
 local LoadingMask  = require "Views.LoadingMask"
 local BaseScene    = require "Scenes.BaseScene"
+
 local Logger       = require "libs.Log.Logger"
 local DropDownMenu = require "libs.DDM.DropDownMenu"
 
@@ -37,6 +39,7 @@ local loginButton
 --TestData For Keyboard
 local cachedDataIndex = 0
 local errorImage
+
 local function checkData()
     if( userNameTextField:getText() == "" )then
         errorImage.x = centerX+100
@@ -203,6 +206,9 @@ function scene:onButtonTouchEnded( event )
                                                 else
                                                     scene:hideMask()
                                                     -- TODO: Bahadir - burda errorMessage image'ını göstereceksin sanırım
+                                                    scene:alert("UYARI!", "Kullanıcı adı yada şifreniz yanlış.", "Tamam", function()
+                                                    end
+                                                        )
                                                 end
 
                                             end,
@@ -229,7 +235,7 @@ function scene:onInputBegan( event )
 end
         
 function scene:onInputEdit( event )
-    
+    --event.text = addLetterToStringForPhone(event.oldText, event.newCharacters)
 end
 
 function scene:onInputEnd( event )
@@ -321,6 +327,7 @@ end
 
 function scene:exitScene( event )
     scene.view:removeEventListener("touch", onSceneTouch)
+    native.setKeyboardFocus(nil)
     --userNameTextField:addRuntimeEventListener()
     --passwordTextField:addRuntimeEventListener()
 end

@@ -9,10 +9,19 @@ local button
 function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
 	local buttonWrapper = display.newGroup( )
         local label
+        local background = display.newRoundedRect( 0, 0, 140, 40, 5 )
+	background:setFillColor( 113/255, 27/255, 69/255 )
+        
         local function onButtonTouch( event )
+            
             if( event.phase == "began" )then
+                background:setFillColor( 113/255, 27/255, 69/255, 0.95 )
                label:setFillColor( 0.5, 0.5 ) 
+            elseif( event.phase == "moved" )then
+                label:setFillColor( 1, 1 )
+                background:setFillColor( 113/255, 27/255, 69/255, 1 )
             elseif( event.phase == "ended" )then
+                background:setFillColor( 113/255, 27/255, 69/255, 1 )
                 label:setFillColor( 1, 1 )
                 if( buttonWrapper.delegate ~= nil )then
                     buttonWrapper.delegate:onButtonTouchEnded( event )
@@ -57,8 +66,6 @@ function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
         --]]
         buttonWrapper.delegate = delegate
         
-	local background = display.newRoundedRect( 0, 0, 140, 40, 5 )
-	background:setFillColor( 113/255, 27/255, 69/255 )
 	background:addEventListener("touch", onButtonTouch )
         background.id = buttonID
 	buttonWrapper:insert( background )

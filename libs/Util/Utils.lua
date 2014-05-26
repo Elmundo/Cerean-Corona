@@ -53,13 +53,18 @@ end
 function addLetterToStringForPhone (_text, _addedLetter )
     local text = _text
     local addedLetter = _addedLetter
-    
-    if( addedLetter:match("%W") == false )then
-        return addedLetter
+    local test = string.match(addedLetter,"%d")
+    if( string.match(addedLetter,"%d") == nil )then
+        return text
     end
     local returnText
-    
-    local textLength = string.len(text)
+    local textLength
+    if( text == nil )then
+        textLength = 0
+    else 
+        textLength = string.len(text)
+    end
+     
     
     if( 0 == textLength )then
         --Need to check this

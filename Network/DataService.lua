@@ -12,6 +12,7 @@ Phase = {
 	ApplicationPhase = 0,
 	CallPhase = 1,
 	RegistryPhase = 2,
+        EditPhase = 3,
 }
 
 
@@ -57,7 +58,9 @@ local DataService = {
 	verificationCode = "",
 	webFormPage = "",
 	meterSerialNumber = "",
-
+        
+        meterData = "",
+        
 	-- Parameters Cached Data List
 	cities           = {},
 	companies        = {},
@@ -197,6 +200,13 @@ function DataService:isCustomer( customerId, callback, failure  )
 	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end
 
+function DataService:getMeter( meterId , callback, failure )
+    request.params = { meterId, self.customer.CustomerId, self.webFormPage }
+    request.method = "getmeter"
+    
+    CereanServer:request(self:completeRequest(baseRequest), callback, failure)
+end
+
 function DataService:getParameters( key, parentAsInt, callback, failure )
 	
 	request.params = {key, json.null, json.null}
@@ -222,9 +232,14 @@ function DataService:sendMail( mailType, params, callback, failure  )
 end
 
 function DataService:getProduct( callback, failure  )
+	if( self.phase == Phase.EditPhase )then
+            request.params = {self.customer.CustomerId, self.meterData.MeterId, self.webFormPage}
+            request.method = "getproducts"
+        else 
+            request.params = {self.customerId, self.meterId}
+            request.method = "getproducts"  
+        end
 	
-	request.params = {self.customerId, self.meterId}
-	request.method = "getproducts"
 	
 	CereanServer:request(self:completeRequest(baseRequest), callback, failure)
 end

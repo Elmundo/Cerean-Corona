@@ -522,6 +522,7 @@ end
 
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
+    native.setKeyboardFocus(nil)
         local group = self.view
         personalInformationGroup:onViewDelete()
         counterInformationGroup:onViewDelete()

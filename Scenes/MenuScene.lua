@@ -17,10 +17,11 @@ local centerY = display.contentCenterY
 local displayGroup
 local controlBar
 local menuHeader
+
 local applicationPhaseButton
 local callPhaseButton
 local registryPhaseButton
-
+local editPhaseButton
 
 
 
@@ -61,8 +62,19 @@ local function onRegistryPhaseButtonTouched( event )
         return true
 end
 
+local function onEditPhaseButtonTouched( event )
+    if( event.phase == "ended" )then
+        DataService.phase = Phase.EditPhase
+        DataService.webFormPage = "sayacyenile"
+        storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
+    end
+    
+    return true
+end
+
 function scene:logout()
     storyboard.removeAll()
+    DataService:resetCachedData()
     storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
 end
 -------------------------------------------------------------------------------
@@ -85,7 +97,7 @@ function scene:createScene( event )
                 label = "",
                 onEvent = onApplicationPhaseButtonTouched
 	}
-	applicationPhaseButton.x = centerX-229-219/2
+	applicationPhaseButton.x = centerX-2*219-15
 	applicationPhaseButton.y = centerY-219/2
 
 	callPhaseButton = widget.newButton{
@@ -96,7 +108,7 @@ function scene:createScene( event )
     	label = "",
     	onEvent = onCallPhaseButtonTouched
 	}
-	callPhaseButton.x = centerX-219/2
+	callPhaseButton.x = centerX-219-5
 	callPhaseButton.y = centerY-219/2
 
 	registryPhaseButton = widget.newButton{
@@ -107,14 +119,26 @@ function scene:createScene( event )
     	label = "",
     	onEvent = onRegistryPhaseButtonTouched
 	}
-	registryPhaseButton.x = centerX+229-219/2
+	registryPhaseButton.x = centerX+5
 	registryPhaseButton.y = centerY-219/2
+        
+        editPhaseButton = widget.newButton{
+            width = 219,
+            height = 219,
+            defaultFile = "Assets/MenuButton04.png",
+            overFile = "Assets/MenuButton04Pressed.png",
+            label = "",
+            onEvent = onEditPhaseButtonTouched
+        }
+        editPhaseButton.x = centerX+219+15
+        editPhaseButton.y = centerY-219/2
         
         displayGroup:insert( controlBar )
 	displayGroup:insert( menuHeader )
 	displayGroup:insert( applicationPhaseButton )
 	displayGroup:insert( callPhaseButton )
 	displayGroup:insert( registryPhaseButton )
+        displayGroup:insert( editPhaseButton)
 	--[[
 	displayGroup.x = centerX
 	displayGroup.y = centerY
@@ -126,7 +150,7 @@ function  scene:enterScene( event )
 end
 
 function scene:exitScene( event )
-	
+    native.setKeyboardFocus(nil)
 end
 
 function scene:destroyScene( event )

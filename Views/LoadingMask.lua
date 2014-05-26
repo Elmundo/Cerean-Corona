@@ -8,7 +8,7 @@ local LoadingMask = {}
 function LoadingMask.new( options )
     
     local loadingMask = {}
-    
+    local didAddedToGroup = false
     -- Properties
     local group = options.view
     local imageSheet = nil
@@ -51,16 +51,22 @@ function LoadingMask.new( options )
     spinner.isVisible = false
     
     function loadingMask:start()
-        group:insert(group.numChildren+1, mask)
-        group:insert(group.numChildren+1, spinner)
+        if( didAddedToGroup == false )then
+            group:insert(group.numChildren+1, mask)
+            group:insert(group.numChildren+1, spinner)
+            didAddedToGroup = true
+        end 
         spinner:start()
         mask.isVisible = true
         spinner.isVisible = true
     end
     
     function loadingMask:stop()
-        group:remove(mask)
-        group:remove(spinner)
+        if( didAddedToGroup )then
+            --group:remove(mask)
+            --group:remove(spinner)
+            --didAddedToGroup = false
+        end
         spinner:stop()
         mask.isVisible = false
         spinner.isVisible = false

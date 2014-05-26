@@ -362,6 +362,7 @@ end
 
 function ConfirmationScene:didExitScene(event)
     ConfirmationScene.view:removeEventListener("touch", onSceneTouch)
+    native.setKeyboardFocus(nil)
 end
 
 
