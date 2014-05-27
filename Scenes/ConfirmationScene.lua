@@ -73,7 +73,9 @@ function ConfirmationScene:onButtonTouchEnded( event )
     if( event.target.id == "backButton" )then
         storyboard.gotoScene("Scenes.AppointmentScene", "slideRight", 400)
     elseif( event.target.id == "nextButton" )then
+        ConfirmationScene:showMask()
         ConfirmationScene:saveContent(step, function (success, errorDetail)
+            ConfirmationScene:hideMask()
             if success then
                 ConfirmationScene:sendCustomerNumberMail()
                 storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400)

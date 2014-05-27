@@ -57,7 +57,12 @@ function PackageScene:onButtonTouchEnded( event )
         
         PackageScene:saveContent(step, function (success, errorDetail)
             if success then
-                storyboard.gotoScene("Scenes.AppointmentScene", "slideLeft", 400 )
+                if( DataService.phase == Phase.EditPhase )then
+                    storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 400 )
+                else 
+                    storyboard.gotoScene("Scenes.AppointmentScene", "slideLeft", 400 )
+                end
+                
             else
                 Logger:error(PackageScene, "PackageScene:saveContent", errorDetail)
                 PackageScene:alert("UYARI!", errorDetail, {"OK"})

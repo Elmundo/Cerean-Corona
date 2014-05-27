@@ -201,12 +201,12 @@ function scene:onButtonTouchEnded( event )
     
     DataService:getMeter(meterId, 
         function(responseData)
+            scene:hideMask()
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
                 if( doneSearch ) then
                     doneSearch = false
                 else 
-                    scene:hideMask()
                     doneSearch = true
                     resultTable:reloadData()
                 end
