@@ -416,6 +416,7 @@ end
 
 function scene:logout()
     storyboard.removeAll()
+    DataService:resetCachedData()
     storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
 end
 
@@ -492,9 +493,10 @@ function scene:willEnterScene( event )
 
 end
 
-
+local superEnterScene = scene.enterScene
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
+        superEnterScene(self, event)
         local group = self.view
         if( DataService.meterId ~= "" )then
             step = 2

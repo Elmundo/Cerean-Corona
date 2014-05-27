@@ -30,6 +30,7 @@ local function onApplicationPhaseButtonTouched( event )
         if event.phase == "ended" then
             DataService.phase = Phase.ApplicationPhase
             DataService.webFormPage = "bayibasvuru"
+            storyboard.removeAll()
             storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
         end
         --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
@@ -42,6 +43,7 @@ local function onCallPhaseButtonTouched( event )
         if event.phase == "ended" then
             DataService.phase = Phase.CallPhase
             DataService.webFormPage = "bayibeniara"
+            storyboard.removeAll()
             storyboard.gotoScene("Scenes.SubscriptionScene", "slideLeft", 800)
         end
         
@@ -55,6 +57,7 @@ local function onRegistryPhaseButtonTouched( event )
         if event.phase == "ended" then
             DataService.phase = Phase.RegistryPhase
             DataService.webFormPage = "sayac"
+            storyboard.removeAll()
             storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
         end
         --storyboard.gotoScene( "Scenes.SubscriptionScene", "slideLeft", 800 )
@@ -66,6 +69,7 @@ local function onEditPhaseButtonTouched( event )
     if( event.phase == "ended" )then
         DataService.phase = Phase.EditPhase
         DataService.webFormPage = "sayacyenile"
+        storyboard.removeAll()
         storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
     end
     

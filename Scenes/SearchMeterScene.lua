@@ -4,8 +4,6 @@ local storyboard = require( "storyboard" )
 
 local DataService = require "Network.DataService"
 
-local LoadingMask  = require "Views.LoadingMask"
-
 local CTextField = require( "Views.TextFields.CTextField" )
 local CLabel = require( "Views.Labels.CLabel" )
 local CButton = require( "Views.Buttons.CButton" )
@@ -52,6 +50,7 @@ local searchData = {}
 
 local function isErrorCheckOk(responseData)
     if( type(responseData) == "table" )then
+        --Error check 
         return true
     else 
         return false
@@ -60,36 +59,19 @@ end
 
 local function onSearchComplete ()
     resultTable:deleteAllRows()
-    for i=1, #searchData do
+    for i=1, #searchData.SearchMeter do
         resultTable:insertRow{
             rowHeight = 60,
             isCategory = false,
             rowColor = { default = {1, 0, 0, 0}, over = { 0, 0, 0, 0} },
             params = {
-                name = searchData[i].CustomerName,
-                id = searchData[i].CustomerNumber,
-                customerData = searchData[i]
+                name = searchData.SearchMeter[i].CustomerName,
+                id = searchData.SearchMeter[i].MeterSerialNumber,
+                meterData = searchData.SearchMeter[i]
             }
         }
     end
 end
-
-local function onRowTouch ( event )
-    if( "release" == event.phase )then
-        if( DataService.phase == Phase.EditPhase )then
-            DataService.customer = event.row.params.customerData
-            storyboard.gotoScene("Scenes.SearchMeterScene", "slideRight", 800)
-        elseif( DataService.phase == Phase.RegistryPhase)then 
-            DataService.customer = event.row.params.customerData
-            scene:hideMask()
-            storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 800)
-        end
-        
-    end
---event.phase="tap", "press", "release", "swipeLeft", "swipeRight"
---event.target=row
---event.target.index=index
-end 
 
 local function onSceneTouch( event )
     if( "began" == event.phase )then
@@ -101,6 +83,33 @@ local function onSceneTouch( event )
             
     end
 end
+
+local function onRowTouch ( event )
+    if( "release" == event.phase )then
+        scene:showMask()
+        DataService.meterData = event.row.params.meterData
+        DataService:getProduct(function(responseData)
+                                        if( responseData )then
+                                            DataService.products = responseData
+                                            --Utils:printTable(responseData)
+                                            scene:hideMask()
+                                            storyboard.gotoScene("Scenes.PackageScene", "slideLeft", 800)
+                                        else 
+                                            scene:alert("Servis Hatası", "Paket listesi boş geldi.")
+                                        end
+                                         --scene:shiftUp()
+                                     end, function(errorData) 
+                                        --Utils:printTable(errorData)
+                                        print("error")
+                                     end)
+        
+        --storyboard.gotoScene("Scenes.PackageScene", "slideRight", 800)
+        
+    end
+--event.phase="tap", "press", "release", "swipeLeft", "swipeRight"
+--event.target=row
+--event.target.index=index
+end 
 
 local function onRowRender( event )
     local row = event.row
@@ -117,7 +126,7 @@ local function onRowRender( event )
     
     row:insert( row.editButton )
     row:insert(row.editButtonText)
-
+    
     row.nameText = CLabel.new( params.name, 320, 15, 15 )
     row.nameText:setTextColor( 165/255, 161/255, 155/255 )
     row:insert( row.nameText )
@@ -125,7 +134,7 @@ local function onRowRender( event )
     row.id = CLabel.new( params.id, 170, 15, 15 )
     row:insert( row.id )
     
-    row.data = params.customerData
+    row.data = params.meterData
     return true   
 end
 
@@ -137,6 +146,7 @@ local function onCancelButtonTouch ()
     storyboard.removeAll()
     storyboard.gotoScene("Scenes.LoginScene", "slideRight", 800)
 end
+
 function scene:logout()
     storyboard.removeAll()
     DataService:resetCachedData()
@@ -186,9 +196,10 @@ function scene:onButtonTouchEnded( event )
         storyboard.removeAll()
     storyboard.gotoScene("Scenes.MenuScene", "slideRight", 800)
     elseif( event.target.id == "searchButton" )then
-        local customerId = searchField:getText()
         scene:showMask()
-    DataService:isCustomer(customerId, 
+        local meterId = searchField:getText()
+    
+    DataService:getMeter(meterId, 
         function(responseData)
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
@@ -224,9 +235,9 @@ function scene:createScene( event )
         cancelButton = CButton.new( "VAZGEÇ", "cancelButton", scene, 1100, 80, 5 )
         
         --BOLD
-        headerText = CLabel.new( "Sayaç Ekle", 50, 200, 20 )
+        headerText = CLabel.new( "Sayaç Düzenle", 50, 200, 20 )
 
-        searchFieldHeader = CLabel.new( "Müşteri Kodu İle Ara", 50, 240, 15 )
+        searchFieldHeader = CLabel.new( "Sayaç Ara", 50, 240, 15 )
         --MAY NEED TO RESIZE
         searchField = CTextField.new(45, 260, 360, 40)
         searchField:setDelegate(self, "searchField")
@@ -266,9 +277,10 @@ function scene:createScene( event )
 
 end
 
-
+local superEnterScene = scene.enterScene
 -- Called BEFORE scene has moved onscreen:
 function scene:willEnterScene( event )
+        superEnterScene(self, event)
         local group = self.view
         
 
@@ -397,3 +409,5 @@ scene:addEventListener( "overlayEnded", scene )
 ---------------------------------------------------------------------------------
 
 return scene
+
+

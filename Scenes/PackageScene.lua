@@ -43,7 +43,12 @@ function PackageScene:onButtonTouchEnded( event )
     
     if( event.target.id == "backButton" )then
         print("BACK BUTTON PRESSED")
-        storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 400 )        
+        if( DataService.phase == Phase.EditPhase )then
+            storyboard.gotoScene("Scenes.SearchMeterScene", "slideRight", 400 )
+        else
+            storyboard.gotoScene("Scenes.SubscriptionScene", "slideRight", 400 )    
+        end
+                
     elseif( event.target.id == "nextButton" )then
         print("NEXT BUTTON PRESSED")
         if selectedProduct == nil then
