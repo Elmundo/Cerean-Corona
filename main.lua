@@ -1,4 +1,4 @@
-local native       = require "native"
+require "CiderDebugger";local native       = require "native"
 local display      = require "display"
 local widget       = require "widget"
 local mime         = require "mime"
