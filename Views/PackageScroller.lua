@@ -65,8 +65,16 @@ function PackageScroller.new(options)
             
             self:insert(packageView)
         end
+        
+        local dataCount     = #list
+        local contentHeight = 0
+        if dataCount%2 == 0  then
+            contentHeight  = self.yPos
+        else
+            contentHeight  = self.yPos + cPACKAGE_Y_DIFF
+        end
                
-        self:setScrollHeight(self.yPos)
+        self:setScrollHeight(contentHeight)
     end
     
     -- Package Delegate
