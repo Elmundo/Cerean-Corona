@@ -168,7 +168,8 @@ function DropDownMenu.new( params )
                           }
                           
         isButtonActive = true
-        buttonLabel.text = "SEÇİNİZ"
+        ddmValue = "SEÇİNİZ"
+        buttonLabel.text = ddmValue
     end
     
     -- Drop Down Menu Methods
@@ -189,7 +190,8 @@ function DropDownMenu.new( params )
         end
         
         isButtonActive = true
-        buttonLabel.text = "SEÇİNİZ"
+        ddmValue = "SEÇİNİZ"
+        buttonLabel.text = ddmValue
     end
     
     function dropDownMenu:insertRow(value)
@@ -263,7 +265,13 @@ function DropDownMenu.new( params )
     
     function dropDownMenu:updateButton( value )
         ddmValue = value 
-        buttonLabel.text = ddmValue.Name
+        buttonLabel.text = ddmValue
+    end
+    
+    function dropDownMenu:updateWithId( value, id )
+        ddmValue = value
+        buttonLabel.text = ddmValue
+        ID = id
     end
     
     function dropDownMenu:setValue(value)

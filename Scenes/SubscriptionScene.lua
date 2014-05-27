@@ -128,6 +128,7 @@ function scene:saveContent ( appStep, callback )
                                  end, 
                                  
                                  function (errorData) -- Failure callback
+                                    scene:hideMask()
                                     Logger:debug(scene, "scene:saveContent", "Step 1 is failure!")
                                     callback(false, errorData.ErrorDetail)
                                     --Shift Up Should Be Removed 

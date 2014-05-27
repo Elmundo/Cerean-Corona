@@ -63,7 +63,8 @@ function AddressInformationView.new( delegate )
     local emailLabel2
     local emailField2
     
-    local counties
+    local counties1
+    local counties2
     local sameVisitingAndContactAdress
     local mirrorDataButton
     local mirrorDataButtonLabel
@@ -97,11 +98,18 @@ function AddressInformationView.new( delegate )
                 --Start Spinner but first check for Corona Behaviour
                 --Save Sellected City
                 --Get County List
+                if( mirrorData )then
+                    cityField2:updateWithId(ddmValue, ID)
+                end    
                 DataService:getParametersWithGuid(kParameterCounties, ddmValue.id, nil, function(responseData)
                     --Check for error
                     print("Success")
-                    counties = getDropDownList(responseData)
-                    countyField1:loadData(counties)
+                    counties1 = getDropDownList(responseData)
+                    countyField1:loadData(counties1)
+                    if(mirrorData)then
+                       counties2 = counties1
+                       countyField2:loadData(counties2)
+                    end
                 end, 
                     function(errorData)
                         --Error Handling
@@ -116,15 +124,17 @@ function AddressInformationView.new( delegate )
                 DataService:getParametersWithGuid(kParameterCounties, ddmValue.id, nil, function(responseData)
                     --Check for error
                     print("Success")
-                    counties = getDropDownList(responseData)
-                    countyField2:loadData(counties)
+                    counties2 = getDropDownList(responseData)
+                    countyField2:loadData(counties2)
                 end, 
                     function(errorData)
                         --Error Handling
                         print("Fail")
                     end)
             elseif( ID == "CountyField1") then
-                
+                if( mirrorData )then
+                    countyField2:updateWithId(ddmValue, ID)
+                end  
             elseif( ID == "CountyField2") then
                     
             end
@@ -165,6 +175,37 @@ function AddressInformationView.new( delegate )
 
                 emailField2:setText(emailField1:getText())
                 
+                
+                local cityValue = cityField1:getValue()
+                local countyValue = countyField1:getValue()
+                local cityId = cityField1:getID()
+                local countyId = countyField1:getID()
+                
+                if( cityValue ~= "SEÇİNİZ" )then
+                    
+                
+                    cityField2:updateWithId(cityValue, cityId)
+                    --setValue(cityValue)
+                    --countyField2:updateButton(countyValue)
+                    --setValue(countyValue)
+                
+                    counties2 = counties1
+                    countyField2:loadData( counties2 )
+                    countyField2:updateWithId(countyValue, countyId)
+                    
+                    --cityField2:setID(cityId)
+                    --countyField2:setID(countyId)
+                    
+                end
+                --[[]
+                [self.city2 updateButtonWithName:self.city1.name];
+                self.city2.ID = self.city1.ID;
+    
+                self.county2.objects = self.county1.objects;
+    _           counties2 = _counties1;
+                [self.county2 updateButtonWithName:self.county1.name];
+                self.county2.ID = self.county1.ID;
+                --]]
                 mirrorData = true 
                 mirrorDataButton:removeSelf()
                 mirrorDataButton = nil

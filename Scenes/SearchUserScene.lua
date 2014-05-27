@@ -52,10 +52,14 @@ local searchData = {}
 
 local function isErrorCheckOk(responseData)
     if( type(responseData) == "table" )then
-        if( responseData.ErrorCode == 0 )then
-            return true
+        if( responseData.ErrorCode )then
+            if( responseData.ErrorCode == 0 )then
+                return true
+            else 
+                return false 
+            end
         else 
-            return false 
+            return true
         end
     else 
         return false
@@ -210,6 +214,7 @@ function scene:onButtonTouchEnded( event )
             end
         end, 
         function(errorData)
+            scene:hideMask()
             print "Error finding user"
         end)
     end

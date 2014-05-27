@@ -410,7 +410,7 @@ function CounterInformationView.new(delegate)
             print( "Nil City" )
         else 
             sellectedImageName = company.Image
-            distrubitionCompanyField:updateButton(company)
+            distrubitionCompanyField:updateWithId(company.Name, company.ID)
             counterInformationGroup:updateBillImage(company.Image)
             --[[
             distrubitionCompanyField:updateButton(company)

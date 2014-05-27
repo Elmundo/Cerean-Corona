@@ -9,7 +9,7 @@ local parameterConfig = require( "ParameterConfig" )
 local DataService = require( "Network.DataService" )
 
 local ControlBar = require( "Views.ControlBar" )
-
+local LoadingMask  = require "Views.LoadingMask"
 local AppointmentPlanningView = require( "Views.AppointmentPlanningView" )
 local AddresInformationView = require( "Views.AddressInformationView" )
 
@@ -284,9 +284,10 @@ function scene:willEnterScene( event )
 
 end
 
-
+local superEnterScene = scene.enterScene
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
+    superEnterScene(self, event)
         local group = self.view
         isStepAnimationRunning = false
         addressInformationView:onViewInit()
