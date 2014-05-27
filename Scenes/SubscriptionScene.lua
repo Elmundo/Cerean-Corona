@@ -89,6 +89,7 @@ function scene:isErrorCheckOk(responseData)
 end
 
 function scene:saveContent ( appStep, callback ) 
+    scene:showMask()
     local contentData 
     if( step == kStepPersonel ) then
         if( isCorporate == 0 )then
@@ -109,7 +110,7 @@ function scene:saveContent ( appStep, callback )
         
         DataService:saveContent( contentData, 
                                  function (responseData) -- Success callback
-                                     
+                                     scene:hideMask()
                                      if scene:isErrorCheckOk(responseData) then
                                          Logger:debug(scene, "scene:saveContent", "Step 1 is success!")
                                          DataService.customerId = responseData.CustomerId

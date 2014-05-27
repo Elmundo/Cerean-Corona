@@ -52,7 +52,11 @@ local searchData = {}
 
 local function isErrorCheckOk(responseData)
     if( type(responseData) == "table" )then
-        return true
+        if( responseData.ErrorCode == 0 )then
+            return true
+        else 
+            return false 
+        end
     else 
         return false
     end
@@ -190,12 +194,12 @@ function scene:onButtonTouchEnded( event )
         scene:showMask()
     DataService:isCustomer(customerId, 
         function(responseData)
+            scene:hideMask()
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
                 if( doneSearch ) then
                     doneSearch = false
                 else 
-                    scene:hideMask()
                     doneSearch = true
                     resultTable:reloadData()
                 end

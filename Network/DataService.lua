@@ -108,8 +108,6 @@ function DataService:resetCachedData( )
 	self.primaryContactId = ""
 	self.productId = ""
 	self.quoteId = ""
-	self.userBusinessUnitName = ""
-	self.userId = ""
 	self.userName = ""
 	self.webFormPage = ""
 	self.meterSerialNumber = ""
