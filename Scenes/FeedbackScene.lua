@@ -39,6 +39,19 @@ function FeedbackScene:createScene( event )
     congImage.anchorX = 0.5
     congImage.anchorY = 0.5
     
+    local congMessage = display.newText( "Başvurunuz alınmıştır.", 0, 0, native.systemFontBold, 18 )
+    congMessage:setFillColor(74/255, 74/255, 74/255);
+    congMessage.anchorX = 0.5
+    congMessage.anchorY = 0.5
+    congMessage.x = display.contentCenterX
+    congMessage.y = 500
+    
+    local customerIdText = display.newText( "Müşteri Numarası: " .. DataService.customerNumber, 0, 0, native.systemFontBold, 18 )
+    customerIdText:setFillColor(74/255, 74/255, 74/255);
+    customerIdText.anchorX = 0.5
+    customerIdText.anchorY = 0.5
+    customerIdText.x = display.contentCenterX
+    customerIdText.y = 550
     -- SCENE BUTTONS
     local backButton = CButton.new( "GERİ", "backButton", self, 40, 630, 0 )
     local nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 630, 0 )
@@ -49,7 +62,8 @@ function FeedbackScene:createScene( event )
     group:insert(bgHeaderText)
     group:insert(headerText)
     group:insert(congImage)
-    
+    group:insert(congMessage)
+    group:insert(customerIdText)
     --group:insert(backButtonBg)
     group:insert(backButton)
     --group:insert(nextButtonBg)
