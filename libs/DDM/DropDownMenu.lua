@@ -272,7 +272,7 @@ function DropDownMenu.new( params )
     function dropDownMenu:updateWithId( value, id )
         ddmValue = value
         buttonLabel.text = ddmValue
-        ID = id
+        dataDDM = id
     end
     
     function dropDownMenu:setValue(value)
@@ -288,7 +288,7 @@ function DropDownMenu.new( params )
     end
     
     function dropDownMenu:setID(id)
-        ID = id
+        dataDDM = id
     end
     
     -- Add event listeners

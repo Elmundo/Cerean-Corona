@@ -56,6 +56,14 @@ function CounterInformationView.new(delegate)
     counterInformationGroup = display.newGroup( )
     contentGroup = display.newGroup( )
     
+    function counterInformationGroup:setCustomerName()
+        if( DataService.phase == Phase.ApplicationPhase )then
+            customerNameField:setText(DataService.customerName)
+       elseif( DataService.phase == Phase.EditPhase or DataService.phase == Phase.RegistryPhase )then
+           customerNameField:setText(DataService.customer.CustomerName)
+        end
+    end
+    
     function counterInformationGroup:hideGroup( isHidden )
         distrubitionCompanyField:hideDDM(isHidden)
         supplierCompanyField:hideDDM(isHidden)
@@ -82,13 +90,18 @@ function CounterInformationView.new(delegate)
             MembershipNumber = subscriberNumberField:getText(),
             TariffCode = recieptField:getText(),
             MembershipGroup = subscriberGroupField:getID(),
-            CustomerName = customerNameField:getText(),
+            --CustomerName = customerNameField:getText(),
             MeterSerialNumber = counterSerialNumberField:getText(),
             MeterSerialNumberAgain = inductiveCounterSerialNumberField:getText(),
             MeterParameter = counterMultiplierField:getText(),
             BillAmount = billAmountField:getText()
        } 
-
+       if( DataService.phase == Phase.ApplicationPhase )then
+            contentData.CustomerName = DataService.customerName
+       elseif( DataService.phase == Phase.EditPhase or DataService.phase == Phase.RegistryPhase )then
+           contentData.CustomerName = DataService.customer.CustomerName
+        end
+           
         return contentData
     end
     
@@ -251,7 +264,8 @@ function CounterInformationView.new(delegate)
     
     customerNameLabel = display.newText( "Müşteri Adı/Ünvanı", 60, 655, native.systemFontBold, 15 )
     customerNameLabel:setFillColor( 0,0,0 ) 
-    customerNameField = CTextField.new( 50, 675, 240, 30)
+    
+    customerNameField = CTextField.new( 50, 675, 240, 30, true)  
     customerNameField:setDelegate(counterInformationGroup, "customerName")
     customerNameField:setFont(native.systemFont, viewFontSize)
     --[[]

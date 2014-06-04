@@ -3,22 +3,30 @@ local CTextField = {}
 local display = require( "display" )
 local native = require( "native" )
 
-function CTextField.new( xPos, yPos, width, height )
+function CTextField.new( xPos, yPos, width, height, disabled )
         
         local defaultXPos
+        local isDisabled = disabled
         
 	local textFieldWrapper = display.newGroup( )
         textFieldWrapper.isKeyboard = true
 
-        local textField = native.newTextField(-5, 0, width+10, height+10 )
-        textField.font = native.newFont( native.systemFont, 12)
-        textField.hasBackground = false
+        local textField 
+        
+        if( isDisabled )then
+            textField = display.newText("", 8, 7, native.systemFont, 12)
+            textField:setFillColor( 0,0,0,1 )
+        else 
+            textField= native.newTextField(-5, 0, width+10, height+10 )
+            textField.font = native.newFont( native.systemFont, 12)
+            textField.hasBackground = false
+        end
+        
         
         local background = display.newRoundedRect( 0, 0, width, height, 5 )
         background:setFillColor( 0.5, 0.5, 0.5 )
         local whiteBackground = display.newRoundedRect( 4, 4, width-8, height-8, 5 )
         whiteBackground:setFillColor(1, 1, 1 )
-        
         
         local function onInput( event )
             if( event.phase == "began")then
@@ -87,6 +95,11 @@ function CTextField.new( xPos, yPos, width, height )
         end
         
 	function textFieldWrapper:setDelegate( delegate, iD )
+            
+            if(isDisabled) then
+                return
+            end
+            
             textFieldWrapper.delegate = delegate
             textField.iD = iD
 	end

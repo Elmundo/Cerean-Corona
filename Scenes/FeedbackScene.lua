@@ -71,9 +71,17 @@ function FeedbackScene:createScene( event )
     end
     
     -- SCENE BUTTONS
-    local backButton = CButton.new( "GERİ", "backButton", self, 40, 630, 0 )
-    local nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 630, 0 )
+    --local backButton = CButton.new( "GERİ", "backButton", self, 40, 630, 0 )
+    --local nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 630, 0 )
+    local size = {}
     
+    size.width = 200
+    size.height = 40
+    
+    local mainMenuButton = CButton.new( "ANA MENÜYE DÖN", "mainMenuButton", self, display.contentCenterX-size.width/2, 600, 0, size )
+    mainMenuButton.anchorX = 0.5
+    mainMenuButton.anchorY = 0.5
+        
     group:insert(headerBar)
     group:insert(logo)
     group:insert(progressBar)
@@ -82,32 +90,36 @@ function FeedbackScene:createScene( event )
     group:insert(congImage)
     group:insert(congMessage)
     group:insert(customerIdText)
+    group:insert(mainMenuButton)
     --group:insert(backButtonBg)
-    group:insert(backButton)
+    --group:insert(backButton)
     --group:insert(nextButtonBg)
-    group:insert(nextButton)
+    --group:insert(nextButton)
     
 end
 FeedbackScene:addEventListener("createScene")
 
 function FeedbackScene:onButtonTouchEnded( event )
     
-    if( event.target.id == "backButton" )then
-        
+    if( event.target.id == "mainMenuButton" )then
+        DataService:resetCachedData()
+        storyboard.purgeAll()
+        storyboard.gotoScene("Scenes.MenuScene", "slideRight", 400)
     elseif( event.target.id == "nextButton" )then
         
     end
 end
 
 function FeedbackScene:enterScene(event)
-    
-    timer.performWithDelay(1000, 
+    --[[]
+    timer.performWithDelay(3000, 
                             function (event)
                                 DataService:resetCachedData()
                                 storyboard.purgeAll()
                                 storyboard.gotoScene("Scenes.MenuScene", "slideRight", 400)
                             end, 
                             1)
+                            --]]
 end
 FeedbackScene:addEventListener("enterScene")
 

@@ -194,7 +194,7 @@ function scene:onButtonTouchEnded( event )
         --"Crmuser", "CaCu2013!"
         scene:showMask()
         -- TODO: Hard-Coded Data Insert
-        DataServer:login("Crmuser", "CuCa2014!",--userNameTextField:getText(), passwordTextField:getText(), 
+        DataServer:login(userNameTextField:getText(), passwordTextField:getText(),--userNameTextField:getText(), passwordTextField:getText(), 
                                             function (responseData)
 
                                                 if isErrorCheckOk(responseData) then
