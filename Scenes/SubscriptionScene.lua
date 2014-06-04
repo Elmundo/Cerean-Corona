@@ -269,9 +269,8 @@ function scene:onButtonTouchEnded( event )
                     print( errorDetail )
                 end
                 
-                if( DataService.phase == Phase.ApplicationPhase  )then
+                if( DataService.phase == Phase.ApplicationPhase)then
                     --local company = DataService:findCompanyForCity(DataService.selectedCity.id)
-                    print( "Test")
                     if( DataService.selectedCity ~= null )then
                         counterInformationGroup:setCompany()
                         --Set City
@@ -520,6 +519,11 @@ function scene:enterScene( event )
                 transition.to( enterpriseInformationGroup, {time=400, y= -190,  transition = easing.outExpo } )
                 transition.to( counterInformationGroup, {time=400, y= -235,  transition = easing.outExpo } )
             end
+        end
+        
+        if DataService.phase == Phase.EditPhase or DataService.phase == Phase.RegistryPhase then
+            local cityId = DataService.customer.CustomerWebFormCity
+            counterInformationGroup:setCompany(cityId)
         end
         -----------------------------------------------------------------------------
 
