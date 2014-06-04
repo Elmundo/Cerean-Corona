@@ -173,12 +173,12 @@ function DropDownMenu.new( params )
     end
     
     -- Drop Down Menu Methods
-    function dropDownMenu:loadData(dataList)
-        
+    function dropDownMenu:loadData(newDataList)
+        dataList = newDataList
         ddmTable:deleteAllRows()
         
-        for i = 1, #dataList do
-            local params = dataList[i]
+        for i = 1, #newDataList do
+            local params = newDataList[i]
 
             ddmTable:insertRow{
                                     isCategory = isCategory,
@@ -265,7 +265,8 @@ function DropDownMenu.new( params )
     
     function dropDownMenu:updateButton( value )
         ddmValue = value 
-        buttonLabel.text = ddmValue
+        buttonLabel.text = ddmValue.value
+        
     end
     
     function dropDownMenu:updateWithId( value, id )

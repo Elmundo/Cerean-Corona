@@ -98,12 +98,15 @@ function AddressInformationView.new( delegate )
                 --Start Spinner but first check for Corona Behaviour
                 --Save Sellected City
                 --Get County List
-                if( mirrorData )then
-                    cityField2:updateWithId(ddmValue, ID)
-                end    
+                    
                 DataService:getParametersWithGuid(kParameterCounties, ddmValue.id, nil, function(responseData)
                     --Check for error
                     print("Success")
+                    if( mirrorData )then
+                    --cityField2:updateWithId(ddmValue.value, ddmValue.id)
+                        cityField2:updateButton(ddmValue)
+                    end
+                    
                     counties1 = getDropDownList(responseData)
                     countyField1:loadData(counties1)
                     if(mirrorData)then
@@ -133,7 +136,8 @@ function AddressInformationView.new( delegate )
                     end)
             elseif( ID == "CountyField1") then
                 if( mirrorData )then
-                    countyField2:updateWithId(ddmValue, ID)
+                    --countyField2:updateWithId(ddmValue, ID)
+                    countyField2:updateButton(ddmValue)
                 end  
             elseif( ID == "CountyField2") then
                     
@@ -334,10 +338,10 @@ function AddressInformationView.new( delegate )
     
     mirrorDataButtonLabel = display.newText("Ziyaret adresim aynı zamanda düzenli iletişim adresim.", 620, 880, 0, 0, native.systemFont, 12)
     mirrorDataButtonLabel:setFillColor( 0.5, 1 )
-    mirrorDataButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
+    mirrorDataButton = display.newImageRect("Assets/SwitchButtonActive.png", 48, 20)
     mirrorDataButton.x = 60
     mirrorDataButton.y = 880
-    mirrorData = false
+    mirrorData = true
     mirrorDataButton:addEventListener("touch", mirrorDataButtonTouched)
     
     communicationButtonLabel = display.newText("Fatura adresim ziyaret adresimle aynı.", 120, 880, 0, 0, native.systemFont, 12)

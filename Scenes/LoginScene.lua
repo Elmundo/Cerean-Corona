@@ -214,8 +214,8 @@ function scene:onButtonTouchEnded( event )
                                             end,
 
                                             function ( errorData )
-                                                scene:alert("Login Operations","Login request is failed!",{"OK"})
                                                 scene:hideMask()
+                                                scene:alert("Login Operations","Login request is failed!",{"OK"})
                                             end)
 
 
