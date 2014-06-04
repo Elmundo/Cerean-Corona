@@ -84,7 +84,7 @@ function addLetterToStringForPhone (_text, _addedLetter )
     elseif( 7 == textLength )then
         returnText = text .. addedLetter
     elseif( 8 == textLength )then
-        returnText = text .. addedLetter "-"
+        returnText = text .. addedLetter .. "-"
     elseif( 9 == textLength )then
         returnText = text .. addedLetter
     elseif( 10 == textLength )then

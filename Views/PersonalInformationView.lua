@@ -246,18 +246,22 @@ function PersonalInformationView.new(delegate)
         if( "nameField" == event.target.iD )then
             
         elseif( "iDNumberField" == event.target.iD )then
+            
             if( event.text)then
                 if(string.len(event.text) > 11 )then
                     iDNumberField:setText(event.text:sub(1, 11))
-                    --[[]
-                    if( tonumber(event.target.text.newCharacters))then
-
+                else
+                    if( tonumber(event.newCharacters) )then
+                        
                     else
-                        iDNumberField:setText(tonumber(event.target.text.newCharacters))
+                        iDNumberField:setText(event.text:sub(1, string.len(event.text)-1))
                     end
-                    --]]
                 end
             end
+        elseif( "mobileField" == event.target.iD )then
+            local test = addLetterToStringForPhone(event.text:sub(1, string.len(event.text)-1), event.newCharacters)
+            mobileField:setText(test)
+            --print(test)
         end
     end
 

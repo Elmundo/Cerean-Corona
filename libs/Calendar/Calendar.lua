@@ -17,7 +17,10 @@ function Calendar.new( delegate, xPos, yPos, width, height )
     local calendar = display.newGroup()
     local delegate = delegate
     local date = os.date("*t")
+    --local thisDay = date.
+    local thisMonth = date.month
     local curMonth = date.month
+    local thisYear = date.year
     local curYear = date.year
     local lastSellecetedDateBox
     local monthName = {
@@ -43,6 +46,13 @@ function Calendar.new( delegate, xPos, yPos, width, height )
         "Ptesi", "Salı", "Çar", "Per", "Cuma", "Ctesi", "Pazar"
     }
     local function getStartDay ( curMonth, curYear )
+        --[[]
+        if( thisYear > curYear)then
+            return daysInMonth[curMonth]
+        elseif( thisMonth > curMonth )then
+            return daysInMonth[curMonth]
+        end
+        --]]
         local temp = os.time{
             year = curYear, month = curMonth, day = 1 
         }
@@ -100,7 +110,7 @@ function Calendar.new( delegate, xPos, yPos, width, height )
         local sellectedYear = year
         local sellectedDays = false
         local sellecetedStartDay = getStartDay(month, year)
-        
+
         local sellectedEndDay = getEndDay(month, year)
         
         local nextMonth = month + 1
@@ -143,11 +153,7 @@ function Calendar.new( delegate, xPos, yPos, width, height )
         
         local weekDayNames = {}
         
-        for i=1, 7 do
-            weekDayNames[i] = display.newText( daysOfWeek[i], (i-0.7)*width/7, 35, width/7, 10, native.systemFont, 6 )
-            weekDayNames[i]:setTextColor( 255, 255, 255 )
-            calendar:insert(weekDayNames[i])
-        end
+        
         
         local function dateBoxSetup(boxHeight)
             
@@ -213,19 +219,30 @@ function Calendar.new( delegate, xPos, yPos, width, height )
             local dayData = params.day .." ".. sellectedMonth .." "..sellectedYear
             delegate:daySellected(dayData)
         end
-        
+        local previousMonthButtonBackground = display.newRect(0, 0, 40, 40)
+        previousMonthButtonBackground:setFillColor(0.5, 1)
+        calendar:insert(previousMonthButtonBackground)
         local previousMonthButton = display.newImageRect("Assets/DSLCalendar-previousMonth.png", 12, 16)
         previousMonthButton.x = 10
         previousMonthButton.y = 8
-        previousMonthButton:addEventListener( "tap", previousMonthButtonTapped )
+        previousMonthButtonBackground:addEventListener( "tap", previousMonthButtonTapped )
         calendar:insert(previousMonthButton)
         
+        local nextMonthButtonBackground = display.newRect(width-40, 0, 40, 40)
+        nextMonthButtonBackground:setFillColor(0.5, 1)
+        calendar:insert(nextMonthButtonBackground)
         local nextMonthButton = display.newImageRect("Assets/DSLCalendar-nextMonth.png", 12, 16)
         nextMonthButton.x = width-10-12
         nextMonthButton.y = 8
-        nextMonthButton:addEventListener( "tap", nextMonthButtonTapped )
+        nextMonthButtonBackground:addEventListener( "tap", nextMonthButtonTapped )
         calendar:insert(nextMonthButton)
         --AddNext and Back Buttons Here
+        
+        for i=1, 7 do
+            weekDayNames[i] = display.newText( daysOfWeek[i], (i-0.7)*width/7, 35, width/7, 10, native.systemFont, 6 )
+            weekDayNames[i]:setTextColor( 255, 255, 255 )
+            calendar:insert(weekDayNames[i])
+        end
         
         local calendarDay
         local calendarMonth
@@ -233,11 +250,12 @@ function Calendar.new( delegate, xPos, yPos, width, height )
         local calendarEnd
         local calendarFirst = false
         local calendarWhatMonth
-        local calendarRows = 5
-        if( 36 - sellectedEndDay - sellecetedStartDay < 0 )then
+        local calendarRows = 6
+        --[[]
+        if( 34 - sellectedEndDay - sellecetedStartDay < 0 )then
             calendarRows = 6
         end
-        
+        --]]
         if( previousDays )then
             calendarDay = previousStartDay
             calendarMonth = previosMonth
@@ -269,7 +287,34 @@ function Calendar.new( delegate, xPos, yPos, width, height )
                     --dayBox = display.newRect(x, y, (width)/7, (height-50)/6 )
                 end
                 --]]
-                if( (weekStart.year < calendarYear) or (weekStart.month < calendarMonth) or (weekStart.day <= calendarDay) )then
+                
+                if( weekStart.year <= calendarYear )then
+                    if( weekStart.month > calendarMonth )then
+                        dayBox = DateBox.new(DateBoxType.UnSellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
+                    elseif( weekStart.month == calendarMonth )then
+                        if( weekStart.day > calendarDay )then
+                            dayBox = DateBox.new(DateBoxType.UnSellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
+                        else 
+                            if( i==6 or i==7 )then
+                                dayBox = DateBox.new(DateBoxType.UnSellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
+                            else
+                                dayBox = DateBox.new(DateBoxType.Sellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
+                            end
+                        end
+                    else
+                        if( i==6 or i==7 )then
+                            dayBox = DateBox.new(DateBoxType.UnSellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
+
+                        else
+                            dayBox = DateBox.new(DateBoxType.Sellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
+                        end
+                    end
+                else
+                    dayBox = DateBox.new(DateBoxType.UnSellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
+                end
+                
+                --[[]
+                if( (weekStart.year <= thisYear) and (weekStart.month <= calendarMonth) and (weekStart.day <= calendarDay) )then
                     if calendarWhatMonth ~= 2 then
                         dayBox = DateBox.new(DateBoxType.UnSellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
                     elseif i == 6 or i == 7 then --Fills weekend days with a different color
@@ -279,8 +324,8 @@ function Calendar.new( delegate, xPos, yPos, width, height )
                     end
                 else
                     dayBox = DateBox.new(DateBoxType.UnSellectable, calendarDay, calendar, x, y,(width)/7, (height-50)/calendarRows )
-
                 end
+                --]]
                 
                 
                 
