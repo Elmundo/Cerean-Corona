@@ -46,12 +46,30 @@ function FeedbackScene:createScene( event )
     congMessage.x = display.contentCenterX
     congMessage.y = 500
     
-    local customerIdText = display.newText( "Müşteri Numarası: " .. DataService.customerNumber, 0, 0, native.systemFontBold, 18 )
-    customerIdText:setFillColor(74/255, 74/255, 74/255);
-    customerIdText.anchorX = 0.5
-    customerIdText.anchorY = 0.5
-    customerIdText.x = display.contentCenterX
-    customerIdText.y = 550
+    local customerIdText 
+    if( DataService.phase == Phase.RegistryPhase)then
+        customerIdText = display.newText( "Sayaç Numarası: " .. DataService.meterSerialNumber, 0, 0, native.systemFontBold, 18 )
+        customerIdText:setFillColor(74/255, 74/255, 74/255);
+        customerIdText.anchorX = 0.5
+        customerIdText.anchorY = 0.5
+        customerIdText.x = display.contentCenterX
+        customerIdText.y = 550
+    elseif( DataService.phase == Phase.EditPhase )then
+        customerIdText = display.newText( "Müşteri Numarası: " .. DataService.customer.CustomerNumber, 0, 0, native.systemFontBold, 18 )
+        customerIdText:setFillColor(74/255, 74/255, 74/255);
+        customerIdText.anchorX = 0.5
+        customerIdText.anchorY = 0.5
+        customerIdText.x = display.contentCenterX
+        customerIdText.y = 550
+    else 
+        customerIdText = display.newText( "Müşteri Numarası: " .. DataService.customerNumber, 0, 0, native.systemFontBold, 18 )
+        customerIdText:setFillColor(74/255, 74/255, 74/255);
+        customerIdText.anchorX = 0.5
+        customerIdText.anchorY = 0.5
+        customerIdText.x = display.contentCenterX
+        customerIdText.y = 550
+    end
+    
     -- SCENE BUTTONS
     local backButton = CButton.new( "GERİ", "backButton", self, 40, 630, 0 )
     local nextButton = CButton.new( "DEVAM", "nextButton", self, 1100, 630, 0 )

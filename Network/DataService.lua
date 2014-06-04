@@ -233,8 +233,11 @@ function DataService:getProduct( callback, failure  )
 	if( self.phase == Phase.EditPhase )then
             request.params = {self.customer.CustomerId, self.meterData.MeterId, self.webFormPage}
             request.method = "getproducts"
+        elseif( self.phase == Phase.RegistryPhase )then
+            request.params = {self.customer.CustomerId, self.meterId, self.webFormPage}
+            request.method = "getproducts"
         else 
-            request.params = {self.customerId, self.meterId}
+            request.params = {self.customerId, self.meterId, self.webFormPage }
             request.method = "getproducts"  
         end
 	

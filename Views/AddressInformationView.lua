@@ -99,7 +99,8 @@ function AddressInformationView.new( delegate )
                 --Save Sellected City
                 --Get County List
                 if( mirrorData )then
-                    cityField2:updateWithId(ddmValue, ID)
+                    --cityField2:updateWithId(ddmValue.value, ddmValue.id)
+                    cityField2:updateButton(ddmValue)
                 end    
                 DataService:getParametersWithGuid(kParameterCounties, ddmValue.id, nil, function(responseData)
                     --Check for error
@@ -334,10 +335,10 @@ function AddressInformationView.new( delegate )
     
     mirrorDataButtonLabel = display.newText("Ziyaret adresim aynı zamanda düzenli iletişim adresim.", 620, 880, 0, 0, native.systemFont, 12)
     mirrorDataButtonLabel:setFillColor( 0.5, 1 )
-    mirrorDataButton = display.newImageRect("Assets/SwitchButton.png", 48, 20)
+    mirrorDataButton = display.newImageRect("Assets/SwitchButtonActive.png", 48, 20)
     mirrorDataButton.x = 60
     mirrorDataButton.y = 880
-    mirrorData = false
+    mirrorData = true
     mirrorDataButton:addEventListener("touch", mirrorDataButtonTouched)
     
     communicationButtonLabel = display.newText("Fatura adresim ziyaret adresimle aynı.", 120, 880, 0, 0, native.systemFont, 12)
