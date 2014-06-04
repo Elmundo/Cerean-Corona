@@ -201,6 +201,8 @@ function scene:onButtonTouchEnded( event )
             scene:hideMask()
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
+                onSearchComplete()
+                --[[]
                 if( doneSearch ) then
                     doneSearch = false
                 else 
@@ -211,6 +213,7 @@ function scene:onButtonTouchEnded( event )
                 if( doneSearch ) then
                     onSearchComplete()
                 end
+                --]]
             end
         end, 
         function(errorData)
