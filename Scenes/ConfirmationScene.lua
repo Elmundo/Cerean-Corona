@@ -101,12 +101,12 @@ function ConfirmationScene:sendMail()
     
     local contentData
     
-    if DataService.phase == Phase.RegistryPhase then
+    if DataService.phase == Phase.RegistryPhase or DataService.phase == Phase.EditPhase then
         contentData = {
-            Name = DataService.customer.customerName,
-            Sms = DataService.customer.customerPhone,
-            Email = DataService.customer.customerEmail,
-            VerificationCode = DataService.customer.verificationCode,
+            Name = DataService.customer.CustomerName,
+            Sms = DataService.customer.CustomerPhone,
+            Email = DataService.customer.CustomerEmail,
+            VerificationCode = DataService.verificationCode,
         }
     else
         contentData = {
@@ -150,8 +150,8 @@ function ConfirmationScene:sendCustomerNumberMail()
         }
     elseif DataService.phase == Phase.RegistryPhase then
         contentData = {
-            Name = DataService.customer.customerName,
-            Sms = DataService.customer.customerPhone,
+            Name = DataService.customer.CustomerName,
+            Sms = DataService.customer.CustomerPhone,
             Email = DataService.customerEmail,
             meterserialnumber = DataService.meterSerialNumber,
             CustomerNumber = DataService.customerNumber,

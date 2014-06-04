@@ -101,6 +101,7 @@ function CounterInformationView.new(delegate)
             contentData.CustomerName = DataService.customerName
        elseif( DataService.phase == Phase.EditPhase or DataService.phase == Phase.RegistryPhase )then
            contentData.CustomerName = DataService.customer.CustomerName
+           DataService.meterSerialNumber = counterSerialNumberField:getText()
         end
            
         return contentData

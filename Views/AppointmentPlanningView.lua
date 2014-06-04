@@ -147,7 +147,7 @@ function AppointmentPlanningView.new()
             
             contentData = {
                 ScheduledStart = dayData,--"6 3 2014 00:00:00",
-                IntervalTime = sellectedRow.row,
+                IntervalTime = sellectedRow.index,
            }
            --[[]
            contentData = {

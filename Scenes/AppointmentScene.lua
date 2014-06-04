@@ -387,7 +387,12 @@ function scene:onButtonTouchEnded( event )
             --Add check for enterprise
             saveContent(kStepAddress, function( isSuccess, errrorDetail )
                 if( isSuccess )then
-                    storyboard.gotoScene("Scenes.ConfirmationScene", "slideLeft", 800)
+                    if DataService.phase == Phase.RegistryPhase then
+                        storyboard.gotoScene("Scenes.FeedbackScene", "slideLeft", 800)
+                    else
+                        storyboard.gotoScene("Scenes.ConfirmationScene", "slideLeft", 800)
+                    end
+                    
                     --shiftUp()
                 else 
 
