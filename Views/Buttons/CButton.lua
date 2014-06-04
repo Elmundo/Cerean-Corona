@@ -6,10 +6,32 @@ local widget = require( "widget" )
 
 local button
 
-function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
+function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize, size )
 	local buttonWrapper = display.newGroup( )
         local label
-        local background = display.newRoundedRect( 0, 0, 140, 40, 5 )
+        local background
+        if( size )then
+            background = display.newRoundedRect( 0, 0, size.width, size.height, 5 )
+            label = display.newText( {
+            text = buttonLabel,
+            x = size.width/2,
+            y = size.height/2,
+            font = native.systemFont,
+            fontSize = 18,
+            align = "center",
+            })
+        else 
+           background = display.newRoundedRect( 0, 0, 140, 40, 5 )
+           label = display.newText( {
+            text = buttonLabel,
+            x = 70,
+            y = 20,
+            font = native.systemFont,
+            fontSize = 18,
+            align = "center",
+            })
+        end
+         
 	background:setFillColor( 113/255, 27/255, 69/255 )
         
         local function onButtonTouch( event )
@@ -34,14 +56,7 @@ function CButton.new( buttonLabel, buttonID, delegate, xPos, yPos, fontSize )
         --button = display.newRoundedRect(0, 0, 140, 40, 5)
         --button:setFillColor(0, 1)
         
-        label = display.newText( {
-            text = buttonLabel,
-            x = 70,
-            y = 20,
-            font = native.systemFont,
-            fontSize = 18,
-            align = "center",
-            })
+        
         --label:setTextColor(1, 1)
         label:setFillColor( 1, 1 )
         label.anchorX = 0.5

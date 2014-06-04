@@ -115,6 +115,7 @@ function scene:saveContent ( appStep, callback )
                                          Logger:debug(scene, "scene:saveContent", "Step 1 is success!")
                                          DataService.customerId = responseData.CustomerId
                                          DataService.customerNumber = responseData.CustomerNumber
+                                         counterInformationGroup:setCustomerName()
                                          callback(true, nil )
                                          scene:shiftUp()
                                      else
@@ -243,7 +244,11 @@ function scene:onButtonTouchEnded( event )
     
     if( event.target.id == "backButton" )then
         print("BACK BUTTON PRESSED")
-        scene:shiftDown()
+        if DataService.phase == Phase.RegistryPhase then
+            storyboard.gotoScene("Scenes.SearchUserScene", "slideLeft", 800)
+        else
+            scene:shiftDown()
+        end
     elseif( event.target.id == "nextButton" )then
         print("NEXT BUTTON PRESSED")
         if( step == 0 )then
@@ -505,6 +510,7 @@ function scene:enterScene( event )
         end
         personalInformationGroup:onViewInit()
         counterInformationGroup:onViewInit()
+        counterInformationGroup:setCustomerName()
         scene.view:addEventListener("touch", onSceneTouch)
         
         if( Phase.RegistryPhase == DataService.phase)then
