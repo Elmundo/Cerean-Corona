@@ -98,13 +98,15 @@ function AddressInformationView.new( delegate )
                 --Start Spinner but first check for Corona Behaviour
                 --Save Sellected City
                 --Get County List
-                if( mirrorData )then
-                    --cityField2:updateWithId(ddmValue.value, ddmValue.id)
-                    cityField2:updateButton(ddmValue)
-                end    
+                    
                 DataService:getParametersWithGuid(kParameterCounties, ddmValue.id, nil, function(responseData)
                     --Check for error
                     print("Success")
+                    if( mirrorData )then
+                    --cityField2:updateWithId(ddmValue.value, ddmValue.id)
+                        cityField2:updateButton(ddmValue)
+                    end
+                    
                     counties1 = getDropDownList(responseData)
                     countyField1:loadData(counties1)
                     if(mirrorData)then
@@ -134,7 +136,8 @@ function AddressInformationView.new( delegate )
                     end)
             elseif( ID == "CountyField1") then
                 if( mirrorData )then
-                    countyField2:updateWithId(ddmValue, ID)
+                    --countyField2:updateWithId(ddmValue, ID)
+                    countyField2:updateButton(ddmValue)
                 end  
             elseif( ID == "CountyField2") then
                     

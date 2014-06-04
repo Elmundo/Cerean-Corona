@@ -237,13 +237,28 @@ function PersonalInformationView.new(delegate)
     end 
 
     function personalInformationGroup:onInputBegan( event )
-
+        
         setFocus(-230)
 
     end
 
     function personalInformationGroup:onInputEdit( event )
+        if( "nameField" == event.target.iD )then
+            
+        elseif( "iDNumberField" == event.target.iD )then
+            if( event.text)then
+                if(string.len(event.text) > 11 )then
+                    iDNumberField:setText(event.text:sub(1, 11))
+                    --[[]
+                    if( tonumber(event.target.text.newCharacters))then
 
+                    else
+                        iDNumberField:setText(tonumber(event.target.text.newCharacters))
+                    end
+                    --]]
+                end
+            end
+        end
     end
 
     function personalInformationGroup:onInputEnd( event )
