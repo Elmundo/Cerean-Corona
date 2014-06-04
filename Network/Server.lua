@@ -24,7 +24,7 @@ local params = {
 local Server = {
 
 -- Property List
-	baseURL = "http://cerean.ogoodigital.com/Services/MobileService.ashx/",
+	baseURL = "http://basvuru.cerean.com.tr/Entities/MobileService.ashx/?",
 	params  = params,
 	requestID = 0,
 }
