@@ -43,6 +43,13 @@ local searchFieldHeader
 local searchField
 local searchButton
 
+local errorMessageLabel 
+
+local function setErrorMessage( text )
+    errorMessageLabel.text = text
+    --errorMessageLabel.x = 
+end
+
 local resultMessage
 local resultTable
 local doneSearch
@@ -52,8 +59,8 @@ local searchData = {}
 
 local function isErrorCheckOk(responseData)
     if( type(responseData) == "table" )then
-        if( responseData.ErrorCode )then
-            if( responseData.ErrorCode == 0 )then
+        if( responseData[1].ErrorCode )then
+            if( responseData[1].ErrorCode == "00" )then
                 return true
             else 
                 return false 
@@ -202,19 +209,13 @@ function scene:onButtonTouchEnded( event )
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
                 onSearchComplete()
-                --[[]
-                if( doneSearch ) then
-                    doneSearch = false
-                else 
-                    doneSearch = true
-                    resultTable:reloadData()
-                end
-
-                if( doneSearch ) then
-                    onSearchComplete()
-                end
-                --]]
+                errorMessageLabel = setErrorMessage( #responseData .. " adet kullanıcı bulundu." )
+            else 
+                resultTable:deleteAllRows()
+                errorMessageLabel = setErrorMessage(responseData[1].ErrorDetail)
+                print("ERROR")
             end
+            --scene.view:insert(errorMessageLabel)
         end, 
         function(errorData)
             scene:hideMask()
@@ -247,7 +248,8 @@ function scene:createScene( event )
         --CTextField.new( 45, 260 )
         searchButton = CButton.new( "ARA", "searchButton", scene, 415, 260 )
         
-        
+        errorMessageLabel = display.newText("", 570, 270, 300, 40, native.systemFontBold, 17, "left")
+        errorMessageLabel:setTextColor(255/255, 107/255, 0/255)
         
         resultTable = widget.newTableView{
             left = 40,
@@ -266,6 +268,7 @@ function scene:createScene( event )
         group:insert( searchFieldHeader )
         group:insert( searchField )
         group:insert( searchButton )
+        group:insert( errorMessageLabel )
         group:insert( resultTable )
 
         -----------------------------------------------------------------------------

@@ -94,6 +94,17 @@ local function saveContent(appStep, callback)
     local contentData
     if( step == 0 ) then
         contentData = appointmentPlanningView:getContent(appStep)
+        if( contentData.ScheduledStart == "" or contentData.ScheduledStart == nil )then
+            scene:alert("Uyarı", "Lütfen bir gün seçin.")
+            scene:hideMask()
+            return
+        end
+        
+        if( contentData.IntervalTime == "" or contentData.IntervalTime == nil )then
+            scene:alert("Uyarı", "Lütfen bir saat aralığı seçin.")
+            scene:hideMask()
+            return
+        end
         
         if( DataService.appointmentId ~= nil ) then
             --Back from next scene

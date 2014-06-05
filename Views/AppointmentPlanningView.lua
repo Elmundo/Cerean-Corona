@@ -144,11 +144,17 @@ function AppointmentPlanningView.new()
     
     function appointmentPlanningGroup:getContent( appStep )--?appStep
         local contentData = {}
-            
-            contentData = {
-                ScheduledStart = dayData,--"6 3 2014 00:00:00",
-                IntervalTime = sellectedRow.row,
-           }
+            if( sellectedRow )then
+                contentData = {
+                    ScheduledStart = dayData,--"6 3 2014 00:00:00",
+                    IntervalTime = sellectedRow.index,
+               }
+            else 
+                contentData = {
+                    ScheduledStart = dayData,--"6 3 2014 00:00:00",
+                    IntervalTime = "",
+               }
+            end
            --[[]
            contentData = {
                 ScheduledStart = "6 3 2014 00:00:00",

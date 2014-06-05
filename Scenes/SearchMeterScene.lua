@@ -41,6 +41,8 @@ local searchFieldHeader
 local searchField
 local searchButton
 
+local errorMessageLabel
+
 local resultMessage
 local resultTable
 local doneSearch
@@ -50,8 +52,15 @@ local searchData = {}
 
 local function isErrorCheckOk(responseData)
     if( type(responseData) == "table" )then
-        --Error check 
-        return true
+        if( responseData[1].ErrorCode )then
+            if( responseData[1].ErrorCode == "00" )then
+                return true
+            else 
+                return false 
+            end
+        else 
+            return true
+        end
     else 
         return false
     end
@@ -204,16 +213,9 @@ function scene:onButtonTouchEnded( event )
             scene:hideMask()
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
-                if( doneSearch ) then
-                    doneSearch = false
-                else 
-                    doneSearch = true
-                    resultTable:reloadData()
-                end
-
-                if( doneSearch ) then
-                    onSearchComplete()
-                end
+                onSearchComplete()
+            else
+                resultTable:deleteAllRows()
             end
         end, 
         function(errorData)
