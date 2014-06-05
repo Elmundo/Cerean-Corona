@@ -72,6 +72,7 @@ end
 
 local function onSearchComplete ()
     resultTable:deleteAllRows()
+    
     for i=1, #searchData.SearchMeter do
         resultTable:insertRow{
             rowHeight = 60,
@@ -218,7 +219,7 @@ function scene:onButtonTouchEnded( event )
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
                 onSearchComplete()
-                setErrorMessage( #responseData .. " adet sayaç bulundu." )
+                setErrorMessage( #responseData.SearchMeter .. " adet sayaç bulundu." )
             else
                 resultTable:deleteAllRows()
                 setErrorMessage(responseData.ErrorDetail)
