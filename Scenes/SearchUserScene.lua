@@ -209,10 +209,10 @@ function scene:onButtonTouchEnded( event )
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
                 onSearchComplete()
-                errorMessageLabel = setErrorMessage( #responseData .. " adet kullanıcı bulundu." )
+                setErrorMessage( #responseData .. " adet kullanıcı bulundu." )
             else 
                 resultTable:deleteAllRows()
-                errorMessageLabel = setErrorMessage(responseData[1].ErrorDetail)
+                setErrorMessage(responseData[1].ErrorDetail)
                 print("ERROR")
             end
             --scene.view:insert(errorMessageLabel)
@@ -248,7 +248,7 @@ function scene:createScene( event )
         --CTextField.new( 45, 260 )
         searchButton = CButton.new( "ARA", "searchButton", scene, 415, 260 )
         
-        errorMessageLabel = display.newText("", 570, 270, 300, 40, native.systemFontBold, 17, "left")
+        errorMessageLabel = display.newText("", 570, 270, 400, 40, native.systemFontBold, 17, "left")
         errorMessageLabel:setTextColor(255/255, 107/255, 0/255)
         
         resultTable = widget.newTableView{

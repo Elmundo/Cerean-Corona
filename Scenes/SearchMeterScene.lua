@@ -43,6 +43,10 @@ local searchButton
 
 local errorMessageLabel
 
+local function setErrorMessage( text )
+    errorMessageLabel.text = text
+end
+
 local resultMessage
 local resultTable
 local doneSearch
@@ -52,8 +56,8 @@ local searchData = {}
 
 local function isErrorCheckOk(responseData)
     if( type(responseData) == "table" )then
-        if( responseData[1].ErrorCode )then
-            if( responseData[1].ErrorCode == "00" )then
+        if( responseData.ErrorCode )then
+            if( responseData.ErrorCode == "00" )then
                 return true
             else 
                 return false 
@@ -214,8 +218,10 @@ function scene:onButtonTouchEnded( event )
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
                 onSearchComplete()
+                setErrorMessage( #responseData .. " adet sayaç bulundu." )
             else
                 resultTable:deleteAllRows()
+                setErrorMessage(responseData.ErrorDetail)
             end
         end, 
         function(errorData)
@@ -248,7 +254,8 @@ function scene:createScene( event )
         --CTextField.new( 45, 260 )
         searchButton = CButton.new( "ARA", "searchButton", scene, 415, 260 )
         
-        
+        errorMessageLabel = display.newText("", 570, 270, 400, 40, native.systemFontBold, 17, "left")
+        errorMessageLabel:setTextColor(255/255, 107/255, 0/255)
         
         resultTable = widget.newTableView{
             left = 40,
@@ -267,6 +274,7 @@ function scene:createScene( event )
         group:insert( searchFieldHeader )
         group:insert( searchField )
         group:insert( searchButton )
+        group:insert( errorMessageLabel )
         group:insert( resultTable )
 
         -----------------------------------------------------------------------------
