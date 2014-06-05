@@ -248,13 +248,15 @@ function PersonalInformationView.new(delegate)
         elseif( "iDNumberField" == event.target.iD )then
             
             if( event.text)then
-                if(string.len(event.text) > 11 )then
+                if(string.len(event.text) > 11 ) then
                     iDNumberField:setText(event.text:sub(1, 11))
                 else
-                    if( tonumber(event.newCharacters) )then
-                        
-                    else
-                        iDNumberField:setText(event.text:sub(1, string.len(event.text)-1))
+                    if(event.newCharacters ~= "") then
+                        if(tonumber(event.newCharacters) )then
+
+                        else
+                            iDNumberField:setText(event.text:sub(1, string.len(event.text)-1))
+                        end
                     end
                 end
             end

@@ -6,6 +6,7 @@ local CTextField = require( "Views.TextFields.CTextField" )
 local DropDownMenu = require "libs.DDM.DropDownMenu"
 local DataService = require( "Network.DataService" )
 local ImageMapper = require( "ImageMapper" )
+local Logger = require "libs.Log.Logger"
 
 local CounterInformationView = {}
 
@@ -100,6 +101,7 @@ function CounterInformationView.new(delegate)
             contentData.CustomerName = DataService.customerName
        elseif( DataService.phase == Phase.EditPhase or DataService.phase == Phase.RegistryPhase )then
            contentData.CustomerName = DataService.customer.CustomerName
+           DataService.meterSerialNumber = counterSerialNumberField:getText()
         end
            
         return contentData
@@ -111,7 +113,11 @@ function CounterInformationView.new(delegate)
             billImage = nil
         end
         billImage = display.newImage( "Assets/BillImages/" .. imageName .. ".jpg", 0, 0, true)
-        billImageScrollView:insert( billImage )
+        if billImage then
+            billImageScrollView:insert( billImage )
+        else
+            Logger:error(nil, "updateBillImage", "There is no such an image '" .. imageName .. "'")
+        end
     end
     
     local function setBillImageOffset ( frame )
@@ -168,7 +174,8 @@ function CounterInformationView.new(delegate)
         
         local function setFocus ( yPos )
             delegate:setFocus( yPos )
-        end 
+        end
+        
         function counterInformationGroup:onInputBegan( event )
             if( sellectedImageName )then
                 local imageMapperPosition = ImageMapper:findFieldRect( sellectedImageName, event.target.iD )
@@ -178,7 +185,7 @@ function CounterInformationView.new(delegate)
         end
         
         function counterInformationGroup:onInputEdit( event )
-            
+            print "asd"
         end
         
         function counterInformationGroup:onInputEnd( event )
@@ -202,8 +209,8 @@ function CounterInformationView.new(delegate)
         end
         
 
-        counterInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
-        --counterInformationGroupBackground:setFillColor( 0,0,1 )
+    counterInformationGroupBackground = display.newRect( 40, 420, 1200, 400 )
+    --counterInformationGroupBackground:setFillColor( 0,0,1 )
 
     counterInformationHeaderBackground = display.newRoundedRect( 40, 420, 1200, 40, 5 )
     counterInformationHeaderBackground:setFillColor( 255/255, 107/255, 0 )
@@ -418,10 +425,16 @@ function CounterInformationView.new(delegate)
     counterInformationGroup.y = 230
     --counterInformationGroup.alpha = 0
     
-    function counterInformationGroup:setCompany()
-        local company = DataService:findCompanyForCity(DataService.selectedCity.id)
+    function counterInformationGroup:setCompany(cityId)
+        local company = nil
+        if cityId then
+            company = DataService:findCompanyForCity(cityId)
+        else
+            company = DataService:findCompanyForCity(DataService.selectedCity.id)
+        end
+        
         if( company == nil )then
-            print( "Nil City" )
+            Logger:error("CounterInformationView", "setCompany", "Company data is null so there is no Image name!")
         else 
             sellectedImageName = company.Image
             distrubitionCompanyField:updateWithId(company.Name, company.ID)
