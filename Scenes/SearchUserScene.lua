@@ -47,7 +47,6 @@ local errorMessageLabel
 
 local function setErrorMessage( text )
     errorMessageLabel.text = text
-    --errorMessageLabel.x = 
 end
 
 local resultMessage
