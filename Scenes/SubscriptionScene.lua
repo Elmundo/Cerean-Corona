@@ -93,7 +93,12 @@ function scene:saveContent ( appStep, callback )
     local contentData 
     if( step == kStepPersonel ) then
         if( isCorporate == 0 )then
-            contentData = personalInformationGroup:getContent()
+            if( personalInformationGroup:checkData() )then
+                contentData = personalInformationGroup:getContent()
+            else 
+                scene:hideMask()
+                return
+            end
         else
             contentData = enterpriseInformationGroup:getContent() -- TODO: enterpriseGroup:getContent()
         end

@@ -38,6 +38,8 @@ function PersonalInformationView.new(delegate)
 
 	local centerX = display.contentCenterX
 	local centerY = display.contentCenterY
+        local errorImage = display.newImageRect("Assets/IconWarningSmall.png", 17, 14)
+        errorImage.isVisible = false
         
         personalInformationGroup = display.newGroup( )
 	contentGroup = display.newGroup( )
@@ -58,6 +60,7 @@ function PersonalInformationView.new(delegate)
         end
         
         function personalInformationGroup.didDDMItemSelected(ddmValue, ID, index)
+            errorImage.isVisible = false
             if( ID == "CityField")then
                 --local index = index
                 --Enable DDM?
@@ -108,7 +111,40 @@ function PersonalInformationView.new(delegate)
         function personalInformationGroup.didHideDDMTable( ID, isTableHidden)
             
         end
-        
+        function personalInformationGroup:checkData()
+            if( nameField:getText() == "" )then
+                errorImage.x = nameField.x+330
+                errorImage.y = nameField.y+10
+                errorImage.isVisible = true
+                return false
+            elseif( iDNumberField:getText() == "" )then
+                errorImage.x = iDNumberField.x+330
+                errorImage.y = iDNumberField.y+10
+                errorImage.isVisible = true
+                return false
+            elseif( mobileField:getText() == "" )then
+                errorImage.x = mobileField.x+330
+                errorImage.y = mobileField.y+10
+                errorImage.isVisible = true
+                return false
+             elseif( not isValidEmail(emailField:getText()) )then--emailField:getText() == "" )then
+                errorImage.x = emailField.x+330
+                errorImage.y = emailField.y+10
+                errorImage.isVisible = true
+                return false
+             elseif( cityField:getValue() == "SEÇİNİZ" )then
+                errorImage.x = cityField.x+330
+                errorImage.y = cityField.y+10
+                errorImage.isVisible = true
+                return false
+            elseif( countyField:getValue() == "SEÇİNİZ" or countyField:getValue() == "" )then
+                errorImage.x = countyField.x+330
+                errorImage.y = countyField.y+10
+                errorImage.isVisible = true
+                return false
+            end
+            return true
+        end
         function personalInformationGroup:getContent () 
             local contentData = {}
             
@@ -219,6 +255,7 @@ function PersonalInformationView.new(delegate)
     contentGroup:insert( countyField )
 
     personalInformationGroup:insert( contentGroup )
+    personalInformationGroup:insert( errorImage )
     personalInformationGroup.y = 185
     --personalInformationGroup.alpha = 0
     
@@ -237,7 +274,7 @@ function PersonalInformationView.new(delegate)
     end 
 
     function personalInformationGroup:onInputBegan( event )
-        
+        errorImage.isVisible = false
         setFocus(-230)
 
     end
@@ -261,8 +298,12 @@ function PersonalInformationView.new(delegate)
                 end
             end
         elseif( "mobileField" == event.target.iD )then
-            local test = addLetterToStringForPhone(event.text:sub(1, string.len(event.text)-1), event.newCharacters)
-            mobileField:setText(test)
+            if( event.newCharacters == "" )then
+            else
+                local test = addLetterToStringForPhone(event.text:sub(1, string.len(event.text)-1), event.newCharacters)
+                mobileField:setText(test)
+            end
+            
             --print(test)
         end
     end

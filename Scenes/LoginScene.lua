@@ -186,7 +186,7 @@ function scene:onButtonTouchEnded( event )
     print( "Working on Scene" )
     if( checkData() )then
     else
-        return
+        --return
     end
     if( event.phase == "ended") then
         print( userNameTextField:getText() )
@@ -194,7 +194,7 @@ function scene:onButtonTouchEnded( event )
         --"Crmuser", "CaCu2013!"
         scene:showMask()
         -- TODO: Hard-Coded Data Insert
-        DataServer:login(userNameTextField:getText(), passwordTextField:getText(),--userNameTextField:getText(), passwordTextField:getText(), 
+        DataServer:login("finacrm", "JetGiller04",--userNameTextField:getText(), passwordTextField:getText(),--userNameTextField:getText(), passwordTextField:getText(), 
                                             function (responseData)
 
                                                 if isErrorCheckOk(responseData) then

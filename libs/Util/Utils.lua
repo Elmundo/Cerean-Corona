@@ -54,9 +54,15 @@ function addLetterToStringForPhone (_text, _addedLetter )
     local text = _text
     local addedLetter = _addedLetter
     local test = string.match(addedLetter,"%d")
-    if( string.match(addedLetter,"%d") == nil )then
+    if( addedLetter == "" )then
         return text
+    else
+        if( string.match(addedLetter,"%d") == nil )then
+            return text
+        end
     end
+    
+    
     local returnText
     local textLength
     if( text == nil )then
@@ -78,7 +84,7 @@ function addLetterToStringForPhone (_text, _addedLetter )
     elseif( 4 == textLength )then
         returnText = text .. ") " .. addedLetter
     elseif( 5 == textLength )then
-        returnText = " " .. text .. addedLetter
+        returnText = text .. " "  .. addedLetter
     elseif( 6 == textLength )then
         returnText = text .. addedLetter
     elseif( 7 == textLength )then
@@ -116,7 +122,11 @@ function isValidID(_text)
     local text = _text
     
     local textLength = string.len(text)
-    
+    if( textLength == 11 )then
+        return true
+    else 
+        return false
+    end
 end
 
 return Utils
