@@ -47,7 +47,6 @@ local errorMessageLabel
 
 local function setErrorMessage( text )
     errorMessageLabel.text = text
-    --errorMessageLabel.x = 
 end
 
 local resultMessage
@@ -209,10 +208,10 @@ function scene:onButtonTouchEnded( event )
             if(isErrorCheckOk(responseData) )then
                 searchData = responseData
                 onSearchComplete()
-                errorMessageLabel = setErrorMessage( #responseData .. " adet kullanıcı bulundu." )
+                setErrorMessage( #responseData .. " adet kullanıcı bulundu." )
             else 
                 resultTable:deleteAllRows()
-                errorMessageLabel = setErrorMessage(responseData[1].ErrorDetail)
+                setErrorMessage(responseData[1].ErrorDetail)
                 print("ERROR")
             end
             --scene.view:insert(errorMessageLabel)
